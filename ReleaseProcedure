@@ -1,14 +1,12 @@
 # Change these as required:
 
 # Version to be released
-VERSION=1.0
+VERSION=1.1
 
 # Date to put in documentation for the release date of this release
 VERSION_DATE="24 August 2002"
 
 BASEDIR=/home/workareas/gregm.on.sourceforge
-
-PYTHON=python2.2.1
 
 # ==================================================================
 
@@ -36,6 +34,8 @@ vi /tmp/foosh
 # Check cvs for any unknown files or files not checked in:
 export CVS_RSH=ssh
 cvs -z9 -nq update -I \! -I CVS -I "*.pyc"
+
+# Tag the release
 cvs -z9 tag V$DIR
 
 cd ${BASEDIR}
@@ -54,28 +54,50 @@ mozilla /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html
 
 # Ftp distribution to incoming on SourceForge:
 cd /tmp
-ftp download.sourceforge.net
-user: ftp
+ftp upload.sourceforge.net
+user: anonymous
 password: gregm@iname.com
-cd incoming
+cd /incoming
 bin
 put Pmw.$VERSION.tar.gz
 put Pmw.$VERSION.docsrc.tar.gz
+quit
 
-# Move distribution to Pmw download page via Pmw project page.
+# Move distribution to Pmw download page via Pmw project page:
+http://sourceforge.net/projects/pmw
+-> Admin
+-> Edit/Release Files
+-> Add Release (for Package Name "Pmw")
+enter into "New release name" field: $VERSION
+paste top of docsrc/Pmw.announce into "Paste The Notes In:" box
+select "Preserve my pre-formatted text" box
+click on "Submit/Refresh"
+select Pmw.$VERSION.tar.gz
+select Pmw.$VERSION.docsrc.tar.gz
+click on "Add Files and/or Refresh View"
+for Pmw.$VERSION.tar.gz:
+    from "Processor" combobox select "Any"
+    from "File Type" combobox select ".gz"
+    click on "Update/Refresh"
+for Pmw.$VERSION.docsrc.tar.gz:
+    from "Processor" combobox select "Any"
+    from "File Type" combobox select ".gz"
+    click on "Update/Refresh"
+select "I'm sure" in Step 4
+click on "Send Notice"
 
 # Copy home page to SourceForge
 cd ${BASEDIR}/Pmw/${SRC_DIR}/docsrc/text
-scp root_index.html gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
+scp root_index.html gregm@shell.sourceforge.net:/home/groups/p/pm/pmw/htdocs
 
 # Copy all documentation to home page
 cd /tmp
-scp Pmw.$VERSION.tar.gz gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
+scp Pmw.$VERSION.tar.gz gregm@shell.sourceforge.net:/home/groups/p/pm/pmw/htdocs
 
 ssh pmw.sourceforge.net
   # set VERSION as ABOVE
   DIR=`echo ${VERSION} | tr . _`
-  cd /home/groups/pmw/htdocs
+  cd /home/groups/p/pm/pmw/htdocs
   gzip -dc Pmw.${VERSION}.tar.gz | tar xf - 
   rm -rf doc
   mv Pmw/Pmw_${DIR}/doc doc
@@ -83,10 +105,18 @@ ssh pmw.sourceforge.net
   rm -rf Pmw.${VERSION}.tar.gz
   mv root_index.html index.html
 
-# netscape http://pmw.sourceforge.net/
+# mozilla http://pmw.sourceforge.net/
+
+# After 30 minutes so that mirrors are updated, test release
+http://sourceforge.net/projects/pmw
+-> Download
+download Pmw.$VERSION.tar.gz to /tmp
+unpack and run tests
+
+# Sleep on it, then ...
+
+Add news item to sourceforge
 
 Announce new release on:
     python-announce-list@python.org
     python-list@python.org
-
-Add news item to sourceforge

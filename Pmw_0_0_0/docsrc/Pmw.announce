@@ -1,13 +1,24 @@
-Subject: ANNOUNCE: Pmw megawidgets 1.0
+Subject: ANNOUNCE: Pmw megawidgets 1.1
 
         
                    Pmw megawidgets for Tkinter
 
-                          Version 1.0
+                          Version 1.1
 
                   Greg McFarlane <gregm@iname.com>
                     http://pmw.sourceforge.net/
 
+
+(The Pmw Development Team has aspired to the "release early, release
+often" school of free software.  It has not always lived up to the
+goal (the last release was over one year ago), so to try to remedy
+this, we have made two releases in the one day!  The first, 1.0, is
+described below.  The second, 1.1, was made 1) to fix a nasty bug
+reported by the Pmw Quality Assurance Team in the new Pmw.ScrolledText
+row and column header functionality and 2) to boost the version number
+to make it look like we are making progress.)
+
+                            --oOo--
 
 A new release of Pmw is out.  Although this release is numbered 1.0,
 Pmw has been in use for several years, has had many public releases
