@@ -47,6 +47,12 @@ class Demo:
 	vmode.pack(side = 'left', padx = 5, pady = 5)
 	vmode.invoke('dynamic')
 
+	buttonBox = Pmw.ButtonBox(parent)
+	buttonBox.pack(side = 'bottom')
+	buttonBox.add('yview', text = 'Show\nyview', command = self.showYView)
+	buttonBox.add('scroll', text = 'Page\ndown', command = self.pageDown)
+	buttonBox.add('center', text = 'Center', command = self.centerPage)
+
 	# Pack this last so that the buttons do not get shrunk when
 	# the window is resized.
 	self.st.pack(padx = 5, pady = 5, fill = 'both', expand = 1)
@@ -66,6 +72,18 @@ class Demo:
 
     def setvscrollmode(self, tag):
 	self.st.configure(vscrollmode = tag)
+
+    def showYView(self):
+        print self.st.yview()
+
+    def pageDown(self):
+        self.st.yview('scroll', 1, 'page')
+
+    def centerPage(self):
+        top, bottom = self.st.yview()
+        size = bottom - top
+        middle = 0.5 - size / 2
+        self.st.yview('moveto', middle)
 
 ######################################################################
 

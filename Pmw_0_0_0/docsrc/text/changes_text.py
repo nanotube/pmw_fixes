@@ -1163,4 +1163,9 @@ text = """
 
   - Release of version 0.8.5
 
+  18 February 2001
+
+  - Added xview() and yview() methods to Pmw.ScrolledFrame (suggested
+    by Christer Fernstrom).
+
 """

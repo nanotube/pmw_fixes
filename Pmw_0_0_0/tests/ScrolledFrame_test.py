@@ -7,10 +7,22 @@ c = Pmw.ScrolledFrame
 
 def _createInterior():
     w = Test.currentWidget()
-    for i in range(2):
+    for i in range(3):
 	lb = Pmw.ScrolledListBox(w.interior(),
 		items = range(20), listbox_height = 6)
 	lb.pack(padx = 10, pady = 10)
+
+def _testYView(doBottom):
+    w = Test.currentWidget()
+    top, bottom = w.yview()
+    if type(top) != type(0.0) or type(bottom) != type(0.0):
+        return 'bad type ' + str(top) + ' ' + str(bottom)
+    if doBottom:
+        if bottom != 1.0:
+            return 'bottom is ' + str(bottom)
+    else:
+        if top != 0.0:
+            return 'top is ' + str(top)
 
 kw_1 = {'labelpos': 'n', 'label_text': 'ScrolledFrame'}
 tests_1 = (
@@ -34,6 +46,35 @@ tests_1 = (
     'option "bogus": should be static, dynamic, or none'),
   ('hscrollmode', 'bogus', 'ValueError: bad hscrollmode ' +
     'option "bogus": should be static, dynamic, or none'),
+  (c.cget, 'vscrollmode', 'bogus'),
+  (c.cget, 'hscrollmode', 'bogus'),
+  ('vscrollmode', 'dynamic'),
+  ('hscrollmode', 'dynamic'),
+  (_testYView, 0),
+  (c.yview, ('moveto', 0.02)),
+  (c.yview, ('moveto', 0.04)),
+  (c.yview, ('moveto', 0.06)),
+  (c.yview, ('moveto', 0.08)),
+  (c.yview, ('moveto', 0.10)),
+  (c.yview, ('moveto', 0.12)),
+  (c.yview, ('moveto', 0.14)),
+  (c.yview, ('moveto', 0.16)),
+  (c.yview, ('moveto', 0.18)),
+  (c.yview, ('moveto', 0.20)),
+  (c.yview, ('moveto', 0.22)),
+  (c.yview, ('moveto', 0.24)),
+  (c.yview, ('moveto', 0.26)),
+  (c.yview, ('moveto', 0.28)),
+  (c.yview, ('moveto', 0.98)),
+  (_testYView, 1),
+  (c.yview, ('scroll', -1, 'page')),
+  (c.yview, ('scroll', -1, 'page')),
+  (c.yview, ('scroll', -1, 'page')),
+  (_testYView, 0),
+  (c.yview, ('scroll', 1, 'page')),
+  (c.yview, ('scroll', 1, 'page')),
+  (c.yview, ('scroll', 1, 'page')),
+  (_testYView, 1),
 )
 
 kw_2 = {

@@ -65,10 +65,12 @@ class Demo:
 	vmode.pack(side = 'left', padx = 5, pady = 3)
 	vmode.invoke('dynamic')
 
-	button = Tkinter.Button(parent,
-	    text = 'Add a button',
-	    command = self.addButton)
-	button.pack(side = 'bottom')
+        buttonBox = Pmw.ButtonBox(parent)
+	buttonBox.pack(side = 'bottom')
+	buttonBox.add('add', text = 'Add a\nbutton', command = self.addButton)
+	buttonBox.add('yview', text = 'Show\nyview', command = self.showYView)
+	buttonBox.add('scroll', text = 'Page\ndown', command = self.pageDown)
+	buttonBox.add('center', text = 'Center', command = self.centerPage)
 
 	# Pack this last so that the buttons do not get shrunk when
 	# the window is resized.
@@ -108,12 +110,29 @@ class Demo:
 	else:
 	    self.col = self.col + 1
 
+    def showYView(self):
+        print self.sf.yview()
+
+    def pageDown(self):
+        self.sf.yview('scroll', 1, 'page')
+
+    def centerPage(self):
+        top, bottom = self.sf.yview()
+        size = bottom - top
+        middle = 0.5 - size / 2
+        self.sf.yview('moveto', middle)
+
 ######################################################################
  
 # Create demo in root window for testing.
 if __name__ == '__main__': 
+    import os
+    if os.name == 'nt':
+        size = 16
+    else:
+        size = 12
     root = Tkinter.Tk()
-    Pmw.initialise(root, fontScheme = 'pmw1')
+    Pmw.initialise(root, size = size, fontScheme = 'pmw2')
     root.title(title)
  
     exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)

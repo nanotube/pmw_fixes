@@ -247,6 +247,9 @@ you are interested in doing any of these, please let me
           font changed, or the borderwidth, etc?  You would need to
           override and check many more methods.
 
+	- Add ability to tearoff dropdown list (suggested by Dean N. 
+          Williams).
+
     Counter
 
 	- Add option for different increment/decrement behaviour.  For
@@ -700,6 +703,10 @@ you are interested in doing any of these, please let me
     - Complete all doco.
 
     - Add short examples to all megawidget manual pages.
+
+    - Since python 2.0, the default values of real options (such as
+      the horizfraction option of Pmw.ScrolledFrame) are being
+      reported with too many digits (such as 0.050000000000000003).
 
     - Check if time24 is documented in EntryField/Counter man page.
 

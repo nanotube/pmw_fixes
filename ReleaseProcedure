@@ -77,3 +77,9 @@ ssh pmw.sourceforge.net
   mv root_index.html index.html
 
 # netscape http://pmw.sourceforge.net/
+
+Announce new release on:
+    python-announce-list@python.org
+    python-list@python.org
+
+Add news item to sourceforge

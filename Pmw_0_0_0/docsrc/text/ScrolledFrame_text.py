@@ -1,5 +1,5 @@
 complete = 1
-reviewdate = "23 August 1998"
+reviewdate = "18 February 2001"
 
 name = """
     frame with optional scrollbars
@@ -166,5 +166,47 @@ text['methods']['reposition'] = """
     this method should be called when a new widget is added to the
     *frame* (or a widget is increased in size) 'after' the initial
     megawidget construction.
+
+"""
+
+text['methods']['xview'] = """
+    Query or change the horizontal position of the scrollable interior
+    frame.  If 'mode' is *None*, return a tuple of two numbers, each
+    between 0.0 and 1.0.  The first is the position of the left edge
+    of the visible region of the contents of the scrolled frame,
+    expressed as a fraction of the total width of the contents.  The
+    second is the position of the right edge of the visible region.
+
+    If 'mode' == *'moveto'*, adjust the view of the interior so that
+    the fraction 'value' of the total width of the contents is
+    off-screen to the left.  The 'value' must be between '0.0' and
+    '1.0'.
+
+    If 'mode' == *'scroll'*, adjust the view of the interior left or
+    right by a fixed amount.  If 'what' is *'units'*, move the view in
+    units of *horizfraction*.  If 'what' is 'pages', move the view in
+    units of the width of the scrolled frame.  If 'value' is positive,
+    move to the right, otherwise move to the left.
+    
+"""
+
+text['methods']['yview'] = """
+    Query or change the vertical position of the scrollable interior
+    frame.  If 'mode' is *None*, return a tuple of two numbers, each
+    between 0.0 and 1.0.  The first is the position of the top edge
+    of the visible region of the contents of the scrolled frame,
+    expressed as a fraction of the total height of the contents.  The
+    second is the position of the bottom edge of the visible region.
+
+    If 'mode' == *'moveto'*, adjust the view of the interior so that
+    the fraction 'value' of the total height of the contents is
+    off-screen to the top.  The 'value' must be between '0.0' and
+    '1.0'.
+
+    If 'mode' == *'scroll'*, adjust the view of the interior up or
+    down by a fixed amount.  If 'what' is *'units'*, move the view in
+    units of *vertfraction*.  If 'what' is 'pages', move the view in
+    units of the height of the scrolled frame.  If 'value' is
+    positive, move to down, otherwise move up.
 
 """

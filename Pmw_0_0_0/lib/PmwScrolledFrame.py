@@ -71,7 +71,7 @@ class ScrolledFrame(Pmw.MegaWidget):
 		(), 'Scrollbar',
 		Tkinter.Scrollbar, (self.origInterior,),
 	        orient='horizontal',
-		command=self._xview
+		command=self.xview
 	)
 
 	# Create the vertical scrollbar
@@ -79,7 +79,7 @@ class ScrolledFrame(Pmw.MegaWidget):
 		(), 'Scrollbar',
 		Tkinter.Scrollbar, (self.origInterior,),
 		orient='vertical',
-		command=self._yview
+		command=self.yview
 	)
 
 	self.createlabel(self.origInterior, childCols = 3, childRows = 3)
@@ -129,6 +129,46 @@ class ScrolledFrame(Pmw.MegaWidget):
     def reposition(self):
 	if self.scrollTimer is None:
 	    self.scrollTimer = self.after_idle(self._scrollBothNow)
+
+    # Called when the user clicks in the horizontal scrollbar. 
+    # Calculates new position of frame then calls reposition() to
+    # update the frame and the scrollbar.
+    def xview(self, mode = None, value = None, units = None):
+
+        if mode is None:
+            return self._horizScrollbar.get()
+	elif mode == 'moveto':
+	    frameWidth = self._frame.winfo_reqwidth()
+	    self.startX = string.atof(value) * float(frameWidth)
+	else: # mode == 'scroll'
+	    clipperWidth = self._clipper.winfo_width()
+	    if units == 'units':
+		jump = int(clipperWidth * self['horizfraction'])
+	    else:
+		jump = clipperWidth
+            self.startX = self.startX + string.atof(value) * jump
+
+	self.reposition()
+
+    # Called when the user clicks in the vertical scrollbar. 
+    # Calculates new position of frame then calls reposition() to
+    # update the frame and the scrollbar.
+    def yview(self, mode = None, value = None, units = None):
+
+        if mode is None:
+            return self._vertScrollbar.get()
+	elif mode == 'moveto':
+	    frameHeight = self._frame.winfo_reqheight()
+	    self.startY = string.atof(value) * float(frameHeight)
+	else: # mode == 'scroll'
+	    clipperHeight = self._clipper.winfo_height()
+	    if units == 'units':
+		jump = int(clipperHeight * self['vertfraction'])
+	    else:
+		jump = clipperHeight
+            self.startY = self.startY + string.atof(value) * jump
+
+	self.reposition()
 
     # ======================================================================
 
@@ -199,50 +239,6 @@ class ScrolledFrame(Pmw.MegaWidget):
     # Private methods.
 
     def _reposition(self, event):
-	self.reposition()
-
-    # Called when the user clicks in the horizontal scrollbar. 
-    # Calculates new position of frame then calls reposition() to
-    # update the frame and the scrollbar.
-    def _xview(self, mode, value, units = None):
-
-	if mode == 'moveto':
-	    frameWidth = self._frame.winfo_reqwidth()
-	    self.startX = string.atof(value) * float(frameWidth)
-	else:
-	    clipperWidth = self._clipper.winfo_width()
-	    if units == 'units':
-		jump = int(clipperWidth * self['horizfraction'])
-	    else:
-		jump = clipperWidth
-
-	    if value == '1':
-		self.startX = self.startX + jump
-	    else:
-		self.startX = self.startX - jump
-
-	self.reposition()
-
-    # Called when the user clicks in the vertical scrollbar. 
-    # Calculates new position of frame then calls reposition() to
-    # update the frame and the scrollbar.
-    def _yview(self, mode, value, units = None):
-
-	if mode == 'moveto':
-	    frameHeight = self._frame.winfo_reqheight()
-	    self.startY = string.atof(value) * float(frameHeight)
-	else:
-	    clipperHeight = self._clipper.winfo_height()
-	    if units == 'units':
-		jump = int(clipperHeight * self['vertfraction'])
-	    else:
-		jump = clipperHeight
-
-	    if value == '1':
-		self.startY = self.startY + jump
-	    else:
-		self.startY = self.startY - jump
-
 	self.reposition()
 
     def _getxview(self):

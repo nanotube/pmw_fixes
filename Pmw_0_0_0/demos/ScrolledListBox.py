@@ -46,6 +46,12 @@ class Demo:
 	vmode.pack(side = 'top', padx = 5, pady = 5)
 	vmode.invoke('dynamic')
 
+	buttonBox = Pmw.ButtonBox(parent)
+	buttonBox.pack(side = 'bottom')
+	buttonBox.add('yview', text = 'Show\nyview', command = self.showYView)
+	buttonBox.add('scroll', text = 'Page\ndown', command = self.pageDown)
+	buttonBox.add('center', text = 'Center', command = self.centerPage)
+
 	# Pack this last so that the buttons do not get shrunk when
 	# the window is resized.
 	self.box.pack(fill = 'both', expand = 1, padx = 5, pady = 5)
@@ -85,6 +91,18 @@ class Demo:
 	    print 'No selection for double click'
 	else:
 	    print 'Double click:', sels[0]
+
+    def showYView(self):
+        print self.box.yview()
+
+    def pageDown(self):
+        self.box.yview('scroll', 1, 'page')
+
+    def centerPage(self):
+        top, bottom = self.box.yview()
+        size = bottom - top
+        middle = 0.5 - size / 2
+        self.box.yview('moveto', middle)
 
 ######################################################################
 
