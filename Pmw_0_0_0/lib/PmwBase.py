@@ -325,6 +325,12 @@ class MegaArchetype:
 	# At the end of megawidget construction, a call is made to
 	# initialiseoptions() which reports an error if there are
 	# unused options given to the constructor.
+        #
+        # After megawidget construction, the dictionary contains
+        # keywords which refer to a dynamic component group, so that
+        # these components can be created after megawidget
+        # construction and still use the group options given to the
+        # constructor.
 	#
 	# self._constructorKeywords = {}
 
@@ -577,7 +583,6 @@ class MegaArchetype:
                     index = string.find(name, '_')
                     if index < 0 or name[:index] not in self._dynamicGroups:
                         unusedOptions.append(name)
-	    self._constructorKeywords = {}
 	    if len(unusedOptions) > 0:
 		if len(unusedOptions) == 1:
 		    text = 'Unknown option "'
@@ -1371,9 +1376,16 @@ def displayerror(text):
     if _errorReportFile is not None:
 	_errorReportFile.write(text + '\n')
     else:
+        # Print error on standard error as well as to error window. 
+        # Useful if error window fails to be displayed, for example
+        # when exception is triggered in a <Destroy> binding for root
+        # window.
+        sys.stderr.write(text + '\n')
+
 	if _errorWindow is None:
 	    # The error window has not yet been created.
 	    _errorWindow = _ErrorWindow()
+
 	_errorWindow.showerror(text)
 
 _root = None
@@ -1801,9 +1813,7 @@ def _reporterror(func, args):
     try:
 	displayerror(msg)
     except:
-	print 'Failed to display error window.'
-	print 'Original error was:'
-	print msg
+        pass
 
 class _ErrorWindow:
     def __init__(self):
