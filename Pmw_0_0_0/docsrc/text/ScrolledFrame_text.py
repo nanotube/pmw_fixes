@@ -154,7 +154,7 @@ text['methods']['interior'] = """
 
 text['methods']['reposition'] = """
     Update the position of the *frame* component in the *clipper* and
-    update the scrollbar.
+    update the scrollbars.
     
     Usually, this method does not need to be called explicitly, since
     the position of the *frame* component and the scrollbars are

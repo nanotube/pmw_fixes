@@ -6,7 +6,7 @@ VERSION=0.8.5
 # Date to put in documentation for the release date of this release
 VERSION_DATE="8 February 2001"
 
-BASEDIR=/home/workareas/gregm
+BASEDIR=/home/workareas/gregm.on.sourceforge
 
 PYTHON=python2.0
 
@@ -21,9 +21,10 @@ cd ${BASEDIR}/Pmw
 # Check that change file ends with "Release of version $VERSION"
 tail ${SRC_DIR}/docsrc/text/changes_text.py
 
-# In the home page:        vi ${SRC_DIR}/docsrc/text/root_index.html
+# In the home page:
 #   - change the version number to $VERSION
 #   - update the date to $VERSION_DATE
+vi ${SRC_DIR}/docsrc/text/root_index.html
 
 # Make sure porting document contains changes since last release
 vi ${SRC_DIR}/docsrc/text/porting_text.py
