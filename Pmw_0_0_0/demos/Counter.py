@@ -48,7 +48,8 @@ class Demo:
 		increment=5*60)
 	self._real = Pmw.Counter(parent,
 		labelpos = 'w',
-		label_text = 'Real (with comma):',
+		label_text = 'Real (with comma)\nand extra\nlabel lines:',
+                label_justify = 'left',
 		entryfield_value = '1,5',
 		datatype = {'counter' : 'real', 'separator' : ','},
 	        entryfield_validate = {'validator' : 'real',
@@ -77,7 +78,7 @@ class Demo:
 
 	# Pack them all.
 	for counter in counters:
-	    counter.pack(fill='x', expand=1, padx=10, pady=5)
+	    counter.pack(fill='both', expand=1, padx=10, pady=5)
 	self._int.pack(padx=10, pady=5)
 
     def execute(self):
@@ -111,7 +112,7 @@ def _custom_counter(text, factor, increment):
 # Create demo in root window for testing.
 if __name__ == '__main__':
     root = Tkinter.Tk()
-    Pmw.initialise(root, fontScheme = 'pmw1')
+    Pmw.initialise(root)
     root.title(title)
 
     exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
