@@ -40,7 +40,7 @@ cvs -z9 tag V$DIR
 
 cd ${BASEDIR}
 
-PYTHON=$PYTHON VERSION=${VERSION} SRC_DIR=${SRC_DIR} \
+VERSION=${VERSION} SRC_DIR=${SRC_DIR} \
   DIR=${DIR} VERSION_DATE=${VERSION_DATE} sh Pmw/maketar.sh
 
 # Make sure there are no unexpected files displayed by maketar.sh
