@@ -17,7 +17,7 @@ text = Tkinter.Label(splash,
     borderwidth = 2,
     padx=50, pady=50,
     text =
-    'Welcome to the Pmw python megawidgets demo.\n'
+    'Welcome to the Pmw megawidgets demo.\n'
     '\n'
     'In a moment the main window will appear.\n'
     'Please enjoy yourself while you wait.\n'
