@@ -42,7 +42,7 @@ lines = (
 # Create demo in root window for testing.
 if __name__ == '__main__':
     root = Tkinter.Tk()
-    Pmw.initialise(root, fontScheme = 'pmw1')
+    Pmw.initialise(root)
     root.title(title)
 
     exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
