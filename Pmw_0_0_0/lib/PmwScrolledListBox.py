@@ -91,7 +91,7 @@ class ScrolledListBox(Pmw.MegaWidget):
             root.bind_class(theTag, '<ButtonRelease-1>', releaseEvent)
 
             # Bind double button 1 click to the dblclickcommand.
-            root.bind_class(theTag, '<Double-1>', doubleEvent)
+            root.bind_class(theTag, '<Double-ButtonRelease-1>', doubleEvent)
 
 	    ScrolledListBox._classBindingsDefinedFor = root
 
@@ -105,10 +105,6 @@ class ScrolledListBox(Pmw.MegaWidget):
         self._scrollRecurse = 0
 	self._horizScrollbarNeeded = 0
 	self._vertScrollbarNeeded = 0
-
-        # To avoid the selectioncommand being called both before and
-        # after the dblclickcommand.
-        self.lastEventWasDouble = 0
 
 	# Check keywords and initialise options.
 	self.initialiseoptions()
@@ -331,15 +327,10 @@ class ScrolledListBox(Pmw.MegaWidget):
 
     def _handleEvent(self, event, eventType):
         if eventType == 'double':
-            self.lastEventWasDouble = 1
             command = self['dblclickcommand']
         elif eventType == 'key':
             command = self['selectioncommand']
         else: #eventType == 'release'
-            if self.lastEventWasDouble:
-                self.lastEventWasDouble = 0
-                return
-
             # Do not execute the command if the mouse was released
             # outside the listbox.
             if (event.x < 0 or self._listbox.winfo_width() <= event.x or
