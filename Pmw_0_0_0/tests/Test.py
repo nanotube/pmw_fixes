@@ -57,7 +57,11 @@ def initialise():
     if not _initialised:
 	root = Tkinter.Tk(className = 'PmwTest')
 	root.withdraw()
-	Pmw.initialise(root, fontScheme = 'pmw1')
+        if os.name == 'nt':
+            size = 16
+        else:
+            size = 12
+        Pmw.initialise(root, size = size, fontScheme = 'pmw2')
 	font = {}
 	font['small'] = '6x13'
 	font['large'] = '10x20'
