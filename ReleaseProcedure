@@ -45,7 +45,7 @@ PYTHON=$PYTHON VERSION=${VERSION} SRC_DIR=${SRC_DIR} \
 # Check tests and documentation as instructed.
 # Check for unexpected files.
 
-# Ftp distribution to incoming on sourceforge:
+# Ftp distribution to incoming on SourceForge:
 cd /tmp
 ftp download.sourceforge.net
 user: ftp
@@ -57,7 +57,7 @@ put Pmw.$VERSION.docsrc.tar.gz
 
 # Move distribution to Pmw download page via Pmw project page.
 
-# Copy home page to sourceforge
+# Copy home page to SourceForge
 cd ${BASEDIR}/Pmw/${SRC_DIR}/docsrc/text
 scp root_index.html gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
 
