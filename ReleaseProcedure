@@ -52,6 +52,12 @@ cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/demos
 All.py
 mozilla /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html
 
+# Also run tests and demos for older versions of python, eg:
+cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/tests
+python2.1 All.py
+cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/demos
+python2.1 All.py
+
 # Ftp distribution to incoming on SourceForge:
 cd /tmp
 ftp upload.sourceforge.net
@@ -122,7 +128,7 @@ unpack and run tests
   http://sourceforge.net/projects/pmw
   -> Submit News
 
-Announce new release on:
+Post docsrc/Pmw.announce about new release on:
     python-announce-list@python.org
     python-list@python.org
     pmw-general@lists.sourceforge.net
