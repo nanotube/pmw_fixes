@@ -35,7 +35,7 @@ vi /tmp/foosh
 # Check cvs for any unknown files or files not checked in:
 export CVS_RSH=ssh
 cvs -z9 -nq update -I \! -I CVS -I "*.pyc"
-cvs tag V$DIR
+cvs -z9 tag V$DIR
 
 cd ${BASEDIR}
 
