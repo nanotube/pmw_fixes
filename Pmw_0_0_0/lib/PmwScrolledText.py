@@ -134,6 +134,14 @@ class ScrolledText(Pmw.MegaWidget):
 	self._vertScrollbarNeeded = 0
 	self._textWidth = None
 
+        # These four variables avoid an infinite loop caused by the
+        # row or column header's scrollcommand causing the main text
+        # widget's scrollcommand to be called and vice versa.
+	self._textboxLastX = None
+	self._textboxLastY = None
+	self._columnheaderLastX = None
+	self._rowheaderLastY = None
+
 	# Check keywords and initialise options.
 	self.initialiseoptions()
 
@@ -269,7 +277,9 @@ class ScrolledText(Pmw.MegaWidget):
             self._textWidth = currentWidth
 
         if self['columnheader']:
-            self._columnheader.xview('moveto', first)
+	    if self._columnheaderLastX != first:
+		self._columnheaderLastX = first
+		self._columnheader.xview('moveto', first)
 
     def _scrollYNow(self, first, last):
         if first == '0' and last == '0':
@@ -282,7 +292,9 @@ class ScrolledText(Pmw.MegaWidget):
                 self._toggleVertScrollbar()
 
         if self['rowheader']:
-            self._rowheader.xview('moveto', first)
+	    if self._rowheaderLastY != first:
+		self._rowheaderLastY = first
+		self._rowheader.yview('moveto', first)
 
     def _scrollBothLater(self, first, last):
 	# Called by the text widget to set the horizontal or vertical
@@ -314,9 +326,13 @@ class ScrolledText(Pmw.MegaWidget):
 	    return
 
         if self['columnheader']:
-            self._columnheader.xview('moveto', xview[0])
+	    if self._columnheaderLastX != xview[0]:
+		self._columnheaderLastX = xview[0]
+		self._columnheader.xview('moveto', xview[0])
         if self['rowheader']:
-            self._rowheader.yview('moveto', yview[0])
+	    if self._rowheaderLastY != yview[0]:
+		self._rowheaderLastY = yview[0]
+		self._rowheader.yview('moveto', yview[0])
 
 	self._horizScrollbar.set(xview[0], xview[1])
 	self._vertScrollbar.set(yview[0], yview[1])
@@ -373,10 +389,14 @@ class ScrolledText(Pmw.MegaWidget):
 		self._toggleVertScrollbar()
 
     def _columnheaderscrolled(self, first, last):
-        self._textbox.xview('moveto', first)
+	if self._textboxLastX != first:
+	    self._textboxLastX = first
+	    self._textbox.xview('moveto', first)
 
     def _rowheaderscrolled(self, first, last):
-        self._textbox.yview('moveto', first)
+	if self._textboxLastY != first:
+	    self._textboxLastY = first
+	    self._textbox.yview('moveto', first)
 
     def _toggleHorizScrollbar(self):
 
