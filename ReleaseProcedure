@@ -64,11 +64,13 @@ put Pmw.$VERSION.docsrc.tar.gz
 quit
 
 # Move distribution to Pmw download page via Pmw project page:
+# First login as administrator, then
 http://sourceforge.net/projects/pmw
 -> Admin
 -> Edit/Release Files
 -> Add Release (for Package Name "Pmw")
 enter into "New release name" field: $VERSION
+click "Create This Release"
 paste top of docsrc/Pmw.announce into "Paste The Notes In:" box
 select "Preserve my pre-formatted text" box
 click on "Submit/Refresh"
@@ -104,6 +106,7 @@ ssh pmw.sourceforge.net
   rm -rf Pmw
   rm -rf Pmw.${VERSION}.tar.gz
   mv root_index.html index.html
+  exit
 
 # mozilla http://pmw.sourceforge.net/
 
@@ -115,8 +118,11 @@ unpack and run tests
 
 # Sleep on it, then ...
 
-Add news item to sourceforge
+# Add news item to sourceforge
+  http://sourceforge.net/projects/pmw
+  -> Submit News
 
 Announce new release on:
     python-announce-list@python.org
     python-list@python.org
+    pmw-general@lists.sourceforge.net
