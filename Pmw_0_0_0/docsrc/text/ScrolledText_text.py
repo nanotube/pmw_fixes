@@ -178,3 +178,10 @@ text['methods']['settext'] = """
     Same as /setvalue()/ method.
 
 """
+
+text['methods']['appendtext'] = """
+    Add 'text' to the end of the *text* component.  Scroll to the
+    bottom of the text, but only if it was already visible before the
+    new text was added.
+
+"""

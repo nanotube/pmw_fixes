@@ -211,20 +211,25 @@ displayerror = """
     This is a general purpose method for displaying background errors
     to the user.  The errors would normally be programming errors and
     may be caused by errors in Tk callbacks or functions called by other
-    asynchronous events.  The error messages are shown in a text window.
-    If further errors occur while the window is displayed, the window
-    is raised and these new errors are queued.  The queued errors may
-    be viewed by the user or ignored by dismissing the window.
+    asynchronous events.
+    
+    If the global error report file (set by calling
+    /Pmw.reporterrorstofile()/) is *None*, the error message `text` is
+    written to standard error and also shown in a text window.  If
+    /displayerror/ is called while previous error messages are being
+    displayed, the window is raised and the new error is queued.  The
+    queued errors may be viewed by the user or ignored by dismissing
+    the window.
+
+    If the global error report file is not *None*, `text` is written
+    to the file.  'file' may be any object with a /write()/ method,
+    such as /sys.stderr/.
 
 """
 
 reporterrorstofile = """
-    If 'file' is *None*, or if /Pmw.reporterrorstofile()/ has not been
-    called, future Tk background errors will be displayed in an error
-    window (by calling /Pmw.displayerror()/).  If 'file' is not
-    *None*, future Tk background errors will be written to the file. 
-    'file' may be any object with a /write()/ method, such as
-    /sys.stderr/.
+    Sets the global error report file, which is initially *None*.  See
+    /Pmw.displayerror()/
 
 """
 
@@ -244,9 +249,8 @@ initialise = """
 	- Modify Tkinter's CallWrapper class to improve the display of
 	  errors which occur in callbacks.  If an error occurs, the
 	  new CallWrapper class calls /Pmw.clearbusycursor()/ to
-	  remove the any outstanding busy cursors and calls
-	  /Pmw.displayerror()/ to display the error.  This behaviour
-	  can be modified by calling /Pmw.reporterrorstofile()/.
+	  remove any outstanding busy cursors and calls
+	  /Pmw.displayerror()/ to display the error.
 
 	- Using the window given by 'root', set the *WM_DELETE_WINDOW*
 	  root window protocol to destroy the root window.  This means
