@@ -12,13 +12,9 @@ mv /tmp/Pmw/${SRC_DIR} /tmp/Pmw/TEMP
 mv /tmp/Pmw/TEMP /tmp/Pmw/Pmw_${DIR}
 cd /tmp/Pmw
 find . -name CVS -exec /bin/rm -rf {} \;
-find . -name Makeit.mk -exec /bin/rm -f {} \;
 find . -name "*.pyc" -exec /bin/rm -f {} \;
 
-# Fix this:
-# ./detabAllPy `find . -name "*.py"`
-
-/bin/rm ReleaseProcedure maketar.sh detabAllPy makelibs
+/bin/rm ReleaseProcedure maketar.sh
 echo Unexpected files:
 /bin/ls | egrep -v "Alpha_99_9_example|__init__.py|README|Pmw_$DIR"
 /bin/ls -lLR | egrep -v "\.(py|html|gif|bmp)$" | \
@@ -54,4 +50,4 @@ echo "  cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/tests"
 echo "  All.py"
 echo "  cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/demos"
 echo "  All.py"
-echo "  netscape /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html
+echo "  netscape /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html"

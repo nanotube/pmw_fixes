@@ -4,7 +4,7 @@
 VERSION=0.8.5
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="26 January 2001"
+VERSION_DATE="8 February 2001"
 
 BASEDIR=/home/workareas/gregm
 
@@ -34,7 +34,8 @@ vi /tmp/foosh
 
 # Check cvs for any unknown files or files not checked in:
 export CVS_RSH=ssh
-cvs -nq update -I \! -I CVS -I "*.pyc"
+cvs -z9 -nq update -I \! -I CVS -I "*.pyc"
+cvs tag V$DIR
 
 cd ${BASEDIR}
 

@@ -1159,7 +1159,7 @@ text = """
 
   - Minor fixes to tests for Tk 8.3.
 
-  25 January 2001
+  8 February 2001
 
   - Release of version 0.8.5
 
