@@ -1,4 +1,5 @@
 import string
+import types
 import Tkinter
 import Pmw
 
@@ -135,18 +136,20 @@ class ScrolledFrame(Pmw.MegaWidget):
     # update the frame and the scrollbar.
     def xview(self, mode = None, value = None, units = None):
 
+        if type(value) == types.StringType:
+            value = string.atof(value)
         if mode is None:
             return self._horizScrollbar.get()
 	elif mode == 'moveto':
 	    frameWidth = self._frame.winfo_reqwidth()
-	    self.startX = string.atof(value) * float(frameWidth)
+	    self.startX = value * float(frameWidth)
 	else: # mode == 'scroll'
 	    clipperWidth = self._clipper.winfo_width()
 	    if units == 'units':
 		jump = int(clipperWidth * self['horizfraction'])
 	    else:
 		jump = clipperWidth
-            self.startX = self.startX + string.atof(value) * jump
+            self.startX = self.startX + value * jump
 
 	self.reposition()
 
@@ -155,18 +158,20 @@ class ScrolledFrame(Pmw.MegaWidget):
     # update the frame and the scrollbar.
     def yview(self, mode = None, value = None, units = None):
 
+        if type(value) == types.StringType:
+            value = string.atof(value)
         if mode is None:
             return self._vertScrollbar.get()
 	elif mode == 'moveto':
 	    frameHeight = self._frame.winfo_reqheight()
-	    self.startY = string.atof(value) * float(frameHeight)
+	    self.startY = value * float(frameHeight)
 	else: # mode == 'scroll'
 	    clipperHeight = self._clipper.winfo_height()
 	    if units == 'units':
 		jump = int(clipperHeight * self['vertfraction'])
 	    else:
 		jump = clipperHeight
-            self.startY = self.startY + string.atof(value) * jump
+            self.startY = self.startY + value * jump
 
 	self.reposition()
 

@@ -1168,4 +1168,12 @@ text = """
   - Added xview() and yview() methods to Pmw.ScrolledFrame (suggested
     by Christer Fernstrom).
 
+  21 February 2001
+
+  - Fixed tests for recent version of Blt graph (reported by
+    Venkatesh Prasad Ranganath).
+
+  - Fixed problem in Pmw.ScrolledFrame in python 1.5 - string.atof
+    does not accept a number as argument, but it does in python 2.0.
+
 """
