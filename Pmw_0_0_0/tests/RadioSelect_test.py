@@ -4,6 +4,11 @@ import Pmw
 
 Test.initialise()
 
+if Tkinter.TkVersion >= 8.4:
+  expected1 = 'TclError: bad relief "bogus": must be '
+else:
+  expected1 = 'TclError: bad relief type "bogus": must be '
+
 c = Pmw.RadioSelect
 
 kw_1 = {'labelpos' : 'nw', 'label_text' : 'Radio Select:'}
@@ -46,8 +51,7 @@ tests_1 = (
   (c.add, ('Foo',), Tkinter.Button),
   ('label_text', 'Label'),
   ('frame_relief', 'sunken'),
-  ('frame_relief', 'bogus',
-      'TclError: bad relief type "bogus": must be ' + Test.reliefs),
+  ('frame_relief', 'bogus', expected1 + Test.reliefs),
   (c.deleteall, ()),
 )
 

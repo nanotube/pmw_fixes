@@ -15,7 +15,7 @@ c = Pmw.EntryField
 kw_1 = {'entry_width' : 12, 'labelpos' : 'n', 'label_text' : 'Entry Field:'}
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
-  (Test.num_options, (), 9),
+  (Test.num_options, (), 10),
   ('errorbackground', 'red'),
   ('hull_background', 'yellow'),
   ('label_background', 'yellow'),

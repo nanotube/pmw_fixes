@@ -9,7 +9,7 @@ c = Pmw.ScrolledField
 kw_1 = {'labelpos': 'nw'}
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
-  (Test.num_options, (), 3),
+  (Test.num_options, (), 4),
   ('text', 'Hello World'),
   ('label_textvariable', Test.stringvar),
   ('label_textvariable', ''),

@@ -7,7 +7,11 @@ import Pmw
 
 Test.initialise()
 
-if Tkinter.TkVersion >= 8.3:
+if Tkinter.TkVersion >= 8.4:
+  expected1 = 'TclError: bad relief "bogus": must be '
+  expected2 = 'TclError: bad state "bogus": must be ' + \
+    'disabled, normal, or readonly'
+elif Tkinter.TkVersion >= 8.3:
   expected1 = 'TclError: bad relief "bogus": must be '
   expected2 = 'TclError: bad state "bogus": must be disabled or normal'
 else:
@@ -38,7 +42,7 @@ kw_1b = {
 
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
-  (Test.num_options, (), 10),
+  (Test.num_options, (), 11),
   ('entry_width', 20),
   ('entry_textvariable', Test.stringvar),
   ('label_text', 'ComboBox:'),

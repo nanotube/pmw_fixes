@@ -14,6 +14,7 @@ kw_1 = {
 }
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
+  (Test.num_options, (), 6),
   (c.getcurselection, (), 'Lollies'),
   (c.index, 'Junk', 2),
   (c.index, 'Nowhere', 'ValueError: bad index "Nowhere": must be ' +

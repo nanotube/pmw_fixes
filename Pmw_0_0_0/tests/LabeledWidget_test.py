@@ -21,7 +21,7 @@ kw_1 = {'labelpos': 'nw'}
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
   (_addListbox, ()),
-  (Test.num_options, (), 2),
+  (Test.num_options, (), 3),
   ('label_textvariable', Test.stringvar),
   ('label_textvariable', ''),
   ('label_text', 'Label'),

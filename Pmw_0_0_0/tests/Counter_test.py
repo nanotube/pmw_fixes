@@ -24,7 +24,7 @@ kw_1 = {
 tests_1 = (
     (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
     (c.get, (), 'First value'),
-    (Test.num_options, (), 11),
+    (Test.num_options, (), 12),
     ('Arrow_borderwidth', 10),
     ('hull_background', 'yellow'),
     ('Arrow_background', 'green'),

@@ -9,6 +9,11 @@ import traceback
 import types
 import Tkinter
 
+if Tkinter.TkVersion >= 8.4:
+  refcountafterdestroy = 7
+else:
+  refcountafterdestroy = 6
+
 script_name = imp.find_module(__name__)[1]
 if not os.path.isabs(script_name):
     script_name = os.path.join(os.getcwd(), script_name)
@@ -299,7 +304,7 @@ def _destructor(widget, isWidget):
 	    try:
 		widget.destroy()
                 ref = sys.getrefcount(widget)
-                if isWidget and ref != 6:
+                if isWidget and ref != refcountafterdestroy:
                     print '====', widget.__class__.__name__, 'destructor'
                     print '---- refcount', ref, 'not zero after destruction'
                     print '---- FAILED'
@@ -447,7 +452,10 @@ def _getErrorValue():
     if type(exc_value) == types.StringType:
 	return exc_type + ': ' + exc_value
     else:
-	return exc_type + ': ' + str(exc_value)
+        exc_value_str = str(exc_value)
+        if exc_value_str[:1] == "'" and exc_value_str[-1:] == "'":
+            exc_value_str = exc_value_str[1:-1]
+        return exc_type + ': ' + exc_value_str
 
 def _methodTest(w, testData):
     func = testData[0]
