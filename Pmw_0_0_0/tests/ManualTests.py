@@ -477,8 +477,8 @@ root.deiconify()
 # To use a different version of Pmw, comment out the three above lines
 # and the "import Test" line and uncomment these three:
 #   root = Tkinter.Tk()
-#   Pmw.setversion('0.8')
-#   Pmw.initialise(root, fontScheme = 'pmw1')
+#   Pmw.setversion('1.0')
+#   Pmw.initialise(root)
 
 testFunction = locals()[testName]
 testFunction()
