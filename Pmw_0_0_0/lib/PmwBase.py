@@ -660,7 +660,7 @@ class MegaArchetype:
 	for option, value in kw.items():
 	    if optionInfo_has_key(option):
 		# This is one of the options of this megawidget. 
-		# Check it is an initialisation option.
+		# Make sure it is not an initialisation option.
 		if optionInfo[option][FUNCTION] is INITOPT:
 		    raise KeyError, \
 			    'Cannot configure initialisation option "' \
