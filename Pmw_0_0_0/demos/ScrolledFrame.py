@@ -65,12 +65,16 @@ class Demo:
 	vmode.pack(side = 'left', padx = 5, pady = 3)
 	vmode.invoke('dynamic')
 
+        self.radio = Pmw.RadioSelect(parent, selectmode = 'multiple',
+            command = self.radioSelected)
+        self.radio.add('center', text = 'Keep centered vertically')
+        self.radio.pack(side = 'bottom')
+
         buttonBox = Pmw.ButtonBox(parent)
 	buttonBox.pack(side = 'bottom')
-	buttonBox.add('add', text = 'Add a\nbutton', command = self.addButton)
-	buttonBox.add('yview', text = 'Show\nyview', command = self.showYView)
-	buttonBox.add('scroll', text = 'Page\ndown', command = self.pageDown)
-	buttonBox.add('center', text = 'Center', command = self.centerPage)
+	buttonBox.add('add', text = 'Add a button', command = self.addButton)
+	buttonBox.add('yview', text = 'Show yview', command = self.showYView)
+	buttonBox.add('scroll', text = 'Page down', command = self.pageDown)
 
 	# Pack this last so that the buttons do not get shrunk when
 	# the window is resized.
@@ -81,7 +85,8 @@ class Demo:
 	self.row = 0
 	self.col = 0
 
-	self.addButton()
+        for count in range(15):
+            self.addButton()
 
     def sethscrollmode(self, tag):
 	self.sf.configure(hscrollmode = tag)
@@ -102,7 +107,13 @@ class Demo:
 
 	self.frame.grid_rowconfigure(self.row, weight = 1)
 	self.frame.grid_columnconfigure(self.col, weight = 1)
-	self.sf.reposition()
+	if self.sf.cget('horizflex') == 'expand' or \
+                self.sf.cget('vertflex') == 'expand':
+            self.sf.reposition()
+
+        if 'center' in self.radio.getcurselection():
+            root.update_idletasks()
+            self.centerPage()
 
 	if self.col == self.row:
 	    self.col = 0
@@ -116,7 +127,12 @@ class Demo:
     def pageDown(self):
         self.sf.yview('scroll', 1, 'page')
 
+    def radioSelected(self, name, state):
+        if state:
+            self.centerPage()
+
     def centerPage(self):
+        # Example of how to use the yview() method of Pmw.ScrolledFrame.
         top, bottom = self.sf.yview()
         size = bottom - top
         middle = 0.5 - size / 2
