@@ -60,18 +60,31 @@ class Demo:
 	w = Pmw.Group(parent,
 		tag_pyclass = Tkinter.Button,
 		tag_text='Tkinter.Button')
+        w.configure(tag_command = w.toggle)
 	w.pack(fill = 'both', expand = 1, padx = 6, pady = 6)
 	cw = Tkinter.Label(w.interior(),
 		background = 'aliceblue',
 		text = 'A group with\na Button tag!?'
 	)
 	cw.pack(padx = 2, pady = 2, expand='yes', fill='both')
+
+	w = Pmw.Group(parent,
+		tag_pyclass = Tkinter.Button,
+		tag_text='Show/Hide')
+        w.configure(tag_command = w.toggle)
+	w.pack(fill = 'both', expand = 1, padx = 6, pady = 6)
+	cw = Tkinter.Label(w.interior(),
+		background = 'aliceblue',
+		text = 'Now you see me.\nNow you don\'t.'
+	)
+	cw.pack(padx = 2, pady = 2, expand='yes', fill='both')
+
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
     root = Tkinter.Tk()
-    Pmw.initialise(root, fontScheme = 'pmw1')
+    Pmw.initialise(root)
     root.title(title)
 
     exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
