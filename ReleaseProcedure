@@ -4,7 +4,7 @@
 VERSION=1.1
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="24 August 2002"
+VERSION_DATE="26 August 2002"
 
 BASEDIR=/home/workareas/gregm.on.sourceforge
 
