@@ -162,10 +162,10 @@ class ScrolledCanvas(Pmw.MegaWidget):
         # scroll commands.
 
         # Clean up previous scroll commands to prevent memory leak.
-        tclCommandName = self._canvas.cget('xscrollcommand')
+        tclCommandName = str(self._canvas.cget('xscrollcommand'))
         if tclCommandName != '':   
             self._canvas.deletecommand(tclCommandName)
-        tclCommandName = self._canvas.cget('yscrollcommand')
+        tclCommandName = str(self._canvas.cget('yscrollcommand'))
         if tclCommandName != '':   
             self._canvas.deletecommand(tclCommandName)
 

@@ -103,7 +103,7 @@ class Demo:
     def addButton(self):
 	button = Tkinter.Button(self.frame,
 	    text = '(%d,%d)' % (self.col, self.row))
-	button.grid(row = self.row, col = self.col, sticky = 'nsew')
+	button.grid(row = self.row, column = self.col, sticky = 'nsew')
 
 	self.frame.grid_rowconfigure(self.row, weight = 1)
 	self.frame.grid_columnconfigure(self.col, weight = 1)

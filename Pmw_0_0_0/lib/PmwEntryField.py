@@ -310,13 +310,13 @@ class EntryField(Pmw.MegaWidget):
         self.setentry('')
 
     def __setEntry(self, text):
-	disabled = (self._entryFieldEntry.cget('state') == 'disabled')
-	if disabled:
+	oldState = str(self._entryFieldEntry.cget('state'))
+	if oldState != 'normal':
 	    self._entryFieldEntry.configure(state='normal')
 	self._entryFieldEntry.delete(0, 'end')
 	self._entryFieldEntry.insert(0, text)
-	if disabled:
-	    self._entryFieldEntry.configure(state='disabled')
+	if oldState != 'normal':
+	    self._entryFieldEntry.configure(state=oldState)
 
     def setentry(self, text):
 	self._preProcess()

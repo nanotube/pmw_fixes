@@ -8,6 +8,7 @@ import sys
 import traceback
 import types
 import Tkinter
+import _tkinter
 
 if Tkinter.TkVersion >= 8.4:
   refcountafterdestroy = 7
@@ -174,12 +175,18 @@ def _print_results(result, expected, description):
                   expected is earthris or expected is stringvar or
 		  expected is floatvar or expected is flagup):
 	        ok = 1
+              elif hasattr(_tkinter, 'Tcl_Obj') and \
+                    type(result) == _tkinter.Tcl_Obj:
+                  ok = (str(stringvar) == result.string)
 	    elif type(expected) == types.IntType:
 		if type(result) is types.StringType:
 		    try:
 			ok = (string.atoi(result) == expected)
 		    except ValueError:
 			pass
+                elif hasattr(_tkinter, 'Tcl_Obj') and \
+                        type(result) == _tkinter.Tcl_Obj:
+                    ok = (string.atoi(str(result)) == expected)
 	    elif type(expected) == types.FloatType:
 		if type(result) is types.StringType:
 		    try:
@@ -224,7 +231,7 @@ def _Toplevel(title):
     top.title(title)
     return top
 
-def _constructor(isToplevel, isWidget, top, classCmd, kw):
+def _constructor(isWidget, top, classCmd, kw):
     if _verbose > 0:
 	print '====', classCmd.__name__, 'construction'
     if isWidget:
@@ -259,6 +266,10 @@ def _constructor(isToplevel, isWidget, top, classCmd, kw):
 			print '====', classCmd.__name__, 'widget', \
 			  '\'' + option + '\'', 'option'
 			print '---- setting option returns different value'
+                        print '==== new value was:'
+                        print newvalue, type(newvalue)
+                        print '---- set value was:'
+                        print value, type(value)
 			print '---- FAILED'
 			print
 		else:
@@ -268,10 +279,25 @@ def _constructor(isToplevel, isWidget, top, classCmd, kw):
 			  try:
 			      apply(w.configure, (), {option : value})
 			      newvalue = w.cget(option)
-			      if newvalue != value:
+                              if hasattr(_tkinter, 'Tcl_Obj') and \
+                              (
+                                    (type(newvalue) == _tkinter.Tcl_Obj
+                                        and str(newvalue) != str(value))
+                                    or
+                                    (type(newvalue) != _tkinter.Tcl_Obj
+                                        and newvalue != value)
+                              ) or \
+                              (
+                                  not hasattr(_tkinter, 'Tcl_Obj') and
+                                    newvalue != value
+                              ):
 				print '====', classCmd.__name__, 'widget', \
 				  '\'' + option + '\'', 'option'
 				print '---- setting option returns different value'
+                                print '==== new value was:'
+                                print `newvalue`, type(newvalue)
+                                print '---- set value was:'
+                                print `value`, type(value)
 				print '---- FAILED'
 				print
 			  except:
@@ -304,7 +330,7 @@ def _destructor(widget, isWidget):
 	    try:
 		widget.destroy()
                 ref = sys.getrefcount(widget)
-                if isWidget and ref != refcountafterdestroy:
+                if ref != refcountafterdestroy:
                     print '====', widget.__class__.__name__, 'destructor'
                     print '---- refcount', ref, 'not zero after destruction'
                     print '---- FAILED'
@@ -402,7 +428,7 @@ def _runTest(top, w, allTestData, index0, index1, index2):
     else:
 	methodTests, kw = fileTests[index1]
 	if index2 == -1:
-	    w = _constructor(isToplevel, isWidget, top, classCmd, kw)
+	    w = _constructor(isWidget, top, classCmd, kw)
 	    if w is None:
 	        root.quit()
 		return

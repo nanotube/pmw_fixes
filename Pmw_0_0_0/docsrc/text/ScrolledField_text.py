@@ -30,7 +30,8 @@ text['components'] = {}
 text['components']['entry'] = """
     This is used to display the text and allows the user to scroll and
     select the text.  The *state* of this component is set to
-    *'disabled'*, so that the user is unable to modify the text.
+    *'readonly'* (or *'disabled'* in earlier versions of Tcl/Tk which do
+    not support  *'readonly'*), so that the user is unable to modify the text.
 
 """
 

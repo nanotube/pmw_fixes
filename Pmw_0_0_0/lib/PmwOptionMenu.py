@@ -61,7 +61,7 @@ class OptionMenu(Pmw.MegaWidget):
 
         # Clean up old items and callback commands.
         for oldIndex in range(len(self._itemList)):
-            tclCommandName = self._menu.entrycget(oldIndex, 'command')
+            tclCommandName = str(self._menu.entrycget(oldIndex, 'command'))
             if tclCommandName != '':   
                 self._menu.deletecommand(tclCommandName)
         self._menu.delete(0, 'end')
@@ -74,13 +74,13 @@ class OptionMenu(Pmw.MegaWidget):
 
 	# Set the currently selected value.
 	if index is None:
-            var = self._menubutton.cget('textvariable')
+            var = str(self._menubutton.cget('textvariable'))
 	    if var != '':
 		# None means do not change text variable.
 		return
 	    if len(items) == 0:
 		text = ''
-	    elif self._menubutton.cget('text') in items:
+	    elif str(self._menubutton.cget('text')) in items:
                 # Do not change selection if it is still valid
 		return
 	    else:
@@ -92,9 +92,9 @@ class OptionMenu(Pmw.MegaWidget):
         self.setvalue(text)
 
     def getcurselection(self):
-	var = self._menubutton.cget('textvariable')
+	var = str(self._menubutton.cget('textvariable'))
 	if var == '':
-	    return self._menubutton.cget('text')
+	    return str(self._menubutton.cget('text'))
 	else:
 	    return self._menu.tk.globalgetvar(var)
 
@@ -102,7 +102,7 @@ class OptionMenu(Pmw.MegaWidget):
         return self.getcurselection()
 
     def setvalue(self, text):
-	var = self._menubutton.cget('textvariable')
+	var = str(self._menubutton.cget('textvariable'))
 	if var == '':
 	    self._menubutton.configure(text = text)
 	else:

@@ -35,7 +35,7 @@ tests_1 = (
     ('hull_cursor', 'gumby'),
     ('datatype', 'time'),
     ('datatype', 'numeric'),
-    ('entry_borderwidth', '6'),
+    ('entry_borderwidth', 6),
     ('entry_relief', 'raised'),
     ('entry_exportselection', 0),
     ('entry_foreground', 'blue'),

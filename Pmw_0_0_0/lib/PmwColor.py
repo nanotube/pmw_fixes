@@ -27,18 +27,18 @@ def getdefaultpalette(root):
     scbar = Tkinter.Scrollbar(root)
 
     orig = {}
-    orig['activeBackground'] = ckbtn.configure('activebackground')[4]
-    orig['activeForeground'] = ckbtn.configure('activeforeground')[4]
-    orig['background'] = ckbtn.configure('background')[4]
-    orig['disabledForeground'] = ckbtn.configure('disabledforeground')[4]
-    orig['foreground'] = ckbtn.configure('foreground')[4]
-    orig['highlightBackground'] = ckbtn.configure('highlightbackground')[4]
-    orig['highlightColor'] = ckbtn.configure('highlightcolor')[4]
-    orig['insertBackground'] = entry.configure('insertbackground')[4]
-    orig['selectColor'] = ckbtn.configure('selectcolor')[4]
-    orig['selectBackground'] = entry.configure('selectbackground')[4]
-    orig['selectForeground'] = entry.configure('selectforeground')[4]
-    orig['troughColor'] = scbar.configure('troughcolor')[4]
+    orig['activeBackground'] = str(ckbtn.configure('activebackground')[4])
+    orig['activeForeground'] = str(ckbtn.configure('activeforeground')[4])
+    orig['background'] = str(ckbtn.configure('background')[4])
+    orig['disabledForeground'] = str(ckbtn.configure('disabledforeground')[4])
+    orig['foreground'] = str(ckbtn.configure('foreground')[4])
+    orig['highlightBackground'] = str(ckbtn.configure('highlightbackground')[4])
+    orig['highlightColor'] = str(ckbtn.configure('highlightcolor')[4])
+    orig['insertBackground'] = str(entry.configure('insertbackground')[4])
+    orig['selectColor'] = str(ckbtn.configure('selectcolor')[4])
+    orig['selectBackground'] = str(entry.configure('selectbackground')[4])
+    orig['selectForeground'] = str(entry.configure('selectforeground')[4])
+    orig['troughColor'] = str(scbar.configure('troughcolor')[4])
 
     ckbtn.destroy()
     entry.destroy()
@@ -323,7 +323,7 @@ def _recolorTree(widget, oldpalette, newcolors):
     for dbOption in newcolors.keys():
         option = string.lower(dbOption)
         try:
-            value = widget.cget(option)
+            value = str(widget.cget(option))
         except:
             continue
         if oldpalette is None or value == oldpalette[dbOption]:

@@ -40,7 +40,8 @@ class Balloon(Pmw.MegaToplevel):
         # around the balloon, but avoids a black 'flash' when the
         # balloon is deiconified, before the text appears.
         if not kw.has_key('hull_background'):
-            self.configure(hull_background = self._label.cget('background'))
+            self.configure(hull_background = \
+                    str(self._label.cget('background')))
 
 	# Initialise instance variables.
 	self._timer = None
@@ -349,8 +350,8 @@ class Balloon(Pmw.MegaToplevel):
             y = bottomrel + widget.winfo_rooty()
         y = y + self['yoffset']
 
-        edges = (string.atoi(self.cget('hull_highlightthickness')) +
-            string.atoi(self.cget('hull_borderwidth'))) * 2
+        edges = (string.atoi(str(self.cget('hull_highlightthickness'))) +
+            string.atoi(str(self.cget('hull_borderwidth')))) * 2
         if x + self._label.winfo_reqwidth() + edges > screenWidth:
             x = screenWidth - self._label.winfo_reqwidth() - edges
 

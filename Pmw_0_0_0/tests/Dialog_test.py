@@ -34,6 +34,8 @@ def _test_deactivate(result):
 
 def _createOtherToplevel():
     global tempToplevel
+    Test.root.deiconify()
+    Test.root.geometry('+0+0')
     tempToplevel = Tkinter.Toplevel()
     tempToplevel.geometry('+0+0')
     label = Tkinter.Label(tempToplevel, text =
@@ -49,6 +51,7 @@ def _createOtherToplevel():
 def _hideOtherToplevel():
     global tempToplevel
     tempToplevel.withdraw()
+    Test.root.withdraw()
 
 def _bogus():
     w = Test.currentWidget()
@@ -78,7 +81,8 @@ tests_1 = (
   ('buttons', ('Apply', 'OK', 'Cancel')),
   ('defaultbutton', 'Cancel'),
   (c.invoke, 'OK', 'None'),
-  ('buttonbox_OK_text', 'OK'),
+  ('buttonbox_OK_text', 'OOOOOKKKKK'),
+  (c.show, ()),
   (c.withdraw, (), ''),
   ('buttons', ('Apply', 'OK', 'Cancel', 'Foo')),
   ('buttons', ('Apply', 'OK', 'Cancel')),

@@ -35,7 +35,14 @@ class MessageBar(Pmw.MegaWidget):
 	interior = self.interior()
 	self._messageBarEntry = self.createcomponent('entry',
 		(), None,
-		Tkinter.Entry, (interior,), state = 'disabled')
+		Tkinter.Entry, (interior,))
+
+        # Can't always use 'disabled', since this greys out text in Tk 8.4.2
+        try:
+            self._messageBarEntry.configure(state = 'readonly')
+        except Tkinter.TclError:
+            self._messageBarEntry.configure(state = 'disabled')
+
 	self._messageBarEntry.grid(column=2, row=2, sticky=self['sticky'])
 	interior.grid_columnconfigure(2, weight=1)
 	interior.grid_rowconfigure(2, weight=1)
@@ -126,6 +133,11 @@ class MessageBar(Pmw.MegaWidget):
 	self._messageBarEntry.configure(state = 'normal')
 	self._messageBarEntry.delete(0, 'end')
 	self._messageBarEntry.insert('end', text)
-	self._messageBarEntry.configure(state = 'disabled')
+
+        # Can't always use 'disabled', since this greys out text in Tk 8.4.2
+        try:
+            self._messageBarEntry.configure(state = 'readonly')
+        except Tkinter.TclError:
+            self._messageBarEntry.configure(state = 'disabled')
 
 Pmw.forwardmethods(MessageBar, Tkinter.Entry, '_messageBarEntry')

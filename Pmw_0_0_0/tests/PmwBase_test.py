@@ -40,7 +40,7 @@ class TestWidget(Pmw.MegaWidget):
 	    w.pack()
 	if hasattr(widget, 'geometry'):
 	    w.geometry('+100+100')
-	return w.cget(option)
+	return str(w.cget(option))
 
     def deleteTestWidget(self):
 	w = self.component('test')

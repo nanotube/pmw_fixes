@@ -59,7 +59,7 @@ class MainMenuBar(Pmw.MegaArchetype):
         menuId = str(menu)
         for item in range(parentMenu.index('end') + 1):
             if parentMenu.type(item) == 'cascade':
-                itemMenu = parentMenu.entrycget(item, 'menu')
+                itemMenu = str(parentMenu.entrycget(item, 'menu'))
                 if itemMenu == menuId:
                     parentMenu.delete(item)
                     del self._menuInfo[parentName][1][item]
@@ -174,9 +174,10 @@ class MainMenuBar(Pmw.MegaArchetype):
         if end is not None:
             for item in range(end + 1):
                 if menu.type(item) not in ('separator', 'tearoff'):
-                    underline = string.atoi(menu.entrycget(item, 'underline'))
+                    underline = \
+                            string.atoi(str(menu.entrycget(item, 'underline')))
                     if underline != -1:
-                        label = menu.entrycget(item, 'label')
+                        label = str(menu.entrycget(item, 'label'))
                         if underline < len(label):
                             hotkey = string.lower(label[underline])
                             if hotkey not in hotkeyList:
@@ -210,7 +211,7 @@ class MainMenuBar(Pmw.MegaArchetype):
             if index is None:
                 balloon.showstatus('')
             else:
-                if menu.cget('tearoff') == '1':
+                if str(menu.cget('tearoff')) == '1':
                     index = index - 1
                 if index >= 0:
                     help = self._menuInfo[menuName][1][index]

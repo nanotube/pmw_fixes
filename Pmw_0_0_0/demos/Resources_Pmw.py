@@ -24,9 +24,15 @@ class Demo:
 	    "('OK', 'Cancel')",
 	    "('OK', 'Apply', 'Cancel', 'Help')",
 	)
+
+        if Tkinter.TkVersion >= 8.4:
+          disabledState = 'readonly'
+        else:
+          disabledState = 'disabled'
+
 	self._buttons = Pmw.ComboBox(parent, label_text = 'buttons:',
 	        labelpos = 'w',
-		entry_state = 'disabled',
+		entry_state = disabledState,
 		scrolledlist_items = buttons)
 	self._buttons.pack(fill = 'x', expand = 1, padx = 8, pady = 8)
 	self._buttons.selectitem(3)
@@ -34,7 +40,7 @@ class Demo:
 	buttonboxpos = ('n', 's', 'e', 'w',)
 	self._buttonboxpos = Pmw.ComboBox(parent, label_text = 'buttonboxpos:',
 	        labelpos = 'w',
-		entry_state = 'disabled',
+		entry_state = disabledState,
 		scrolledlist_items = buttonboxpos)
 	self._buttonboxpos.pack(fill = 'x', expand = 1, padx = 8, pady = 8)
 	self._buttonboxpos.selectitem(2)
@@ -42,7 +48,7 @@ class Demo:
 	pad = ('0', '8', '20', '50',)
 	self._pad = Pmw.ComboBox(parent, label_text = 'padx, pady:',
 	        labelpos = 'w',
-		entry_state = 'disabled',
+		entry_state = disabledState,
 		scrolledlist_items = pad)
 	self._pad.pack(fill = 'x', expand = 1, padx = 8, pady = 8)
 	self._pad.selectitem(1)

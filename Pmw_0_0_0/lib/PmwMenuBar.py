@@ -64,7 +64,7 @@ class MenuBar(Pmw.MegaWidget):
             menuId = str(menu)
             for item in range(parentMenu.index('end') + 1):
                 if parentMenu.type(item) == 'cascade':
-                    itemMenu = parentMenu.entrycget(item, 'menu')
+                    itemMenu = str(parentMenu.entrycget(item, 'menu'))
                     if itemMenu == menuId:
                         parentMenu.delete(item)
                         del self._menuInfo[parentName][1][item]
@@ -185,9 +185,9 @@ class MenuBar(Pmw.MegaWidget):
             for menuName in self._menuInfo.keys():
                 if self._menuInfo[menuName][0] is None:
                     menubutton = self.component(menuName + '-button')
-                    underline = string.atoi(menubutton.cget('underline'))
+                    underline = string.atoi(str(menubutton.cget('underline')))
                     if underline != -1:
-                        label = menubutton.cget(textKey)
+                        label = str(menubutton.cget(textKey))
                         if underline < len(label):
                             hotkey = string.lower(label[underline])
                             if hotkey not in hotkeyList:
@@ -199,9 +199,9 @@ class MenuBar(Pmw.MegaWidget):
                 for item in range(end + 1):
                     if menu.type(item) not in ('separator', 'tearoff'):
                         underline = string.atoi(
-                            menu.entrycget(item, 'underline'))
+                            str(menu.entrycget(item, 'underline')))
                         if underline != -1:
-                            label = menu.entrycget(item, textKey)
+                            label = str(menu.entrycget(item, textKey))
                             if underline < len(label):
                                 hotkey = string.lower(label[underline])
                                 if hotkey not in hotkeyList:
@@ -231,7 +231,7 @@ class MenuBar(Pmw.MegaWidget):
             if index is None:
                 balloon.showstatus('')
             else:
-                if menu.cget('tearoff') == '1':
+                if str(menu.cget('tearoff')) == '1':
                     index = index - 1
                 if index >= 0:
                     help = self._menuInfo[menuName][1][index]

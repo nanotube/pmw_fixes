@@ -9,16 +9,16 @@ def aligngrouptags(groups):
     maxTagHeight = 0
     for group in groups:
 	if group._tag is None:
-	    height = (string.atoi(group._ring.cget('borderwidth')) +
-		    string.atoi(group._ring.cget('highlightthickness')))
+	    height = (string.atoi(str(group._ring.cget('borderwidth'))) +
+		    string.atoi(str(group._ring.cget('highlightthickness'))))
 	else:
 	    height = group._tag.winfo_reqheight()
 	if maxTagHeight < height:
 	    maxTagHeight = height
 
     for group in groups:
-	ringBorder = (string.atoi(group._ring.cget('borderwidth')) +
-		string.atoi(group._ring.cget('highlightthickness')))
+	ringBorder = (string.atoi(str(group._ring.cget('borderwidth'))) +
+		string.atoi(str(group._ring.cget('highlightthickness'))))
 	topBorder = maxTagHeight / 2 - ringBorder / 2
 	group._hull.grid_rowconfigure(0, minsize = topBorder)
 	group._ring.grid_rowconfigure(0,
@@ -63,8 +63,8 @@ class Group( Pmw.MegaWidget ):
 	    Tkinter.Label, (interior,),
 	    )
 
-	ringBorder = (string.atoi(self._ring.cget('borderwidth')) +
-		string.atoi(self._ring.cget('highlightthickness')))
+	ringBorder = (string.atoi(str(self._ring.cget('borderwidth'))) +
+		string.atoi(str(self._ring.cget('highlightthickness'))))
 	if self._tag is None:
 	    tagHeight = ringBorder
 	else:

@@ -216,10 +216,10 @@ class ScrolledListBox(Pmw.MegaWidget):
         # scroll commands.
 
         # Clean up previous scroll commands to prevent memory leak.
-        tclCommandName = self._listbox.cget('xscrollcommand')
+        tclCommandName = str(self._listbox.cget('xscrollcommand'))
         if tclCommandName != '':   
             self._listbox.deletecommand(tclCommandName)
-        tclCommandName = self._listbox.cget('yscrollcommand')
+        tclCommandName = str(self._listbox.cget('yscrollcommand'))
         if tclCommandName != '':   
             self._listbox.deletecommand(tclCommandName)
 

@@ -1323,4 +1323,34 @@ text = """
     ScrolledListBox.  In this case, the second button release of the
     double click is given to another widget.  (Eric Pettersen)
 
+  14 June 2003
+
+  - Changes for python 2.3b and Tcl/Tk 8.4.2:
+
+      - Wrapped calls to cget() for Tkinter widgets in a call to
+        str().  Before python 2.3b cget() always returned a string. 
+        Under python 2.3b, Tkinter sometimes returns non-string values
+        (such as int, or Tcl_Obj).  Made similar change when using
+        configure() to retrieve values.  Fixed tests to handle integer
+        and Tcl_Obj return value from cget().  (Charles Doutriaux)
+
+      - Fixed uses of /col/ field of grid command.  Must use full
+        /column/ under Tcl/Tk 8.4.2.
+
+      - Fixed PmwEntryField.py, PmwMessageBar.py, PmwScrolledField.py
+        so that the text is not greyed out under Tcl/Tk 8.4.2.  This
+        was caused by a change in behaviour of the *'disabled'* state
+        and the Tk entry widget.  Now use new *'readonly'* state for
+        Tcl/Tk 8.4.2.
+
+      - Test script now ignores Blt test for Tcl/Tk 8.4.2, since it
+        causes Blt 2.4z to core dump.  Blt needs to be fixed.
+
+      - Changed Dialog test to work around problem caused by Tk 8.4.2
+        enforcing transient behaviour of windows.  When activate() is
+        called on a dialog whose parent is withdrawn, then the dialog
+        window is made transient.  Under old versions of Tk, the
+        transient dialog was displayed, but under 8.4.2 the dialog is
+        not displayed.  Work around is to deiconify parent of dialog.
+
 """

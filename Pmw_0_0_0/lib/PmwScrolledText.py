@@ -169,7 +169,7 @@ class ScrolledText(Pmw.MegaWidget):
 	file.close()
 
     def settext(self, text):
-	disabled = (self._textbox.cget('state') == 'disabled')
+	disabled = (str(self._textbox.cget('state')) == 'disabled')
 	if disabled:
 	    self._textbox.configure(state='normal')
 	self._textbox.delete('0.0', 'end')
@@ -194,7 +194,7 @@ class ScrolledText(Pmw.MegaWidget):
     def appendtext(self, text):
         oldTop, oldBottom = self._textbox.yview()
      
-        disabled = (self._textbox.cget('state') == 'disabled')
+        disabled = (str(self._textbox.cget('state')) == 'disabled')
         if disabled:
             self._textbox.configure(state='normal')
         self._textbox.insert('end', text)
@@ -258,10 +258,10 @@ class ScrolledText(Pmw.MegaWidget):
         # scroll commands.
 
         # Clean up previous scroll commands to prevent memory leak.
-        tclCommandName = self._textbox.cget('xscrollcommand')
+        tclCommandName = str(self._textbox.cget('xscrollcommand'))
         if tclCommandName != '':   
             self._textbox.deletecommand(tclCommandName)
-        tclCommandName = self._textbox.cget('yscrollcommand')
+        tclCommandName = str(self._textbox.cget('yscrollcommand'))
         if tclCommandName != '':   
             self._textbox.deletecommand(tclCommandName)
 

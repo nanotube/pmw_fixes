@@ -151,10 +151,10 @@ class PanedWidget(Pmw.MegaWidget):
         # Note that, since the hull is a frame, the width and height
         # options specify the geometry *outside* the borderwidth and
         # highlightthickness.
-        bw = string.atoi(self.cget('hull_borderwidth'))
-        hl = string.atoi(self.cget('hull_highlightthickness'))
+        bw = string.atoi(str(self.cget('hull_borderwidth')))
+        hl = string.atoi(str(self.cget('hull_highlightthickness')))
         extra = (bw + hl) * 2
-        if self.cget('orient') == 'horizontal':
+        if str(self.cget('orient')) == 'horizontal':
             totalWidth = totalWidth + extra
             maxHeight = maxHeight + extra
             self.configure(hull_width = totalWidth, hull_height = maxHeight)
@@ -335,8 +335,8 @@ class PanedWidget(Pmw.MegaWidget):
 	    self._minorSize = self.winfo_height()
 	    majorspec = Tkinter.Frame.winfo_reqwidth
 
-        bw = string.atoi(self.cget('hull_borderwidth'))
-        hl = string.atoi(self.cget('hull_highlightthickness'))
+        bw = string.atoi(str(self.cget('hull_borderwidth')))
+        hl = string.atoi(str(self.cget('hull_highlightthickness')))
         extra = (bw + hl) * 2
         self._majorSize = self._majorSize - extra
         self._minorSize = self._minorSize - extra
