@@ -1,0 +1,9 @@
+# Widgets whose name is the same as its module.
+_widgets = ('AlphaExample',)
+
+# Widgets whose name is not the same as its module.
+_extraWidgets = {}
+
+_functions = {}
+
+_modules = ()

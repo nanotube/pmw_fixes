@@ -1,0 +1,278 @@
+<center><P ALIGN="CENTER">
+<IMG SRC = blue_line.gif ALT = "" WIDTH=320 HEIGHT=5>
+</p></center>
+
+<dl>
+<dt> <h2>Introduction</h2><dd>
+<p>
+This document describes how to fetch and install Pmw, and how to run
+the demonstrations and tests.
+
+</p>
+
+<dt> <h2>Requirements</h2><dd>
+<p>
+Pmw.PMW_VERSION requires the _tkinter and Tkinter modules.  It works with
+python 1.5.2 and Tk 8.0.
+
+</p>
+
+<p>
+If the BLT extension to Tk is present, Pmw will use the BLT busy
+command during modal dialogs to display a clock cursor.  Also, the
+Pmw.Blt interface to the BLT busy, graph, stripchart, tabset and
+vector commands will be available.  Only BLT version 2.4i is
+supported.  You can find BLT at
+<a href="http://www.tcltk.com/blt/">http://www.tcltk.com/blt/</a>.
+
+</p>
+
+<dt> <h2>Distribution and installation</h2><dd>
+<p>
+Releases of the Pmw distribution are available via http from
+<code>http://download.sourceforge.net/pmw/</code>.  This release is available
+as <a href="http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.tar.gz">
+<code>Pmw.PMW_VERSION.tar.gz</code></a>, released on VERSION_DATE. 
+This is a compressed tar file which, under Unix, can be unpacked like
+this:
+
+<dl>
+<dd>
+<pre>
+gunzip Pmw.PMW_VERSION.tar.gz
+tar xvf Pmw.PMW_VERSION.tar
+</pre>
+</dl>
+</p>
+
+<p>
+Under Microsoft Windows, you will need a program such as WinZip (<a
+href="http://www.winzip.com">http://www.winzip.com</a>) that can
+unpack the gzipped tar files.  You may need to change the suffix of
+the file to <strong>.tgz</strong> for WinZip to recognise it.
+
+</p>
+
+<p>
+
+This will unpack into a directory named Pmw.  You now need to put this
+directory somewhere python can find it, preferably in one of the
+standard places, such as in the <code>site-packages</code> directory
+(eg: <code>/usr/local/lib/python1.5/site-packages/Pmw</code>) or the
+<code>sys.prefix</code> directory (eg: <code>C:\Program
+Files\Python\Pmw</code> or <code>/usr/local/lib/python1.5</code>).
+
+</p>
+
+<p>
+
+If you do not have access to these standard directories, place the Pmw
+directory somewhere on your <code>PYTHONPATH</code> or
+<code>sys.path</code>.  If this is not possible, place the Pmw
+directory somewhere else and add the parent directory to your
+<code>PYTHONPATH</code> or <code>sys.path</code>.
+
+</p>
+
+<p>
+
+If you have previously installed Pmw version 0.6 or later, then the
+new version can share the same <code>Pmw</code> directory as the
+previous versions.  You will need to perform the <code>tar</code>
+extraction in the directory containing (that is, the parent directory
+of) the existing <code>Pmw</code> directory.  By default, your
+applications will use the most recent version of Pmw.  If required,
+the function <code>Pmw.setversion()</code> can be used to specify a
+version to be used.  See the reference manual for details.  If you are
+no longer using the older versions, you can safely remove the
+corresponding subdirectories from the <code>Pmw</code> directory.
+
+</p>
+
+<dt> <h2>Documentation</h2><dd>
+<p>
+The <code>doc</code> directory for each Pmw version contains all the
+documentation for that version of Pmw.  See the local <a
+href="index.html">home page</a> for a complete list of documents.  The
+files in this directory are also available from the <a
+href="http://pmw.sourceforge.net/">official Pmw home page</a>.
+
+</p>
+
+<dt> <h2>Demonstrations and tests</h2><dd>
+<p>
+  A good way to get an overview of the functionality provided by Pmw
+  is to run the demonstrations and tests and look at the demonstration
+  code.  To view a comprehensive demonstration of many of the features
+  of Pmw run the <code>All.py</code> script, which can be found in the
+  <code>demos</code> subdirectory of each version of Pmw.
+
+<p>
+
+  You do not have to install Pmw to run the demonstrations and tests,
+  simply change into the appropriate directory and run the file
+  <code>All.py</code>.  See <a
+  href="demosandtests.html">Demonstrations and tests</a> for more
+  information about running the demonstrations and tests and how to
+  create your own.
+
+</p>
+
+<a name=contributions></a>
+<dt> <h2>Contributions welcome</h2><dd>
+
+<p>
+If you create some whiz-bang megawidgets and would like to contribute
+them to Pmw, they will be most welcome.  You should be able to get
+some idea of the coding style used in Pmw code by reading <a
+href="howtobuild.html">How to build Pmw megawidgets</a> and by looking
+at the Pmw library code itself in the <code>lib</code> directory of
+each Pmw version.
+
+</p>
+
+<p>
+If you would like to contribute a megawidget, it would be preferable if it
+also came with a simple demonstration and a test script.  See <a
+href="demosandtests.html">Demonstrations and tests</a> for information
+about how to create new demonstrations and tests.
+
+<p>
+Each megawidget should also have a reference manual describing its
+options, components and methods.
+
+</p>
+
+<a name=docgen></a>
+<dt> <h2>Generating the documentation</h2><dd>
+
+<p>
+The released reference manuals are
+automatically generated by merging specially marked-up text with the
+output from megawidget query methods, such as
+<code>components()</code>, <code>options()</code> and
+<code>componentaliases()</code>, and various other introspective
+devices.  If you are interested to see how the documentation is generated,
+you can fetch the marked-up text and the python script to convert the
+text to html from
+<a href="http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.docsrc.tar.gz">
+<code>http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.docsrc.tar.gz</code>
+</a>.  Download this
+file into the <code>Pmw/Pmw_PMW_DIR</code> directory of the Pmw source
+tree.  Unzip and untar the file.  This will create a
+<code>docsrc</code> sub-directory of <code>Pmw/Pmw_PMW_DIR</code>.  If
+you want to keep the documentation which came with the Pmw
+distribution, rename the old <code>doc</code> directory.  Then change
+directory to <code>docsrc</code> and run <code>createmanuals.py</code>.
+After printing lots of warnings about documentation that has not been
+written yet, this will create a new <code>doc</code> directory
+containing all the html documentation.
+
+<p>
+Here is an example set of commands to unpack the documentation source
+and regenerate the documentation, assuming you have downloaded the
+source in the Pmw/Pmw_PMW_DIR directory:
+
+<dl>
+<dd>
+<pre>
+cd Pmw/Pmw_PMW_DIR
+gunzip Pmw.PMW_VERSION.docsrc.tar.gz
+tar xvf Pmw.PMW_VERSION.docsrc.tar
+mv doc doc.old
+cd docsrc
+./createmanuals.py
+</pre>
+</dl>
+</p>
+
+<p>
+If running under Unix, you will need to run the
+<code>createmanuals.py</code> script with a valid DISPLAY environment
+variable, since it creates each megawidget and then queries it for its
+options, components, etc.  This is because Tk (and hence Tkinter)
+requires a connection to an X server to run.
+
+</p>
+
+<dt> <h2>Future plans and bugs</h2><dd>
+
+<p>
+The <a href="todo.html">todo list</a> contains a long list of of
+suggestions, bugs and enhancements for Pmw.  If you are interested in
+doing any of these, please let me
+(<a href="mailto:gregm@iname.com"><i>gregm@iname.com</i></a>) know.
+Some of the items in the todo list may be considered bugs.  There are
+also some other problems due to idiosyncrasies in the implementation
+of Tk.
+
+</p>
+
+<dt> <h2>Acknowledgements</h2><dd>
+
+<p>
+The initial ideas for Pmw were blatantly stolen from the itcl
+extensions
+<a href="http://www.tcltk.com/itk">[incr Tk]</a>
+by Michael McLennan and
+<a href="http://www.tcltk.com/iwidgets">[incr Widgets]</a>
+by Mark Ulferts.  Several of the megawidgets are direct translations
+from the itcl to python.
+</p>
+
+<p>
+The base classes and most megawidgets were written by Greg McFarlane
+and Peter Munnings.  Contributed megawidgets include:  Pmw.TimeCounter
+by Joe VanAndel, Pmw.Group and an early version of Pmw.NoteBook by Case Roole,
+Pmw.ScrolledCanvas, Pmw.ScrolledFrame and another early version of
+Pmw.NoteBook by Joe Saltiel
+and Pmw.OptionMenu by Roman Sulzhyk.  A big thank you to the following
+people for their bug reports, fixes, enhancements and suggestions:
+
+David Ascher,
+Robin Becker,
+Siggy Brentrup,
+Mark Colclough,
+Jerome Gay,
+Clemens Hintze,
+Rob Hooft
+Jack Jansen,
+Jonathan Kelly,
+Magnus Kessler,
+Matthias Klose,
+Andreas Kostyrka,
+Fredrik Lundh,
+Magnus Lycka,
+Graham Matthews,
+Dieter Maurer,
+Michael McLay,
+Daniel Michelson,
+Georg Mischler,
+Rob Pearson,
+Case Roole,
+Joe Saltiel,
+Roman Sulzhyk,
+Shen Wang,
+Chris Wright,
+  and
+Guido van Rossum.
+
+Special thanks to Case Roole and Michael McLay for help with getting
+Pmw to work with python 1.5 packages and many other nifty features.
+
+My deepest apologies if I have forgotten anyone. Please let me know.
+
+</p>
+    
+<p>
+The Pmw home page and project site is made available courtesy of
+<a href="http://sourceforge.net">Sourceforge</a>.
+
+</p>
+<p>
+The current maintainer is Greg McFarlane.  If you have any
+comments, enhancements or new contributions, please contact me at
+<a href="mailto:gregm@iname.com"><i>gregm@iname.com</i></a>.
+</p>
+
+</dl>

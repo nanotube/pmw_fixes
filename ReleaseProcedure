@@ -1,0 +1,76 @@
+# Change these as required:
+
+# Version to be released
+VERSION=0.8.4
+
+# Date to put in documentation for the release date of this release
+VERSION_DATE="12 May 2000"
+
+BASEDIR=/home/workareas/gregm
+
+PYTHON=python1.5.2
+
+# ==================================================================
+
+# Location of Pmw source files:
+SRC_DIR=Pmw_0_0_0
+
+DIR=`echo ${VERSION} | tr . _`
+cd ${BASEDIR}/Pmw
+
+# Check that change file ends with "Released version $VERSION"
+tail ${SRC_DIR}/docsrc/text/changes_text.py
+
+# In the home page:        vi ${SRC_DIR}/docsrc/text/root_index.html
+#   - change the version number to $VERSION
+#   - update the date to $VERSION_DATE
+
+# Make sure porting document contains changes since last release
+vi ${SRC_DIR}/docsrc/text/porting_text.py
+
+# Chmod all files 664. Use this to check
+ls -lR | sort -u > /tmp/foosh
+vi /tmp/foosh
+
+# Check cvs for any unknown files:
+cvs -nq update -I \! -I CVS -I "*.pyc"
+
+cd ${BASEDIR}
+
+PYTHON=$PYTHON VERSION=${VERSION} SRC_DIR=${SRC_DIR} \
+  DIR=${DIR} VERSION_DATE=${VERSION_DATE} sh Pmw/maketar.sh
+
+# Check tests and documentation as instructed.
+# Check for unexpected files.
+
+# Ftp distribution to incoming on sourceforge:
+cd /tmp
+ftp download.sourceforge.net
+user: ftp
+password: gregm@iname.com
+cd incoming
+bin
+put Pmw.$VERSION.tar.gz
+put Pmw.$VERSION.docsrc.tar.gz
+
+# Move distribution to Pmw download page via Pmw project page.
+
+# Copy home page to sourceforge
+cd ${BASEDIR}/Pmw/${SRC_DIR}/docsrc/text
+scp root_index.html gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
+
+# Copy all documentation to home page
+scp Pmw.$VERSION.tar.gz gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
+
+ssh pmw.sourceforge.net
+  # set VERSION as ABOVE
+  DIR=`echo ${VERSION} | tr . _`
+  cd /home/groups/pmw/htdocs
+  gzip -dc Pmw.${VERSION}.tar.gz | tar xf - 
+  rm -rf doc
+  mv Pmw/Pmw_${DIR}/doc doc
+  rm -rf Pmw
+  mv root_index.html index.html
+  # mv old tar file(s) to "old" directory.
+
+# netscape http://pmw.sourceforge.net/
