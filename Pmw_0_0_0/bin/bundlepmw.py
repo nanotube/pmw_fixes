@@ -19,12 +19,12 @@ import sys
 # used.
 files = [
     'Dialog', 'TimeFuncs', 'Balloon', 'ButtonBox', 'EntryField',
-    'Group', 'LabeledWidget', 'MenuBar', 'MessageBar', 'MessageDialog',
-    'NoteBook', 'OptionMenu', 'PanedWidget', 'PromptDialog',
+    'Group', 'LabeledWidget', 'MainMenuBar', 'MenuBar', 'MessageBar',
+    'MessageDialog', 'NoteBook', 'OptionMenu', 'PanedWidget', 'PromptDialog',
     'RadioSelect', 'ScrolledCanvas', 'ScrolledField', 'ScrolledFrame',
-    'ScrolledListBox', 'ScrolledText', 'SelectionDialog', 'TextDialog',
-    'TimeCounter', 'AboutDialog', 'ComboBox', 'ComboBoxDialog', 'Counter',
-    'CounterDialog',
+    'ScrolledListBox', 'ScrolledText', 'HistoryText', 'SelectionDialog',
+    'TextDialog', 'TimeCounter', 'AboutDialog', 'ComboBox', 'ComboBoxDialog',
+    'Counter', 'CounterDialog',
 ]
 
 # Set this to 0 if you do not use any of the Pmw.Color functions:
