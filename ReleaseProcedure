@@ -62,6 +62,7 @@ cd ${BASEDIR}/Pmw/${SRC_DIR}/docsrc/text
 scp root_index.html gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
 
 # Copy all documentation to home page
+cd /tmp
 scp Pmw.$VERSION.tar.gz gregm@shell.sourceforge.net:/home/groups/pmw/htdocs
 
 ssh pmw.sourceforge.net
@@ -72,7 +73,7 @@ ssh pmw.sourceforge.net
   rm -rf doc
   mv Pmw/Pmw_${DIR}/doc doc
   rm -rf Pmw
+  rm -rf Pmw.${VERSION}.tar.gz
   mv root_index.html index.html
-  # mv old tar file(s) to "old" directory.
 
 # netscape http://pmw.sourceforge.net/
