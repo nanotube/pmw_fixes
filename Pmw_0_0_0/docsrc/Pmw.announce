@@ -1,52 +1,26 @@
-Subject: ANNOUNCE: Pmw megawidgets 1.1
+Subject: ANNOUNCE: Pmw megawidgets 1.2
 
         
                    Pmw megawidgets for Tkinter
 
-                          Version 1.1
+                          Version 1.2
 
                   Greg McFarlane <gregm@iname.com>
                     http://pmw.sourceforge.net/
 
-
-(The Pmw Development Team has aspired to the "release early, release
-often" school of free software.  It has not always lived up to the
-goal (the last release was over one year ago), so to try to remedy
-this, we have made two releases in 24 hours!  The first, 1.0, is
-described below.  The second, 1.1, was made 1) to fix a nasty bug just
-reported by the Pmw Quality Assurance Team in the new Pmw.ScrolledText
-row and column header functionality and 2) to boost the version number
-to make it look like we are making progress.)
-
                             --oOo--
 
-A new release of Pmw is out.  Although this release is numbered 1.0,
-Pmw has been in use for several years, has had many public releases
-and is quite stable.  The label 1.0 is given because the documentation
-is finally complete.
+A new release of Pmw is out.  This release makes Pmw compatable with
+recent releases of python and Tcl/Tk.
 
-Apart from the completed documentation, the main changes in this
-release are:
+This version of Pmw was tested against python 2.3, Tcl/Tk 8.4.2 and
+Blt 2.4z.  Except for Blt, all tests pass.  Blt seems to be more
+flacky than usual, with core dumps occuring in the Graph code.  Since
+this is a problem in Blt (not Pmw), the Blt test script has been
+removed from the default Pmw test sequence.
 
-  - added row and column headers to Pmw.ScrolledText which can be used
-    to display tabular data
-
-  - added getvalue() and setvalue() methods to several megawidgets as
-    a consistent way to set and get the user-modifiable state
-
-  - made sub-classing simpler (when no new options or components are
-          being created): 
-      - a sub-class of a Pmw megawidget does not need to have an
-        __init__() method
-      - if it does have an __init__() method, it does not need to call
-        defineoptions()
-      - initialiseoptions() no longer requires an argument
-      - if used, defineoptions() and initialiseoptions() must always
-        be called in matching pairs
-
-  - made fixes to work with python 2.1 and 2.2
-
-  - many bug fixes and other improvements
+Several other bug fixes and improvements were made.  See the change
+log for details.
 
 To download Pmw or for more information, see the home page at
   http://pmw.sourceforge.net/

@@ -1325,11 +1325,11 @@ text = """
 
   14 June 2003
 
-  - Changes for python 2.3b and Tcl/Tk 8.4.2:
+  - Changes for python 2.3 and Tcl/Tk 8.4.2:
 
       - Wrapped calls to cget() for Tkinter widgets in a call to
-        str().  Before python 2.3b cget() always returned a string. 
-        Under python 2.3b, Tkinter sometimes returns non-string values
+        str().  Before python 2.3 cget() always returned a string. 
+        Under python 2.3, Tkinter sometimes returns non-string values
         (such as int, or Tcl_Obj).  Made similar change when using
         configure() to retrieve values.  Fixed tests to handle integer
         and Tcl_Obj return value from cget().  (Charles Doutriaux)
@@ -1352,5 +1352,9 @@ text = """
         window is made transient.  Under old versions of Tk, the
         transient dialog was displayed, but under 8.4.2 the dialog is
         not displayed.  Work around is to deiconify parent of dialog.
+
+  5 August 2003
+
+  - Release of version 1.2
 
 """
