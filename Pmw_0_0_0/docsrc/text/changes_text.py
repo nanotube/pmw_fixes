@@ -1296,4 +1296,10 @@ text = """
 
   - Release of version 1.0
 
+  26 August 2002
+
+  - Minor fixes.
+
+  - Release of version 1.1
+
 """
