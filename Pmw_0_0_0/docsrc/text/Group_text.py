@@ -22,6 +22,12 @@ text['options']['tagindent'] = """
 
 """
 
+text['options']['collapsedsize'] = """
+    The distance from the bottom of the tag to the bottom of the ring
+    when the groupchildsite is collapsed.
+
+"""
+
 text['components'] = {}
 
 text['components']['ring'] = """
@@ -38,7 +44,8 @@ text['components']['groupchildsite'] = """
 
 text['components']['tag'] = """
     The identifying tag displayed over the top edge of the enclosing
-    ring.  If this is *None*, no tag is displayed.
+    ring.  If the pyclass for this component is *None*, (ie: 
+    /tag_pyclass = None/, then no tag component is created.
 
 """
 
@@ -47,5 +54,21 @@ text['methods'] = {}
 text['methods']['interior'] = """
     Return the frame within which the programmer may create widgets. 
     This is the same as /component(\\'groupchildsite\\')/.
+
+"""
+
+text['methods']['collapse'] = """
+    Do not display the groupchildsite component.
+
+"""
+
+text['methods']['expand'] = """
+    Display the groupchildsite component.
+
+"""
+
+text['methods']['toggle'] = """
+    Display the groupchildsite component if it is currently hidden and
+    hide it if it is currently displayed.
 
 """

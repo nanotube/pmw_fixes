@@ -32,10 +32,11 @@ class Group( Pmw.MegaWidget ):
         # Define the megawidget options.
 	INITOPT = Pmw.INITOPT
         optiondefs = (
+	    ('collapsedsize',    6,         INITOPT),
 	    ('ring_borderwidth', 2,         None),
 	    ('ring_relief',      'groove',  None),
-	    ('tagindent',        10,         INITOPT),
-	    )
+	    ('tagindent',        10,        INITOPT),
+        )
         self.defineoptions(kw, optiondefs)
 
         # Initialise the base class (after defining the options).
@@ -85,8 +86,28 @@ class Group( Pmw.MegaWidget ):
 	self._ring.grid_rowconfigure(0,
 		minsize = tagHeight - topBorder - ringBorder)
 
+        self.showing = 1
+
         # Check keywords and initialise options.
         self.initialiseoptions()
+
+    def toggle(self):
+        if self.showing:
+            self.collapse()
+        else:
+            self.expand()
+        self.showing = not self.showing
+
+    def expand(self):
+        self._groupChildSite.grid(column = 0, row = 1, sticky = 'nsew')
+
+    def collapse(self):
+        self._groupChildSite.grid_forget()
+	if self._tag is None:
+	    tagHeight = 0
+	else:
+            tagHeight = self._tag.winfo_reqheight()
+        self._ring.configure(height=(tagHeight / 2) + self['collapsedsize'])
 
     def interior(self):
         return self._groupChildSite
