@@ -116,7 +116,7 @@ class ScrolledFrame(Pmw.MegaWidget):
         self._vertScrollbar.set(0.0, 1.0)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ScrolledFrame)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self.scrollTimer is not None:

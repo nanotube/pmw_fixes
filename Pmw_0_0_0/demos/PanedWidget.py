@@ -9,69 +9,85 @@ import Pmw
 
 class Demo:
     def __init__(self, parent):
-	self.paneCount = 0
 
-	# Create a main PanedWidget with top and bottom panes.
-	pane = Pmw.PanedWidget(parent, hull_width=400, hull_height=300)
-	pane.add('top', min=100)
-	pane.add('bottom', min=100)
-
-	# Create three panes in the top pane.
-	topPane = Pmw.PanedWidget(pane.pane('top'), orient='horizontal',
-            hull_width=0, hull_height=0)
-	for num in range(4):
-	    if num == 1:
-		name = 'Fixed\nsize'
-		topPane.add(name, min = .2, max = .2)
+	# Create a main PanedWidget with a few panes.
+	self.pw = Pmw.PanedWidget(parent,
+                orient='vertical',
+                hull_borderwidth = 1,
+                hull_relief = 'sunken',
+                hull_width=300,
+                hull_height=400)
+	for self.numPanes in range(4):
+	    if self.numPanes == 1:
+		name = 'Fixed size'
+		pane = self.pw.add(name, min = .1, max = .1)
 	    else:
-		name = 'Pane\n' + str(num)
-		topPane.add(name, min = .1, size = .25)
-	    button = Tkinter.Button(topPane.pane(name), text = name)
-	    button.pack(expand = 1)
+		name = 'Pane ' + str(self.numPanes)
+		pane = self.pw.add(name, min = .1, size = .25)
+	    label = Tkinter.Label(pane, text = name)
+	    label.pack(side = 'left', expand = 1)
+	    button = Tkinter.Button(pane, text = 'Delete',
+                    command = lambda s=self, n=name: s.deletePane(n))
+	    button.pack(side = 'left', expand = 1)
+            # TODO: add buttons to invoke self.moveOneUp and self.moveOneUp.
 
-	topPane.pack(expand = 1, fill='both')
+	self.pw.pack(expand = 1, fill='both')
 
-	# Create a "pane factory" in the bottom pane.
-	label = Tkinter.Label(pane.pane('bottom'),
-		pady = 10,
-		text = 'Below is a "pane factory".\n' +
-			'Drag the handle on the left\nto create new panes.')
-	label.pack()
-	self.bottomPane = Pmw.PanedWidget(pane.pane('bottom'),
-		orient='horizontal',
-		command = self.resize,
-		hull_borderwidth = 1,
-		hull_relief = 'raised',
-		hull_width=0, hull_height=0
-                )
-	self.bottomPane.add('starter', size = 0.0)
-	self.bottomPane.add('main')
-	button = Tkinter.Button(self.bottomPane.pane('main'),
-		text = 'Pane\n0')
-	button.pack(expand = 1)
-	self.bottomPane.pack(expand = 1, fill = 'both')
-	pane.pack(expand = 1, fill = 'both')
+        buttonBox = Pmw.ButtonBox(parent)
+        buttonBox.pack(fill = 'x')
+        buttonBox.add('Add pane', command = self.addPane)   
+        buttonBox.add('Move pane', command = self.move)   
+        self.moveSrc = 0
+        self.moveNewPos = 1
+        self.moveBack = 0
 
-    def resize(self, list):
-	pane = self.bottomPane
-	# Remove any panes less than 2 pixel wide.
-	for i in range(len(list) - 1, 0, -1):
-	    if list[i] < 2:
-		pane.delete(i)
+    def move(self):
+        numPanes = len(self.pw.panes())
+        if numPanes == 0:
+            print 'No panes to move!'
+            return
 
-	# If the user has dragged the left hand handle, create a new pane.
-	if list[0] > 1:
-	    self.paneCount = self.paneCount + 1
+        if self.moveSrc >= numPanes:
+            self.moveSrc = numPanes - 1
+        if self.moveNewPos >= numPanes:
+            self.moveNewPos = numPanes - 1
+        print 'Moving pane', self.moveSrc, 'to new position', self.moveNewPos
+        self.pw.move(self.moveSrc, self.moveNewPos)
 
-	    # Add a button to the new pane.
-	    name = pane.panes()[0]
-	    text = 'Pane\n' + str(self.paneCount)
-	    button = Tkinter.Button(pane.pane(name), text = text)
-	    button.pack(expand = 1)
+        self.moveSrc, self.moveNewPos = self.moveNewPos, self.moveSrc
+        if self.moveBack:
+            if self.moveNewPos == numPanes - 1:
+                self.moveNewPos = 0
+                if self.moveSrc == numPanes - 1:
+                    self.moveSrc = 0
+                else:
+                    self.moveSrc = self.moveSrc + 1
+            else:
+                self.moveNewPos = self.moveNewPos + 1
+        self.moveBack = not self.moveBack
 
-	    # Create a new starter pane.
-	    name = 'Pane ' + str(self.paneCount)
-	    pane.insert(name, size=0.0)
+    def addPane(self):
+        self.numPanes = self.numPanes + 1
+        name = 'Pane ' + str(self.numPanes)
+        print 'Adding', name
+        pane = self.pw.add(name, min = .1, size = .25)
+        label = Tkinter.Label(pane, text = name)
+        label.pack(side = 'left', expand = 1)
+        button = Tkinter.Button(pane, text = 'Delete',
+                command = lambda s=self, n=name: s.deletePane(n))
+        button.pack(side = 'left', expand = 1)
+	self.pw.updatelayout()
+
+    def deletePane(self, name):
+        print 'Deleting', name
+        self.pw.delete(name)
+	self.pw.updatelayout()
+
+    def moveOneUp(self, name):
+        self.pw.move(name, name, -1)
+
+    def moveOneDown(self, name):
+        self.pw.move(name, name, 1)
 
 ######################################################################
 

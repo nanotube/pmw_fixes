@@ -1,15 +1,18 @@
 complete = 1
+reviewdate = "14 April 2001"
 
 name = """
     frame subdivided into several resizable panes
 """
 
 description = """
-    This class creates a manager widget for containing resizable
-    frames, known as panes.  Each pane may act as the container for
-    other widgets.  The user may resize the panes by dragging a small
-    rectangle (the handle) or the line between the panes (the separator).
-    The panes may be arranged horizontally or vertically.
+    A paned widget is a container megawidget which manages a number of
+    resizable frames, known as panes.  Each pane may act as the container for
+    other widgets.  The user may interactively resize the panes by
+    dragging a small rectangle (the handle) or the line between the
+    panes (the separator).  The panes may be arranged horizontally or
+    vertically.  Each pane may have maximum and minimum limits of its
+    size.
 
 """
 
@@ -54,6 +57,12 @@ text['options']['command'] = """
 
 """
 
+text['options']['handlesize'] = """
+    Specifies the size in pixels of the square handle which appears on
+    the lines separating the panes.
+
+"""
+
 text['options']['orient'] = """
     Specifies the orientation of the paned widget.  This may be
     *'horizontal'* or *'vertical'*.  If *'vertical'*, the panes are
@@ -63,7 +72,12 @@ text['options']['orient'] = """
 """
 
 text['options']['separatorrelief'] = """
-    Specifies the relief of the line separating the panes.
+    Specifies the relief of the lines separating the panes.
+
+"""
+
+text['options']['separatorthickness'] = """
+    Specifies the thickness of the lines separating the panes.
 
 """
 
@@ -127,4 +141,34 @@ text['methods']['delete'] = """
     *separator*-'n' and *handle*-'n', where 'n' is the number of
     panes remaining.
     
+"""
+
+text['methods']['move'] = """
+    Move the pane specified by 'name' to the new position specified by
+    'newPos'.  The first two arguments may be either an integer,
+    specifying the index of the pane, or a string, specifying the name
+    of the pane.  If 'newPosOffset' is specified, it is added to the
+    'newPos' index.  For example, to move a horizontal pane one pane
+    to the left, specify the name or index of the pane for both 'name'
+    and 'newPos' and specify *-1* for 'newPosOffset'.
+
+"""
+
+text['methods']['setnaturalsize'] = """
+    If oriented horizontally, set the width of the paned widget to the
+    sum of the requested widths of all panes and set the height to the
+    maximum requested height of all panes.
+
+    If oriented vertically, set the height of the paned widget to the
+    sum of the requested heights of all panes and set the width to the
+    maximum requested width of all panes.
+
+"""
+
+text['methods']['updatelayout'] = """
+    Recalculate size and position of panes.  This method must be
+    called after adding or deleting one or more panes.  However it
+    does not need to be called when panes are first added to a newly
+    created paned widget, before it has been displayed.
+
 """

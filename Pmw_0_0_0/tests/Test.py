@@ -479,8 +479,6 @@ def _methodTest(w, testData):
     if hasattr(func, 'im_func'):
 	name = w.__class__.__name__ + ' method ' + \
 	    func.im_func.func_code.co_name
-    elif hasattr(func, '__dict__'):
-	name = 'static method ' + func.__dict__['_func'].func_code.co_name
     else:
 	name = 'function ' + func.__name__
     name = name + ' ' + str(origArgs)

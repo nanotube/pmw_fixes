@@ -21,11 +21,10 @@ text = """
 	  prefix.  It also speeds up module loading time by only
 	  importing Pmw sub-modules when needed.
 
-	- Reference documentation, consisting of complete listings of
-	  megawidget options, methods and components.  Full
-	  descriptions are also available for all the base classes and
-	  several other megawidget classes.  Descriptions of the other
-	  megawidgets will be released soon.
+	- Complete reference documentation, covering all classes and
+          functions including all megawidgets and their options,
+          methods and components.  Helpful tutorial material is also
+          available.
 
 	- A test framework and tests for Pmw megawidgets.
 

@@ -28,7 +28,7 @@ class TextDialog(Pmw.Dialog):
 		padx = self['borderx'], pady = self['bordery'])
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(TextDialog)
+	self.initialiseoptions()
 
     # Need to explicitly forward this to override the stupid
     # (grid_)bbox method inherited from Tkinter.Toplevel.Grid.

@@ -6,7 +6,7 @@ name = """
 """
 
 description = """
-    This megawidget consists of a scrollable interior frame within a
+    A scrolled frame consists of a scrollable interior frame within a
     clipping frame.  The programmer can create other widgets within
     the interior frame.  If the frame becomes larger than the
     surrounding clipping frame, the user can position the frame using

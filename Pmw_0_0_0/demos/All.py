@@ -57,6 +57,7 @@ import sys
 import types
 import Tkinter
 import DemoVersion
+import Args
 
 # Find where the other scripts are, so they can be listed.
 if __name__ == '__main__':
@@ -144,7 +145,7 @@ class Demo(Pmw.MegaWidget):
 	self._loadDemos()
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(Demo)
+	self.initialiseoptions()
 
     def startDemo(self):
 	# Import the selected module and create and instance of the module's
@@ -225,7 +226,7 @@ class Demo(Pmw.MegaWidget):
 	others = []
 	for file in files:
 	    if re.search('.py$', file) is not None and \
-		    file not in ['All.py', 'DemoVersion.py']:
+		    file not in ['All.py', 'DemoVersion.py', 'Args.py']:
 		demoName = file[:-3]
 		index = string.find(demoName, '_')
 		if index < 0:
@@ -262,13 +263,32 @@ class StdOut:
 	self.displayCommand(text)
 
 if os.name == 'nt':
-    size = 16
+    defaultFontSize = 16
 else:
-    size = 12
-Pmw.initialise(root, size = size, fontScheme = 'pmw2', useTkOptionDb = 1)
+    defaultFontSize = 12
+
+commandLineArgSpecs = (
+    ('fontscheme', 0, 'scheme',  'fonts to use [eg pmw2] (Tk defaults)'),
+    ('fontsize',   0, 'num',     'size of fonts to use with fontscheme', defaultFontSize),
+    ('stdout',     0, Args.Bool, 'print messages rather than display in label'),
+)
+
+program = 'All.py'
+msg = Args.parseArgs(program, sys.argv, commandLineArgSpecs, 0)
+if msg is not None:
+    print msg 
+    sys.exit()
+
+size = Args.get('fontsize')
+fontScheme = Args.get('fontscheme')
+Pmw.initialise(root, size = size, fontScheme = fontScheme, useTkOptionDb = 1)
 
 root.title('Pmw ' + Pmw.version() + ' megawidget demonstration')
-root.geometry('700x550')
+if size < 18:
+    geometry = '800x550'
+else:
+    geometry = '1000x700'
+root.geometry(geometry)
 
 demo = Demo(root)
 demo.pack(fill = 'both', expand = 1)
@@ -276,7 +296,7 @@ demo.focus()
 
 # Redirect standard output from demos to status line (unless -stdout
 # option given on command line).
-if len(sys.argv) <= 1 or sys.argv[1] != '-stdout':
+if not Args.get('stdout'):
     sys.stdout = StdOut(demo.showStatus)
 
 # Start the first demo.

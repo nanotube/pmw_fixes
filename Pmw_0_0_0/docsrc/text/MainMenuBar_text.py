@@ -26,16 +26,16 @@ description = """
     
     There are methods to add menus, both as toplevel menus and
     sub-menus, and for adding menu items to the menus.  Each menu item
-    may have help text to be displayed by a ~Balloon~ widget.  Each
-    menu and cascaded menu (sub-menu) is referenced by name which is
-    supplied on creation.
+    may have help text to be displayed by a ~Balloon~.  Each menu and
+    cascaded menu (sub-menu) is referenced by name which is supplied
+    on creation.
 
     This megawidget is derived from ~MegaArchetype~ (not ~MegaWidget~
     like most other megawidgets), with the hull class being
     Tkinter.Menu.
 
-    (Note that due to bugs in Tk's menubar functionality, balloon
-    help has not been impleted and status help does not work properly.)
+    (Note that due to bugs in Tk's menubar functionality, balloon help
+    has not been implemented and status help does not work properly.)
 
 """
 
@@ -55,15 +55,13 @@ text = {}
 text['options'] = {}
 
 text['options']['balloon'] = """
-    Specifies a ~Balloon~ widget to display the help text for menu
-    items.  If *None*, no help is displayed.  If the balloon has an
-    associated ~MessageBar~, the help text will also be displayed
-    there.
+    Specifies a ~Balloon~ to display the help text for menu items.  If
+    *None*, no help is displayed.  If the balloon has an associated
+    ~MessageBar~, the help text will also be displayed there.
 
     Due to a bug in some versions of Tk (8.0 and possible others),
-    help text will not be displayed in the balloon widget.  However,
-    help text will be displayed in the balloon's associated
-    messagebar.
+    help text will not be displayed by the balloon.  However, help
+    text will be displayed in the balloon's associated messagebar.
 
 """
 

@@ -9,12 +9,12 @@ Test.initialise()
 class TestWidget(Pmw.MegaWidget):
 
     def __init__(self, parent = None, **kw):
-	# Define the megawidget options.
-	optiondefs = ()
-	self.defineoptions(kw, optiondefs)
+        # Define the megawidget options.
+        optiondefs = ()
+        self.defineoptions(kw, optiondefs)
 
-	# Initialise the base class (after defining the options).
-	Pmw.MegaWidget.__init__(self, parent)
+        # Initialise the base class (after defining the options).
+        Pmw.MegaWidget.__init__(self, parent)
 
 	# Create the components.
 	interior = self.interior()
@@ -23,8 +23,8 @@ class TestWidget(Pmw.MegaWidget):
 		Tkinter.Label, (interior,), text = 'test')
 	self._label.pack(side='left', padx=2)
 
-	# Check keywords and initialise options.
-	self.initialiseoptions(TestWidget)
+        # Check keywords and initialise options.
+        self.initialiseoptions(TestWidget)
 
     def addComponent(self, nickname):
 	self.createcomponent(nickname,
@@ -79,7 +79,7 @@ class TestComponent(Pmw.MegaWidget):
 	self._statusList = []
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(TestComponent)
+	self.initialiseoptions()
 
     def action(self, info):
         self._statusList.append(info)

@@ -6,7 +6,7 @@ name = """
 """
 
 description = """
-    This class consists of an entry field with arrow buttons to
+    A counter contains an entry field and two arrow buttons to
     increment and decrement the value in the entry field.  Standard
     counting types include numbers, times and dates.  A user defined
     counting function may also be supplied for specialised counting. 
@@ -51,7 +51,8 @@ text['options']['datatype'] = """
     The most general way to specify the *datatype* option is as a
     dictionary.  The kind of counting is specified by the *'counter'*
     dictionary field, which may be either a function or the name of
-    one of the standard counters described below.  The default is
+    one of the standard counters described below.  If the dictionary
+    does not have a *'counter'* field, the field defaults to
     *'numeric'*.
     
     Any other fields in the dictionary are passed on to the 'counter'
@@ -70,37 +71,45 @@ text['options']['datatype'] = """
 
     *'real'* -- A real number, as accepted by /string.atof()/.  This
 	counter accepts a *'separator'* argument, which specifies
-	the charactor used to represent the decimal point.  The
+	the character used to represent the decimal point.  The
 	default *'separator'* is *'.'*.
 
     *'time'* -- A time specification, as accepted by
 	/Pmw.timestringtoseconds()/.  This counter accepts a
-	*'separator'* argument, which specifies the charactor used to
-	separate the time fields.  The default separator is *':'*.
+	*'separator'* argument, which specifies the character used to
+	separate the time fields.  The default separator is *':'*. 
+        This counter also accepts a *'time24'* argument.  If this is
+        true, the time value is converted to a value between
+        *'00:00:00'* and *'23:59:59'*.  The default is false.
 
     *'date'* -- A date specification, as accepted by
 	/Pmw.datestringtojdn()/.  This counter accepts a *'separator'*
-	argument, which specifies the charactor used to separate the
+	argument, which specifies the character used to separate the
 	three date fields.  The default is *'/'*.  This counter also
 	accepts a *'format'* argument, which is passed to
 	/Pmw.datestringtojdn()/ to specify the desired ordering of the
 	fields.  The default is *'ymd'*.
+	This counter also accepts a *'yyyy'* argument.  If this is
+        false, the year field will be displayed as the year within the
+        century, otherwise it will be fully displayed.  In both cases
+        it will be displayed with at least 2 digits, using leading
+        zeroes.  The default is false.
 
-    If *'counter'* is a function, then it will be called whenever the
-    counter is incremented or decremented.  The function is called
-    with at least three arguments, the first three being ('text',
-    'factor', 'increment'), where 'text' is the current contents of
-    the entry field, 'factor' is *1* when incrementing or *-1* when
-    decrementing, and 'increment' is the value of the *increment*
-    megawidget option.
+    If the *'counter'* dictionary field is a function, then it will be
+    called whenever the counter is to be incremented or decremented. 
+    The function is called with at least three arguments, the first
+    three being ('text', 'factor', 'increment'), where 'text' is the
+    current contents of the entry field, 'factor' is *1* when
+    incrementing or *-1* when decrementing, and 'increment' is the
+    value of the *increment* megawidget option.
 
     The other arguments are keyword arguments made up of the fields of
     the *datatype* dictionary (excluding the *'counter'* field).
 
     The 'counter' function should return a string representing the
-    incremented or decremented value.  It should raise a a
+    incremented or decremented value.  It should raise a
     *ValueError* exception if the 'text' is invalid.  In this case the
-    bell is rung and the entry text is is not changed.
+    bell is rung and the entry text is not changed.
 
     The default for *datatype* is *numeric*.
 

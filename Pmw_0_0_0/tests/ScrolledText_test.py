@@ -22,7 +22,7 @@ def _testYView(doBottom):
 kw_1 = {'labelpos': 'n', 'label_text': 'ScrolledText'}
 tests_1 = (
   (c.pack, (), {'padx' : 10, 'pady' : 10, 'fill' : 'both', 'expand' : 1}),
-  (Test.num_options, (), 7),
+  (Test.num_options, (), 10),
   (c.importfile, 'ScrolledText_test.py'),
   ('hull_background', 'aliceblue'),
   ('text_borderwidth', 3),

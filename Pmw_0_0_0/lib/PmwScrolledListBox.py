@@ -111,7 +111,7 @@ class ScrolledListBox(Pmw.MegaWidget):
         self.lastEventWasDouble = 0
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ScrolledListBox)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self.scrollTimer is not None:
@@ -132,6 +132,24 @@ class ScrolledListBox(Pmw.MegaWidget):
 	for sel in self.curselection():
 	    rtn.append(self._listbox.get(sel))
 	return tuple(rtn)
+
+    def getvalue(self):
+        return self.getcurselection()
+
+    def setvalue(self, textOrList):
+        self._listbox.selection_clear(0, 'end')
+        listitems = list(self._listbox.get(0, 'end'))
+        if type(textOrList) == types.StringType:
+            if textOrList in listitems:
+                self._listbox.selection_set(listitems.index(textOrList))
+            else:
+                raise ValueError, 'no such item "%s"' % textOrList
+        else:
+            for item in textOrList:
+                if item in listitems:
+                    self._listbox.selection_set(listitems.index(item))
+                else:
+                    raise ValueError, 'no such item "%s"' % item
 
     def setlist(self, items):
         self._listbox.delete(0, 'end')

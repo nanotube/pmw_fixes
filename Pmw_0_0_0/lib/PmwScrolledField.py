@@ -28,7 +28,7 @@ class ScrolledField(Pmw.MegaWidget):
 	self.createlabel(interior)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ScrolledField)
+	self.initialiseoptions()
 
     def _text(self):
         text = self['text']

@@ -6,7 +6,7 @@ name = """
 """
 
 description = """
-    This megawidget consists of a standard canvas widget with optional
+    A scrolled canvas consists of a standard canvas widget with optional
     scrollbars which can be used to scroll the canvas.  The scrollbars
     can be 'dynamic', which means that a scrollbar will only be
     displayed if it is necessary, that is, if the scrollregion of the

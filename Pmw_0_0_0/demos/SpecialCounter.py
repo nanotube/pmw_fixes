@@ -19,20 +19,12 @@ class LabeledDateCounter(Pmw.Counter):
 	now = (long(time.time()) / 300) * 300
         text = time.strftime('%y/%m/%d', time.localtime(now))
 
-	# Define the megawidget options.
-	optiondefs = (
-            ('datatype',              'date',     None),
-            ('entryfield_validate',   'date',     None),
-            ('entryfield_value',      text,       None),
-            ('labelpos',              'w',        None),
-	)
-	self.defineoptions(kw, optiondefs)
+        kw['datatype'] = 'date'
+        kw['entryfield_validate'] = 'date'
+        kw['entryfield_value'] = text
+        kw['labelpos'] = 'w'
 
-	# Initialise the base class (after defining the options).
-	Pmw.Counter.__init__(self, parent)
-
-	# Check keywords and initialise options.
-	self.initialiseoptions(LabeledDateCounter)
+	apply(Pmw.Counter.__init__, (self, parent), kw)
 
 class LabeledRealCounter(Pmw.Counter):
 
@@ -40,20 +32,13 @@ class LabeledRealCounter(Pmw.Counter):
 
         # Define the validate option dictionary.
         validate = {'validator' : 'real', 'min' : 0.0, 'max' : 100.0}
-	# Define the megawidget options.
-	optiondefs = (
-            ('datatype',              'real',     None),
-            ('entryfield_validate',   validate,   None),
-            ('entryfield_value',      50.0,       None),
-            ('labelpos',              'w',        None),
-	)
-	self.defineoptions(kw, optiondefs)
 
-	# Initialise the base class (after defining the options).
-	Pmw.Counter.__init__(self, parent)
+        kw['datatype'] = 'real'
+        kw['entryfield_validate'] = validate
+        kw['entryfield_value'] = 50.0
+        kw['labelpos'] = 'w'
 
-	# Check keywords and initialise options.
-	self.initialiseoptions(LabeledRealCounter)
+	apply(Pmw.Counter.__init__, (self, parent), kw)
 
 class Demo:
     def __init__(self, parent):

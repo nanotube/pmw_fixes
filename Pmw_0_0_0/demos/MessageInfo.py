@@ -61,7 +61,7 @@ class MessageInfo(Pmw.MegaToplevel):
 	self.bind('<Return>', self.goodbye)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(MessageInfo)
+	self.initialiseoptions()
 
     def goodbye(self, event = None):
 	self.destroy()

@@ -40,7 +40,7 @@ class AboutDialog(Pmw.MessageDialog):
             self.configure(message_text=text)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(AboutDialog)
+	self.initialiseoptions()
 
 def aboutversion(value):
     AboutDialog._version = value

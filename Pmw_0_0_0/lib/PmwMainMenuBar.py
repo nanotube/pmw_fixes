@@ -35,7 +35,7 @@ class MainMenuBar(Pmw.MegaArchetype):
             lambda event=None, self=self: self._menuHelp(event, None))
 
         # Check keywords and initialise options.
-        self.initialiseoptions(MainMenuBar)
+        self.initialiseoptions()
 
     def deletemenuitems(self, menuName, start, end = None):
         self.component(menuName).delete(start, end)

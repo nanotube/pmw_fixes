@@ -39,7 +39,7 @@ class TestWidget(Pmw.MegaWidget):
 	self._statusList = []
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(TestWidget)
+	self.initialiseoptions()
 
     def statusList(self, val=None):
         if val is None:

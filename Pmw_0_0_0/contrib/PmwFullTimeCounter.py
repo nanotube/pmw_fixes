@@ -48,7 +48,7 @@ class FullTimeCounter(Pmw.MegaWidget):
     	self._setTimeFromStr(value)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(FullTimeCounter)
+	self.initialiseoptions()
 
     def _createComponents(self):
 
@@ -422,8 +422,8 @@ class FullTimeCounter(Pmw.MegaWidget):
 	elif datetype == "day": self._day = self._day + factor
 	elif datetype == "hour": self._hour = self._hour + factor
 	elif datetype == "minute": self._minute = self._minute + factor
-	secs = time.mktime(self._year, self._month, self._day, self._hour, 
-			   self._minute, 0, 0, 0, -1)
+	secs = time.mktime((self._year, self._month, self._day, self._hour, 
+			   self._minute, 0, 0, 0, -1))
 	tt = time.localtime(secs) # NOT gmtime!
 
 	self._year = tt[0]
@@ -468,3 +468,25 @@ class FullTimeCounter(Pmw.MegaWidget):
             self.after_cancel(self._timerId)
 	    self._timerId = None
         Pmw.MegaWidget.destroy(self)
+
+if __name__=="__main__":
+
+    def showString():
+        stringVal = _time.getstring()
+        print stringVal
+
+    root = Tkinter.Tk()
+    Pmw.initialise(root)
+    root.title('FullTimeCounter')
+
+    exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)
+    exitButton.pack(side = 'bottom')
+
+    _time = FullTimeCounter(root,
+            labelpos = 'n',
+            label_text = 'YYYY:MM:DD:HH:mm')
+    _time.pack(fill = 'both', expand = 1, padx=10, pady=5)
+
+    button = Tkinter.Button(root, text = 'Show', command = showString)
+    button.pack()
+    root.mainloop()

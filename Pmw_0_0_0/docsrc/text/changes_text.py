@@ -1168,6 +1168,15 @@ text = """
   - Added xview() and yview() methods to Pmw.ScrolledFrame (suggested
     by Christer Fernstrom).
 
+  - Made tktrace output more readable.
+
+  - Added noBltBusy option to Pmw.initialise.
+
+  - Fixed bug where combobox dropdown list could stay mapped after
+    entryfield was unmapped.
+
+  - Improved scrolling in scrolled frame.
+
   21 February 2001
 
   - Fixed tests for recent version of Blt graph (reported by
@@ -1192,5 +1201,94 @@ text = """
 
   - Added HistoryText and MainMenuBar to bin/bundlepmw.py - accidently
     left out.
+
+  13 April 2001
+
+  - Changed default foreground (text) of Pmw.Balloown to black.  (Eric
+    Pettersen)
+
+  - Added default fontScheme to Pmw.initialise().
+
+  - Added -fontscheme and -fontsize options to demo.
+
+  - Added updatelayout() to Pmw.PanedWidget for use when dynamically
+    adding and deleting panes.  (G Cash)
+
+  - Added move() to Pmw.PanedWidget to move panes.  (G Cash)
+
+  20 April 2001
+
+  - Fixed bug in Pmw.Balloon where the balloon would reappear if the
+    mouse button was pressed down inside a widget and then, while the
+    mouse button was being held down, the mouse was moved outside of
+    the widget and then moved back over the widget.
+
+  - Fixed bug in Pmw.Balloon when destroying widgets while the balloon
+    was up.  In this case, the balloon remained displayed even though
+    the widget had been destroyed. (Reported by Stefan Schone.)
+
+  - Fixed bug in Pmw.Balloon when destroying widgets during the
+    initwait period.  In this case, an error occurred when the
+    initwait timer went off when it tried to access the destroyed
+    widget. (Reported by Stefan Schone.)
+
+  - Fixed Pmw.Balloon so that unbinding withdraws the balloon if
+    the widget being unbound is the widget which triggered the balloon.
+
+  - Modified Pmw.Balloon so that when deleting a canvas or text item,
+    /tagunbind()/ can be called which will withdraw the balloon if it
+    was triggered by the item.  Unfortunately this can not be
+    automated as for widgets since Tk does not support <Destroy>
+    bindings on canvas or text items, so there is no way that
+    Pmw.Balloon can be notified of the deletion of an item.
+
+  - Updated tests for python 2.1.
+
+  21 May 2001
+
+  - Pmw.OptionMenu now defaults to taking focus (on <Tab> key).
+
+  15 May 2002
+
+  - Fixed bug in Pmw.Graph.element_closest() where element names
+    should follow option arguments.  (Val Shkolnikov)
+
+  5 June 2002
+
+  - Added command option to Pmw.TimeCounter.
+
+  - Finished all documentation.
+
+  - Fixed bug in documentation creation script which, since python
+    2.0, printed default values of real options (such as the
+    horizfraction option of Pmw.ScrolledFrame) with too many digits
+    (such as 0.050000000000000003).
+
+  - Fixed bug in setgeometryanddeiconify for cygwin python (John
+    Williams).
+
+  4 July 2002
+
+  - Added master option to /MegaToplevel.show()/
+
+  - Improved /MegaToplevel.show()/ so that tkraise is not called
+    unecessarily, thus avoiding 2 second delay under certain window
+    managers (such as sawfish).
+
+  18 August 2002
+
+  - Added columnheader, rowheader and rowcolumnheader components to
+    Pmw.ScrolledText.  (Rob Pearson)
+
+  - Added /getvalue()/ and /setvalue()/ methods to several megawidgets
+    as a consistent way to set and get the user-modifiable state. 
+    (Cimarron Taylor)
+
+  - Made sub-classing simpler when no new options or components are
+    being created.  A sub-class of a Pmw megawidget does not need to
+    have an __init__() method.  If it does, it does not need to call
+    defineoptions().  Also, initialiseoptions() no longer requires an
+    argument (for backwards compatibility it may take an argument, but
+    it is ignored).
 
 """

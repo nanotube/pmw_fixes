@@ -1,0 +1,94 @@
+Subject: ANNOUNCE: Pmw megawidgets 1.0
+
+        
+                   Pmw megawidgets for Tkinter
+
+                          Version 1.0
+
+                  Greg McFarlane <gregm@iname.com>
+                    http://pmw.sourceforge.net/
+
+
+A new release of Pmw is out.  Although this release is numbered 1.0,
+Pmw has been in use for several years, has had many public releases
+and is quite stable.  The label 1.0 is given because the documentation
+is finally complete.
+
+Apart from the completed documentation, the main changes in this
+release are:
+
+  - added row and column headers to Pmw.ScrolledText which can be used
+    to display tabular data
+
+  - added getvalue() and setvalue() methods to several megawidgets as
+    a consistent way to set and get the user-modifiable state
+
+  - made sub-classing simpler (when no new options or components are
+          being created): 
+      - a sub-class of a Pmw megawidget does not need to have an
+        __init__() method
+      - if it does have an __init__() method, it does not need to call
+        defineoptions()
+      - initialiseoptions() no longer requires an argument
+      - if used, defineoptions() and initialiseoptions() must always
+        be called in matching pairs
+
+  - made fixes to work with python 2.1 and 2.2
+
+  - many bug fixes and other improvements
+
+To download Pmw or for more information, see the home page at
+  http://pmw.sourceforge.net/
+
+If you have any comments, enhancements or new contributions, please
+contact me (gregm@iname.com).
+
+=====================================================================
+
+What is Pmw?
+
+    Pmw is a toolkit for building high-level compound widgets, or
+    megawidgets, constructed using other widgets as component parts. 
+    It promotes consistent look and feel within and between graphical
+    applications, is highly configurable to your needs and is easy to
+    use.  It uses the Tkinter python library.
+
+    Pmw consists of:
+
+        - A few base classes, providing a foundation for building
+          megawidgets.
+
+        - A library of flexible and extensible megawidgets built on
+          the base classes, such as buttonboxes, notebooks,  
+          comboboxes, selection widgets, paned widgets, scrolled
+          widgets and dialog windows.
+
+        - A lazy importer/dynamic loader which is automatically
+          invoked when Pmw is first imported.  This gives unified
+          access to all Pmw classes and functions through the Pmw.
+          prefix.  It also speeds up module loading time by only
+          importing Pmw sub-modules when needed.
+
+        - Complete reference documentation, covering all classes and
+          functions including all megawidgets and their options,
+          methods and components.  Helpful tutorial material is also
+          available.
+
+        - A test framework and tests for Pmw megawidgets.
+
+        - A slick demonstration of the megawidgets.
+
+        - An interface to the BLT busy, graph and vector commands.
+
+    The interface to Pmw megawidgets is similar to basic Tk widgets,
+    so it is easy for developers to include both megawidgets and basic
+    Tk widgets in their graphical applications.  In addition, Pmw
+    megawidgets may themselves be extended, using either inheritance
+    or composition.
+
+    The use of the Pmw megawidgets replaces common widget combinations
+    with higher level abstractions.  This simplifies code, making it
+    more readable and maintainable.  The ability to extend Pmw
+    megawidgets enables developers to create new megawidgets based on
+    previous work.
+

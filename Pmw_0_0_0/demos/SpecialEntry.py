@@ -14,19 +14,9 @@ class SpecialEntry(Pmw.EntryField):
 
     def __init__(self, parent=None , **kw):
 
-	# Define the megawidget options.
-	optiondefs = (
-	    ('extravalidators', _myValidators, None),
-	)
-	self.defineoptions(kw, optiondefs)
-
-	# Initialise the base class (after defining the options).
-	Pmw.EntryField.__init__(self, parent)
-
+        kw['extravalidators'] = _myValidators
+	apply(Pmw.EntryField.__init__, (self, parent), kw)
 	self._converter = None
-
-	# Check keywords and initialise options.
-	self.initialiseoptions(SpecialEntry)
 
     def setentry(self, text):
 	# Override Pmw.EntryField.setentry to pass string through

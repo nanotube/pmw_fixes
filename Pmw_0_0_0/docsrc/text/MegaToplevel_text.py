@@ -13,7 +13,7 @@ description = """
     component, named *hull*, to act as the container of the megawidget. 
     The window class name for the *hull* widget is set to the
     most-specific class name for the megawidget.  Derived classes
-    specialise this widget by creating other widget components as
+    specialise this class by creating other widget components as
     children of the *hull* widget.
     
     The megawidget may be used as either a normal toplevel window or
@@ -68,8 +68,8 @@ text['components'] = {}
 
 text['components']['hull'] = """
     This acts as the body for the entire megawidget.  Other components
-    are created as children of the hull to further specialise the
-    widget.
+    are created as children of the hull to further specialise this
+    class.
 
 """
 

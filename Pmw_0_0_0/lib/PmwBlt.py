@@ -399,7 +399,7 @@ class Graph(Tkinter.Widget):
         var = 'python_private_1'
 	success = self.tk.getint(self.tk.call(
                 (self._w, 'element', 'closest', x, y, var) +
-                        args + self._options(kw)))
+                        self._options(kw) + args))
 	if success:
 	    rtn = {}
 	    rtn['dist'] = self.tk.getdouble(self.tk.globalgetvar(var, 'dist'))

@@ -67,7 +67,7 @@ class Simple(Pmw.MegaWidget):
 		Tkinter.Button, (interior,))
 	self._widget.grid(column=0, row=0, sticky='nsew')
 
-	self.initialiseoptions(Simple)
+	self.initialiseoptions()
 
 class Complex(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
@@ -86,7 +86,7 @@ class Complex(Pmw.MegaWidget):
 		Simple, (interior,))
 	self._simple.grid(column=0, row=0, sticky='nsew')
 
-	self.initialiseoptions(Complex)
+	self.initialiseoptions()
 
 class Base(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
@@ -119,7 +119,7 @@ class Base(Pmw.MegaWidget):
 
 	self.basedummy = []
 
-	self.initialiseoptions(Base)
+	self.initialiseoptions()
 
     def _optbase1(self):
 	self.basedummy.append(self['optbase1'])
@@ -160,7 +160,7 @@ class Derived(Base):
 	self.deriveddummy = []
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(Derived)
+	self.initialiseoptions()
 
     def _optbase1(self):
 	self.deriveddummy.append(self['optbase1'])

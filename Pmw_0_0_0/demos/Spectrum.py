@@ -58,20 +58,48 @@ class Demo:
 		command = Pmw.busycallback(self.execute))
 	self.extraOrange.grid(row = 3, column = 0, sticky = 'ew')
 
+	self.text = Pmw.EntryField(parent,
+		labelpos = 'w',
+		label_text = 'Text:',
+		entry_width = 20,
+		command = Pmw.busycallback(self.execute))
+	self.text.grid(row = 4, column = 0, sticky = 'ew')
+
+	self.brightness = Pmw.EntryField(parent,
+		labelpos = 'w',
+		label_text = 'Brightness:',
+		validate = 'real',
+		entry_width = 5,
+		command = Pmw.busycallback(self.execute))
+	self.brightness.grid(row = 3, column = 1, sticky = 'ew')
+
+	self.radiobuttons = Pmw.RadioSelect(parent,
+		command = Pmw.busycallback(self.radio_cb),
+	)
+        self.radiobuttons.grid(row = 4, column = 1)
+        self.radiobuttons.add('Use saturation\nand intensity')
+        self.radiobuttons.add('Use\nbrightness')
+
 	parent.grid_columnconfigure(0, weight = 1)
 	parent.grid_columnconfigure(1, weight = 1)
 	parent.grid_rowconfigure(0, weight = 1)
 
 	Pmw.alignlabels((self.numColors, self.saturation, self.extraOrange))
-	Pmw.alignlabels((self.correction, self.intensity))
+	Pmw.alignlabels((self.correction, self.intensity, self.brightness))
 
 	# Set initial values for all entries.
 	self.numColors.setentry('64')
-	self.correction.setentry('1.5')
+	self.correction.setentry('1.0')
 	self.saturation.setentry('1.0')
 	self.intensity.setentry('1.0')
 	self.extraOrange.setentry('1')
+	self.brightness.setentry('0.7')
+	self.text.setentry('This is a test')
+	self.radiobuttons.invoke('Use saturation\nand intensity')
 
+	self.execute()
+
+    def radio_cb(self, value):
 	self.execute()
 
     def execute(self):
@@ -81,6 +109,7 @@ class Demo:
 	    saturation = string.atof(self.saturation.get())
 	    intensity = string.atof(self.intensity.get())
 	    extraOrange = string.atof(self.extraOrange.get())
+	    brightness = string.atof(self.brightness.get())
 	except ValueError:
 	    self.numColors.bell()
 	    return
@@ -89,23 +118,39 @@ class Demo:
 	    self.numColors.bell()
 	    return
 
+        self.canvas.delete('all')
+
 	colorList = Pmw.Color.spectrum(
 		numColors, correction, saturation, intensity, extraOrange)
 	extent = 360.0 / numColors
+
+        useBrightness = \
+                (self.radiobuttons.getcurselection() == 'Use\nbrightness')
 
 	if numColors == 1:
 	    # Special case circle, since create_arc does not work when
 	    # extent is 360.
 	    background = colorList[0]
+            if useBrightness:
+                background = Pmw.Color.changebrightness(
+                        self.canvas, background, brightness)
 	    self.canvas.create_oval(10, 10, self.width - 10, self.height - 10,
 		fill = background, outline = background)
 
 	for index in range(numColors):
 	    start = index * extent - extent / 2
 	    background = colorList[index]
+            if useBrightness:
+                background = Pmw.Color.changebrightness(
+                        self.canvas, background, brightness)
 	    self.canvas.create_arc(10, 10, self.width - 10, self.height - 10,
 		start = start, extent = extent,
 		fill = background, outline = background)
+
+        text = self.text.get()
+        self.canvas.create_text(self.width / 2, self.height / 3, text = text)
+        self.canvas.create_text(self.width / 2, self.height / 2, text = text)
+        self.canvas.create_text(self.width / 2, 2 * self.height / 3, text = text)
 
 ######################################################################
 

@@ -16,6 +16,7 @@ class Demo:
       (('Helvetica', 0), {}),
       (('Typewriter', 0), {}),
       (('Fixed', 0), {}),
+      (('Courier', 0), {}),
       (('Helvetica', 2), {'slant' : 'italic'}),
       (('Helvetica', 0), {'size' : 18}),
       (('Helvetica', 0), {'weight' : 'bold'}),
@@ -36,12 +37,6 @@ class Demo:
 
 	self.parent = parent
 
-	# Create a label to display the selected font.
-	self.target = Tkinter.Label(parent,
-	        text = 'The quick brown fox jumps\nover the lazy dog',
-		relief = 'sunken', padx = 10, pady = 10)
-	self.target.pack(fill = 'both', expand = 1, padx = 10, pady = 10)
-
 	# Create the text to display to the user to represent each font.
 	if Demo.fontText == []:
 	    for args, dict in Demo.fontList:
@@ -59,7 +54,13 @@ class Demo:
 		items=Demo.fontText,
 		label_text='Font', labelpos='nw', 
 		selectioncommand=self.selectionCommand)
-	self.box.pack(fill = 'both', expand = 'yes', padx = 10, pady = 10)
+	self.box.pack(fill = 'both', expand = 1, padx = 10, pady = 10)
+
+	# Create a label to display the selected font.
+	self.target = Tkinter.Label(parent,
+	        text = 'The quick brown fox jumps\nover the lazy dog',
+		relief = 'sunken', padx = 10, pady = 10)
+	self.target.pack(fill = 'both', expand = 1, padx = 10, pady = 10)
 
     def selectionCommand(self):
 	sel = self.box.curselection()

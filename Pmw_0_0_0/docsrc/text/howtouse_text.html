@@ -3,7 +3,7 @@
 </p></center>
 
 <dl>
-<dt> <h3>Introduction</h3><dd>
+<dt> <h3>Introduction</h3></dt><dd>
 <p>
   This document briefly describes the features of the Pmw megawidget
   toolkit and how to use the megawidgets.  Using examples, it
@@ -27,7 +27,8 @@
   your application.
 
 </p>
-<dt> <h3>Getting started</h3><dd>
+</dd>
+<dt> <h3>Getting started</h3></dt><dd>
 
 <b>Initialisation of Pmw</b>
 <br>
@@ -53,6 +54,7 @@
 import Pmw
 root = Pmw.initialise()
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -69,9 +71,11 @@ root = Tkinter.Tk()
 import Pmw
 Pmw.initialise(root)
 </pre>
+</dd>
 </dl>
 
-<dt> <h3>Megawidget construction</h3><dd>
+</dd>
+<dt> <h3>Megawidget construction</h3></dt><dd>
 
 <b>Creating a counter</b>
 <br>
@@ -89,6 +93,7 @@ Pmw.initialise(root)
 counter1 = Pmw.Counter()
 counter1.pack(padx = 10, pady = 10)
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -97,11 +102,9 @@ counter1.pack(padx = 10, pady = 10)
 
 </p>
 
-<p>
-  <center><P ALIGN="CENTER">
+<center><P ALIGN="CENTER">
   <IMG SRC = counter1.gif ALT = "Counter 1" WIDTH=220 HEIGHT=46>
-  </p></center>
-</p>
+</p></center>
 
 <p>
   The above example creates the counter as a child of the root window. 
@@ -116,9 +119,11 @@ counter1.pack(padx = 10, pady = 10)
 <pre>
 counter1a = Pmw.Counter(frame)
 </pre>
+</dd>
 </dl>
 
-<dt> <h3>Methods</h3><dd>
+</dd>
+<dt> <h3>Methods</h3></dt><dd>
 <p>
   Once a megawidget has been created, you can call any of its other
   methods in a similar way to Tk widgets.  The following sets the value
@@ -131,9 +136,11 @@ counter1a = Pmw.Counter(frame)
 counter1.setentry(41)
 counter1.increment()
 </pre>
+</dd>
 </dl>
 
-<dt> <h3>Options</h3><dd>
+</dd>
+<dt> <h3>Options</h3></dt><dd>
 <p>
   Like any widget, a megawidget may have options to allow it to be
   configured for a particular use.  Options allow the megawidget user
@@ -167,6 +174,7 @@ counter2 = Pmw.Counter(
 counter2.setentry('00:00:00')
 counter2.pack(padx = 10, pady = 10)
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -182,6 +190,7 @@ counter2.pack(padx = 10, pady = 10)
 <pre>
 counter2.configure(increment = 60 * 10)
 </pre>
+</dd>
 </dl>
 
 <b>Initialisation options</b>
@@ -205,6 +214,7 @@ counter2.configure(increment = 60 * 10)
 counter3 = Pmw.Counter(orient = 'vertical')
 counter3.pack(padx = 10, pady = 10)
 </pre>
+</dd>
 </dl>
 
 <b>Querying options</b>
@@ -224,6 +234,7 @@ print counter3.cget('increment')
 print counter3.configure('orient')
     --> ('orient', 'orient', 'Orient', 'horizontal', 'vertical')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -236,7 +247,8 @@ print counter3.configure('orient')
 
 </p>
 
-<dt> <h3>Components</h3><dd>
+</dd>
+<dt> <h3>Components</h3></dt><dd>
 <p>
   Megawidgets are made up of other widgets, which we call
   <em>components</em>.  Each component is known by a logical name and
@@ -256,6 +268,7 @@ print counter3.configure('orient')
 <pre>
 mega.component('comp').doit()
 </pre>
+</dd>
 </dl>
 
 <b>Component options</b>
@@ -277,6 +290,7 @@ counter2.configure(
     downarrow_background = 'green',
     uparrow_background = 'red')
 </pre>
+</dd>
 </dl>
 
 <b>The hull</b>
@@ -306,6 +320,7 @@ counter4 = Pmw.Counter(
     hull_borderwidth = 5 
 )
 </pre>
+</dd>
 </dl>
 
 
@@ -342,6 +357,7 @@ counter4 = Pmw.Counter(
 <pre>
 counter2.configure(entryfield_entry_background = 'yellow')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -356,6 +372,7 @@ counter2.configure(entryfield_entry_background = 'yellow')
 <pre>
 counter2.configure(entry_background = 'yellow')
 </pre>
+</dd>
 </dl>
 
 <b>Changing the python class of a component</b>
@@ -381,9 +398,11 @@ counter5 = Pmw.Counter(
 )
 
 </pre>
+</dd>
 </dl>
 
-<dt> <h3>Forwarding methods</h3><dd>
+</dd>
+<dt> <h3>Forwarding methods</h3></dt><dd>
 <p>
   Since a Pmw megawidget is a normal python class, it both inherits
   methods from its base classes and also may have other methods
@@ -409,7 +428,8 @@ counter5 = Pmw.Counter(
 
 </p>
   
-<dt> <h3>Extending Pmw megawidgets</h3><dd>
+</dd>
+<dt> <h3>Extending Pmw megawidgets</h3></dt><dd>
 
 <p>
   There are several ways of extending Pmw megawidgets.  Firstly, the
@@ -433,22 +453,48 @@ interior = dialog.interior()
 counter = Pmw.Counter(interior)
 counter.pack(padx = 20, pady = 20)
 </pre>
+</dd>
 </dl>
 
-<p>
-  <center><P ALIGN="CENTER">
+<center><P ALIGN="CENTER">
   <IMG SRC = counter2.gif ALT = "Counter 2" WIDTH=266 HEIGHT=126>
-  </p></center>
-</p>
+</p></center>
 
 <p>
-  A third way to extend megawidgets is to subclass them.  See
-  <a href="howtobuild.html">How to build Pmw megawidgets</a> for more
-  information.
+  A third way to extend megawidgets is to inherit from (or subclass)
+  them.  See <a href="howtobuild.html">How to build Pmw
+  megawidgets</a> for information on how to use inheritance to extend
+  a megawidget by adding new options.  For simpler cases, where new
+  methods are to be added to an existing megawidget and/or the default
+  values for some options are to be changed, normal subclassing can be
+  used.  For example, to create new classes based on a Pmw.Counter,
+  one with a new method <code>getminutes()</code> and one with a
+  default datatype of 'time' and a white entry background:
 
 </p>
 
-<dt> <h2>A quick example</h2><dd>
+<dl>
+<dd>
+<pre>
+class MinuteCounter1(Pmw.Counter):
+
+    def getminutes(self):
+	return Pmw.timestringtoseconds(self.getvalue()) / 60
+
+class MinuteCounter2(Pmw.Counter):
+
+    def __init__(self, parent = None, **kw):
+        kw['datatype'] = 'time'
+        kw['entry_background'] = 'white'
+        kw['entryfield_value'] = '00:00:00'
+        kw['increment'] = 60
+	apply(Pmw.Counter.__init__, (self, parent), kw)
+</pre>
+</dd>
+</dl>
+
+</dd>
+<dt> <h2>A quick example</h2></dt><dd>
 <p>
   The following code is a small example of how to use Pmw megawidgets. 
   It is a complete program which displays three ways for the user to
@@ -493,17 +539,15 @@ Pmw.alignlabels((counter, entry, combo))
 root.title('Pmw megawidgets example')
 root.mainloop()
 </pre>
+</dd>
 </dl>
 
-</p>
-
-<p>
-  <center><P ALIGN="CENTER">
+<center><P ALIGN="CENTER">
   <IMG SRC = example1.gif ALT = "Example 1" WIDTH=321 HEIGHT=140>
-  </p></center>
-</p>
+</p></center>
 
-<dt> <h3>Another example</h3><dd>
+</dd>
+<dt> <h3>Another example</h3></dt><dd>
 <p>
   The following also shows how to use Pmw megawidgets.  It displays a
   RadioSelect megawidget and an exit button packed into the root
@@ -545,15 +589,15 @@ exit.pack(pady = 20)
 # Let's go.
 root.mainloop()
 </pre>
+</dd>
 </dl>
 
-<p>
-  <center><P ALIGN="CENTER">
+<center><P ALIGN="CENTER">
   <IMG SRC = example2.gif ALT = "Example 2" WIDTH=503 HEIGHT=158>
-  </p></center>
-</p>
+</p></center>
 
-<dt> <h3>Using the Tk option database</h3><dd>
+</dd>
+<dt> <h3>Using the Tk option database</h3></dt><dd>
 <p>
   There are several ways to use the Tk option database to customise a
   Pmw application.  Firstly you can customise all the basic Tk widgets
@@ -567,6 +611,7 @@ root.mainloop()
 <pre>
 root.option_add('*Label.background', 'pink')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -580,6 +625,7 @@ root.option_add('*Label.background', 'pink')
 <pre>
 root.option_add('*EntryField.Label.background', 'green')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -593,6 +639,7 @@ root.option_add('*EntryField.Label.background', 'green')
 <pre>
 root.option_add('*EntryField*background', 'blue')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -619,6 +666,7 @@ root.option_add('*EntryField*background', 'blue')
 <pre>
 root.option_add('*Dialog.buttonboxpos', 'e')
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -632,4 +680,8 @@ root.option_add('*Dialog.buttonboxpos', 'e')
 <pre>
 root.option_add('*EntryField.labelpos', 'w')
 </pre>
+</dd>
+</dl>
+
+</dd>
 </dl>

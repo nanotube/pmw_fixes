@@ -12,20 +12,14 @@
 </p>
 
 <dl>
-<dt> <h2>Demonstrations</h2><dd>
+<dt> <h2>Demonstrations</h2></dt><dd>
 <p>
-  The Pmw <code>demos</code> directory contains demonstration
-  scripts showing many of the features of Pmw megawidgets.  To view a
+  The Pmw <code>demos</code> directory contains demonstration scripts
+  showing many of the features of Pmw megawidgets.  To view a
   comprehensive package of all the demonstrations, including a view of
-  the source code, run the script
-
-</p>
-<dl>
-<dd>
-<pre>
-demos/All.py
-</pre>
-</dl>
+  the source code, run the <code>All.py</code> script.  Run
+  <code>All.py -help</code> for a short description of the script's
+  options.
 
 <p>
   All of the demonstrations may also be run separately.  Most of the
@@ -40,6 +34,7 @@ demos/All.py
 <pre>
 python ButtonBox.py
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -78,6 +73,7 @@ TextDisplay.py      how to extend the Pmw MegaWidget
                     class
 WidgetDestroy.py    megawidget destruction
 </pre>
+</dd>
 </dl>
 
 <b>Creating demonstrations of new megawidgets</b>
@@ -98,7 +94,8 @@ more instances of your megawidget, which should be a child of
 
 </p>
 
-<dt> <h2>Tests</h2><dd>
+</dd>
+<dt> <h2>Tests</h2></dt><dd>
 <p>
   The Pmw <code>tests</code> directory contains a test framework
   and a set of test scripts for Pmw.
@@ -106,14 +103,7 @@ more instances of your megawidget, which should be a child of
   The tests make a great
   demonstration of the flexibility of the megawidgets.  Simply change
   into the <code>tests</code> directory and run
-
-</p>
-<dl>
-<dd>
-<pre>
-python All.py
-</pre>
-</dl>
+  <code>python All.py</code>.
 
 <p>
   If all tests pass there should be no output printed to standard
@@ -135,6 +125,7 @@ python All.py
 <pre>
 python ButtonBox_test.py
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -152,6 +143,7 @@ Options_test.py       option and component handling
 PmwBase_test.py       more option and component handling
 Tkinter_test.py       Tk widgets in the Tkinter module
 </pre>
+</dd>
 </dl>
 
 <b>Creating tests for new megawidgets</b>
@@ -203,8 +195,10 @@ equal the value specified by the second element. For example,
 ('vscrollmode', 'bogus', 'ValueError: bad vscrollmode ' +
   'option "bogus": should be static, dynamic, or none'),
 </pre>
+</dd>
 </dl>
 
+</li>
 <li>
 <p>
 If the first element is a function or method, then the function or
@@ -227,8 +221,10 @@ None.  For example,
 (c.exportfile, '/tmp/ScrolledText_test.py'),
 (os.unlink, '/tmp/ScrolledText_test.py'),
 </pre>
+</dd>
 </dl>
 
+</li>
 <li>
 <p>
 If it has four elements, then the third element is a dictionary to use
@@ -242,8 +238,10 @@ example,
 <pre>
 (c.search, ('abc', '0.0'), {'nocase': 1}, '2.24'),
 </pre>
+</dd>
 </dl>
 
+</li>
 <li>
 <p>
 If is has three elements and the third element is a dictionary, then
@@ -256,8 +254,10 @@ returned by the call must be None.  For example
 <pre>
 (c.configurepane, 'first', {'size' : 200}),
 </pre>
+</dd>
 </dl>
 
+</li>
 <li>
 <p>
 If is has three elements and the third element is not a dictionary,
@@ -272,14 +272,18 @@ the third element.  For example,
 (c.add, ('Legumes',),
   'ValueError: name "Legumes" already exists'),
 </pre>
+</dd>
 </dl>
 
+</li>
 </ul>
+</li>
 </ul>
 
 <p>
 Some special functions and values supplied by the Test module that may
 be used in the tests include:
+</p>
 <dl>
 <dd>
 <pre>
@@ -295,15 +299,8 @@ Test.flagup         a sample Tkinter.BitmapImage
 Test.floatvar       a Tkinter.DoubleVar
 Test.stringvar      a Tkinter.StringVar
 </pre>
+</dd>
 </dl>
-
-
-</p>
-
-<p>
-
-
-</p>
 
 <p>
   To slow down a test (to see what is being displayed), add the
@@ -316,6 +313,7 @@ Test.stringvar      a Tkinter.StringVar
 <pre>
 Test.setdelay(1000)
 </pre>
+</dd>
 </dl>
 
 <p>
@@ -327,6 +325,8 @@ Test.setdelay(1000)
 <pre>
 Test.setverbose(1)
 </pre>
+</dd>
 </dl>
 
+</dd>
 </dl>

@@ -87,7 +87,7 @@ class EntryField(Pmw.MegaWidget):
 	self._entryFieldEntry.bind('<Return>', self._executeCommand)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(EntryField)
+	self.initialiseoptions()
 
     def destroy(self):
 	_deregisterEntryField(self._entryFieldEntry)
@@ -321,6 +321,12 @@ class EntryField(Pmw.MegaWidget):
 	self._preProcess()
         self.__setEntry(text)
 	return self._postProcess()
+
+    def getvalue(self):
+        return self._entryFieldEntry.get()
+
+    def setvalue(self, text):
+        return self.setentry(text)
 
 Pmw.forwardmethods(EntryField, Tkinter.Entry, '_entryFieldEntry')
 

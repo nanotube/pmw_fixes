@@ -36,9 +36,9 @@ class PromptDialog(Pmw.Dialog):
             self.configure(activatecommand = tkentry.focus_set)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(PromptDialog)
+	self.initialiseoptions()
 
-    # Need to override Dialog insert and delete with EntryField methods
+    # Supply aliases to some of the entry component methods.
     def insertentry(self, index, text):
 	self._promptDialogEntry.insert(index, text)
 

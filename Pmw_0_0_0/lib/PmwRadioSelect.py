@@ -74,10 +74,41 @@ class RadioSelect(Pmw.MegaWidget):
 		': must be either \'horizontal\' or \'vertical\''
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(RadioSelect)
+	self.initialiseoptions()
 
     def getcurselection(self):
-	return self.selection
+	if self._singleSelect:
+            return self.selection
+        else:
+            return tuple(self.selection)
+
+    def getvalue(self):
+        return self.getcurselection()
+
+    def setvalue(self, textOrList):
+	if self._singleSelect:
+            self.__setSingleValue(textOrList)
+        else:
+	    # Multiple selections
+            oldselection = self.selection
+            self.selection = textOrList
+            for button in self._buttonList:
+                if button in oldselection:
+                    if button not in self.selection:
+                        # button is currently selected but should not be
+                        widget = self.component(button)
+                        if self['buttontype'] == 'checkbutton':
+                            widget.deselect()
+                        else:  # Button
+                            widget.configure(relief='raised')
+                else:
+                    if button in self.selection:
+                        # button is not currently selected but should be
+                        widget = self.component(button)
+                        if self['buttontype'] == 'checkbutton':
+                            widget.select()
+                        else:  # Button
+                            widget.configure(relief='sunken')
 
     def numbuttons(self):
         return len(self._buttonList)
@@ -158,22 +189,25 @@ class RadioSelect(Pmw.MegaWidget):
 	else: 
 	    self.selection = []
 
+    def __setSingleValue(self, value):
+            self.selection = value
+            if self['buttontype'] == 'radiobutton':
+                widget = self.component(value)
+                widget.select()
+            else:  # Button
+                for button in self._buttonList:
+                    widget = self.component(button)
+                    if button == value:
+                        widget.configure(relief='sunken')
+                    else:
+                        widget.configure(relief='raised')
+
     def invoke(self, index):
 	index = self.index(index)
 	name = self._buttonList[index]
 
 	if self._singleSelect:
-	    self.selection = name
-	    if self['buttontype'] == 'radiobutton':
-		widget = self.component(name)
-		widget.select()
-	    else:
-		for button in self._buttonList:
-		    widget = self.component(button)
-		    if button == name:
-			widget.configure(relief='sunken')
-		    else:
-			widget.configure(relief='raised')
+            self.__setSingleValue(name)
 	    command = self['command']
 	    if callable(command):
 		return command(name)

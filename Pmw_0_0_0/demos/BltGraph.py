@@ -32,7 +32,7 @@ class GraphDemo(Pmw.MegaToplevel):
 	self.createWidgets()
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(GraphDemo)
+	self.initialiseoptions()
 
     def createWidgets(self):
 	# Create vectors for use as x and y data points.

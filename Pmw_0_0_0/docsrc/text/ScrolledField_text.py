@@ -6,11 +6,11 @@ name = """
 """
 
 description = """
-    This megawidget displays a single line of text.  If the text is
-    wider than the widget it can be scrolled to the left and right by
-    the user by dragging with the middle mouse button.  The text is
-    also selectable by clicking or dragging with the left mouse
-    button.
+    A scrolled field displays a single line of text.  If the text is
+    too wide to display in the megawidget it can be scrolled to the
+    left and right by the user by dragging with the middle mouse
+    button.  The text is also selectable by clicking or dragging with
+    the left mouse button.
 
     It can be used instead of a Tkinter.Label widget when displaying
     text of unknown width such as application status messages.

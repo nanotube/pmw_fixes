@@ -78,7 +78,7 @@ class ThresholdScale(Pmw.MegaWidget):
 	    self.createlabel(interior, childCols=3)
 
         # Check keywords and initialise options.
-        self.initialiseoptions(ThresholdScale)
+        self.initialiseoptions()
 
     def _doCommand(self, valueStr):
 	valueInt = self.scale.get()

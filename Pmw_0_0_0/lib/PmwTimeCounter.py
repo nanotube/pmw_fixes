@@ -18,17 +18,18 @@ class TimeCounter(Pmw.MegaWidget):
 	# Define the megawidget options.
 	INITOPT = Pmw.INITOPT
 	optiondefs = (
-	    ('autorepeat',    1,    INITOPT),
+	    ('autorepeat',    1,    None),
 	    ('buttonaspect',  1.0,  INITOPT),
-	    ('initwait',      300,  INITOPT),
+	    ('command',       None, None),
+	    ('initwait',      300,  None),
 	    ('labelmargin',   0,    INITOPT),
 	    ('labelpos',      None, INITOPT),
-	    ('max',           '',   self._max),
-	    ('min',           '',   self._min),
+	    ('max',           None, self._max),
+	    ('min',           None, self._min),
 	    ('padx',          0,    INITOPT),
 	    ('pady',          0,    INITOPT),
-	    ('repeatrate',    50,   INITOPT),
-	    ('value',         '',   INITOPT),
+	    ('repeatrate',    50,   None),
+	    ('value',         None, INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -42,13 +43,13 @@ class TimeCounter(Pmw.MegaWidget):
 	self._createComponents(kw)
 
 	value = self['value']
-	if value is None or value == '':
+	if value is None:
 	    now = time.time()
 	    value = time.strftime('%H:%M:%S', time.localtime(now))
-    	self._setTimeFromStr(value)
+    	self.setvalue(value)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(TimeCounter)
+	self.initialiseoptions()
 
     def _createComponents(self, kw):
 
@@ -221,7 +222,8 @@ class TimeCounter(Pmw.MegaWidget):
 		s._drawArrow(button, 'down'))
 
 	self._downMinuteArrowBtn.bind('<1>', 
-    	    	lambda event, s=self,button=self._downMinuteArrowBtn: s._countDown(button, 60))
+    	    	lambda event, s=self,button=self._downMinuteArrowBtn:
+                s._countDown(button, 60))
 	self._downMinuteArrowBtn.bind('<Any-ButtonRelease-1>', 
 		lambda event, s=self, button=self._downMinuteArrowBtn:
 		s._stopUpDown(button))
@@ -238,9 +240,12 @@ class TimeCounter(Pmw.MegaWidget):
 		lambda event, s=self, button=self._downSecondArrowBtn:
 		s._stopUpDown(button))
 
-	self._hourCounterEntry.bind('<Return>', self._invoke)
-	self._minuteCounterEntry.bind('<Return>', self._invoke)
-	self._secondCounterEntry.bind('<Return>', self._invoke)
+	self._hourCounterEntry.component('entry').bind(
+                '<Return>', self._invoke)
+	self._minuteCounterEntry.component('entry').bind(
+        	'<Return>', self._invoke)
+	self._secondCounterEntry.component('entry').bind(
+        	'<Return>', self._invoke)
 
 	self._hourCounterEntry.bind('<Configure>', self._resizeArrow)
 	self._minuteCounterEntry.bind('<Configure>', self._resizeArrow)
@@ -263,23 +268,25 @@ class TimeCounter(Pmw.MegaWidget):
 
     def _min(self):
 	min = self['min']
-        if min == '':
+        if min is None:
 	    self._minVal = 0
 	else:
 	    self._minVal = Pmw.timestringtoseconds(min)
 
     def _max(self):
 	max = self['max']
-	if max != '':
-	    self._maxVal = Pmw.timestringtoseconds(max)
-	else:
+	if max is None:
 	    self._maxVal = None
+	else:
+	    self._maxVal = Pmw.timestringtoseconds(max)
 
+    def getvalue(self):
+        return self.getstring()
 
-    def _setTimeFromStr(self, str):
-        list = string.split(str, ':')
+    def setvalue(self, text):
+        list = string.split(text, ':')
 	if len(list) != 3:
-	    raise ValueError, 'invalid value: ' + str
+	    raise ValueError, 'invalid value: ' + text
 
 	self._hour = string.atoi(list[0])
 	self._minute = string.atoi(list[1])
@@ -304,13 +311,13 @@ class TimeCounter(Pmw.MegaWidget):
 	button.configure(relief='sunken')
 	self._count(-1, 'start', increment)
 
-    def increment(self):
-	self._count(1, 'force')
+    def increment(self, seconds = 1):
+	self._count(1, 'force', seconds)
 
-    def decrement(self):
-	self._count(-1, 'force')
+    def decrement(self, seconds = 1):
+	self._count(-1, 'force', seconds)
 
-    def _count(self, factor, newFlag=None,increment=1):
+    def _count(self, factor, newFlag = None, increment = 1):
 	if newFlag != 'force':
 	  if newFlag is not None:
 	    self._flag = newFlag

@@ -55,10 +55,12 @@ class Demo:
 
 	self.sc.component('canvas').bind('<1>', self.addcircle)
 
+        testEntry = Tkinter.Entry(parent)
 	self.sc.create_line(20, 20, 100, 100)
 	self.sc.create_oval(100, 100, 200, 200, fill = 'green')
 	self.sc.create_text(100, 20, anchor = 'nw',
-		text = 'Click in the canvas\nto draw ovals')
+		text = 'Click in the canvas\nto draw ovals',
+                font = testEntry.cget('font'))
 	button = Tkinter.Button(self.sc.interior(),
 		text = 'Hello,\nWorld!\nThis\nis\na\nbutton.')
 	self.sc.create_window(200, 200,

@@ -2,15 +2,16 @@ complete = 1
 reviewdate = "22 April 2000"
 
 name = """
-    manager widget for menu buttons and menus
+    manager megawidget for menu buttons and menus
 """
 
 description = """
-    This class creates a manager widget for containing menus.  There
+    A menu bar is a container megawidget which manages a number of
+    menu buttons and dropdown menus.  There
     are methods to add menu buttons and menus to the menu bar and for
     adding menu items to the menus.  Menu buttons may be added to the
-    left or right of the widget.  Each menu button and menu item may
-    have help text to be displayed by a ~Balloon~ widget.  Each menu
+    left or right of the megawidget.  Each menu button and menu item may
+    have help text to be displayed by a ~Balloon~.  Each menu
     and cascaded menu (sub-menu) is referenced by name which is
     supplied on creation.
 
@@ -37,7 +38,7 @@ text = {}
 text['options'] = {}
 
 text['options']['balloon'] = """
-    Specifies a ~Balloon~ widget to display the help text for menu
+    Specifies a ~Balloon~ to display the help text for menu
     buttons and menu items.  If *None*, no help is displayed.  If the
     balloon has an associated ~MessageBar~, the help text will also be
     displayed there.

@@ -1,6 +1,6 @@
 text = """
 This is a long list of suggestions and enhancements for Pmw.  If
-you are interested in doing any of these, please let me
+you are interested in doing any of these, please let the Pmw maintainer
 ('gregm@iname.com') know.
 
 *New Pmw megawidgets*
@@ -249,6 +249,8 @@ you are interested in doing any of these, please let me
 
 	- Add ability to tearoff dropdown list (suggested by Dean N. 
           Williams).
+
+        - Should be able to disable/enable arrow button.
 
     Counter
 
@@ -514,6 +516,9 @@ you are interested in doing any of these, please let me
 
                 Specifies pixel size of tab corners. 0 means no corners.
 
+	- There should be a way to temporarily hide a page, without
+            deleting it (like pack_forget).  (Suggested by Michel Sanner)
+
     OptionMenu
 
 	- Should accept focus and obey up and down arrow keys.
@@ -536,6 +541,10 @@ you are interested in doing any of these, please let me
         - Add Pmw.SELECT to index() method.  For single selectmode
           this returns an integer, for multiple selectmode this
           returns a list of integers.
+
+        - Add option to set background color on selected buttons. 
+          Maybe should also be able set selected foreground as well. 
+          Any others?
 
     LogicalFont
 
@@ -700,19 +709,6 @@ you are interested in doing any of these, please let me
 
 *Documentation*
 
-    - Complete all doco.
-
-    - Add short examples to all megawidget manual pages.
-
-    - Since python 2.0, the default values of real options (such as
-      the horizfraction option of Pmw.ScrolledFrame) are being
-      reported with too many digits (such as 0.050000000000000003).
-
-    - Check if time24 is documented in EntryField/Counter man page.
-
-    - Add a comment to Blt.html doco that it also covers the blt busy
-      command.
-
     - Document how to get Pmw working on a Mac, for example:
 
 	- Unzip and untar
@@ -757,41 +753,6 @@ you are interested in doing any of these, please let me
 	    are similiar to the PYTHONPATH variable.  I just added the
 	    path to Pmw at the bottom of this list.)
 
-    - Error in Counter doco: add *'yyyy'* argument to *'date'* datatype:
-      The *'date'* counter also accepts a *'yyyy'* argument.  If 0, the year
-      field will be displayed with 2 digits, otherwise it will be
-      displayed with 4 digits.  The default is 0.
-
-    - Add this explanation to MessageBar doco (from email reply):
-
-      Pmw.MessageBar can be used for both interactive help messages
-      (when the mouse enters certain widgets) and also for other
-      general messages.
-
-      To perform the help function it is integrated with the Balloon
-      help widget so that the programmer (or user) can choose either
-      balloon help, message bar help, both or neither.
-
-      The MessageBar supports a configurable number of message types. 
-      The default types include *'state'*, *'help'*, *'usererror'* and
-      *'systemerror'*.  The difference between these are the length of
-      time they are displayed, the number of bells that are rung and
-      the priority of the message.  For example, the *'help'* message
-      type is lower in priority than the *'usererror'*, so that error
-      messages will always be displayed in preference to help messages
-      regardless of the order the messages are created in.  The
-      *'state'* message type is lowest in priority but has no timeout,
-      so it should contain messages describing the current state of
-      the application, such as 'Waiting for
-      database connection' or
-      'Waiting for
-      file to be unlocked'.  I generally set this to the
-      empty string when the application is running normally.  By
-      default the help messages (with message type *'help'*) time out
-      after 5 seconds, so that if the cursor happens to be left over a
-      widget, the application state will be redisplayed after a short
-      time.
-
     - Document general ideas about building guis, eg:
 
       When I write gui applications, I usually defer creation of windows
@@ -825,9 +786,6 @@ you are interested in doing any of these, please let me
       are ignored; the only time this can be used is with the
       Group's tag component - all
       other's use the component widget in some way)
-
-    - Doc: Pmw.Color.setscheme: this changes the initial colours of all
-      widgets created after the call to this function.
 
     - Create index of all Pmw methods, functions, options, components.
 
@@ -867,9 +825,6 @@ you are interested in doing any of these, please let me
     - Delete comments from source if they have been added to docs
       (should not have two copies of anything).
 
-    - Add name and short description for each megawidget, even if rest
-      of reference manual in incomplete.
-
     - Need to document non-standard initial values for component
       options, such as border in ButtonBox and Dialog's childsite.
 
@@ -880,18 +835,9 @@ you are interested in doing any of these, please let me
        # http://www.geocities.com/homestead/promote.html
        # http://www.submit-it.com/subopt.htm, etc
 
-    - Document font functions.
-
     - Create man pages as well as html (modify createmanuals to produce both).
 
     - Maybe something with html frames like: itcl2.2/html/index.html
-
-    - Add to Pmw coding conventions:
-    
-	- Surround *=* with spaces when used with keyword parameters.
-
-	- Multi-line function calls should have one keyword parameter
-	  per line.
 
     - Add to starting.html a note that Pmw is a python "package" and add
       a pointer to python documentation on packages.

@@ -10,9 +10,12 @@ class ScrolledText(Pmw.MegaWidget):
 	INITOPT = Pmw.INITOPT
 	optiondefs = (
 	    ('borderframe',    0,            INITOPT),
+	    ('columnheader',   0,            INITOPT),
 	    ('hscrollmode',    'dynamic',    self._hscrollMode),
 	    ('labelmargin',    0,            INITOPT),
 	    ('labelpos',       None,         INITOPT),
+	    ('rowcolumnheader',0,            INITOPT),
+	    ('rowheader',      0,            INITOPT),
 	    ('scrollmargin',   2,            INITOPT),
 	    ('usehullsize',    0,            INITOPT),
 	    ('vscrollmode',    'dynamic',    self._vscrollMode),
@@ -40,7 +43,7 @@ class ScrolledText(Pmw.MegaWidget):
 		    relief = 'sunken',
 		    borderwidth = 2,
 	    )
-	    self._borderframe.grid(row = 2, column = 2, sticky = 'news')
+	    self._borderframe.grid(row = 4, column = 4, sticky = 'news')
 
 	    # Create the text widget.
 	    self._textbox = self.createcomponent('text',
@@ -50,16 +53,59 @@ class ScrolledText(Pmw.MegaWidget):
 		    borderwidth = 0,
 	    )
 	    self._textbox.pack(fill = 'both', expand = 1)
+
+            bw = self._borderframe.cget('borderwidth'),
+            ht = self._borderframe.cget('highlightthickness'),
 	else:
 	    # Create the text widget.
 	    self._textbox = self.createcomponent('text',
 		    (), None,
 		    Tkinter.Text, (interior,),
 	    )
-	    self._textbox.grid(row = 2, column = 2, sticky = 'news')
+	    self._textbox.grid(row = 4, column = 4, sticky = 'news')
 
-	interior.grid_rowconfigure(2, weight = 1, minsize = 0)
-	interior.grid_columnconfigure(2, weight = 1, minsize = 0)
+            bw = self._textbox.cget('borderwidth'),
+            ht = self._textbox.cget('highlightthickness'),
+
+        # Create the header text widgets
+        if self['columnheader']:
+            self._columnheader = self.createcomponent('columnheader',
+                    (), 'Header',
+                    Tkinter.Text, (interior,),
+                    height=1,
+                    wrap='none',
+                    borderwidth = bw,
+                    highlightthickness = ht,
+            )
+            self._columnheader.grid(row = 2, column = 4, sticky = 'ew')
+            self._columnheader.configure(
+                    xscrollcommand = self._columnheaderscrolled)
+
+        if self['rowheader']:
+            self._rowheader = self.createcomponent('rowheader',
+                    (), 'Header',
+                    Tkinter.Text, (interior,),
+                    wrap='none',
+                    borderwidth = bw,
+                    highlightthickness = ht,
+            )
+            self._rowheader.grid(row = 4, column = 2, sticky = 'ns')
+            self._rowheader.configure(
+                    yscrollcommand = self._rowheaderscrolled)
+
+        if self['rowcolumnheader']:
+            self._rowcolumnheader = self.createcomponent('rowcolumnheader',
+                    (), 'Header',
+                    Tkinter.Text, (interior,),
+                    height=1,
+                    wrap='none',
+                    borderwidth = bw,
+                    highlightthickness = ht,
+            )
+            self._rowcolumnheader.grid(row = 2, column = 2, sticky = 'nsew')
+
+	interior.grid_rowconfigure(4, weight = 1, minsize = 0)
+	interior.grid_columnconfigure(4, weight = 1, minsize = 0)
 
 	# Create the horizontal scrollbar
 	self._horizScrollbar = self.createcomponent('horizscrollbar',
@@ -77,7 +123,7 @@ class ScrolledText(Pmw.MegaWidget):
 		command=self._textbox.yview
 	)
 
-	self.createlabel(interior, childCols = 3, childRows = 3)
+	self.createlabel(interior, childCols = 5, childRows = 5)
 
 	# Initialise instance variables.
 	self._horizScrollbarOn = 0
@@ -89,7 +135,7 @@ class ScrolledText(Pmw.MegaWidget):
 	self._textWidth = None
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ScrolledText)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self.scrollTimer is not None:
@@ -130,6 +176,12 @@ class ScrolledText(Pmw.MegaWidget):
 	    return self._textbox.get('1.0', 'end')
 	else:
 	    return self._textbox.get(first, last)
+
+    def getvalue(self):
+        return self.get()
+
+    def setvalue(self, text):
+        return self.settext(text)
 
     # ======================================================================
 
@@ -216,6 +268,9 @@ class ScrolledText(Pmw.MegaWidget):
                     self._toggleHorizScrollbar()
             self._textWidth = currentWidth
 
+        if self['columnheader']:
+            self._columnheader.xview('moveto', first)
+
     def _scrollYNow(self, first, last):
         if first == '0' and last == '0':
             return
@@ -225,6 +280,9 @@ class ScrolledText(Pmw.MegaWidget):
         if self['vscrollmode'] == 'dynamic':
             if self._vertScrollbarNeeded != self._vertScrollbarOn:
                 self._toggleVertScrollbar()
+
+        if self['rowheader']:
+            self._rowheader.xview('moveto', first)
 
     def _scrollBothLater(self, first, last):
 	# Called by the text widget to set the horizontal or vertical
@@ -254,6 +312,11 @@ class ScrolledText(Pmw.MegaWidget):
 	# has been created. Ignore this.
 	if yview == (0.0, 0.0):
 	    return
+
+        if self['columnheader']:
+            self._columnheader.xview('moveto', xview[0])
+        if self['rowheader']:
+            self._rowheader.yview('moveto', yview[0])
 
 	self._horizScrollbar.set(xview[0], xview[1])
 	self._vertScrollbar.set(yview[0], yview[1])
@@ -309,17 +372,23 @@ class ScrolledText(Pmw.MegaWidget):
 	    if self._vertScrollbarNeeded != self._vertScrollbarOn:
 		self._toggleVertScrollbar()
 
+    def _columnheaderscrolled(self, first, last):
+        self._textbox.xview('moveto', first)
+
+    def _rowheaderscrolled(self, first, last):
+        self._textbox.yview('moveto', first)
+
     def _toggleHorizScrollbar(self):
 
 	self._horizScrollbarOn = not self._horizScrollbarOn
 
 	interior = self.interior()
 	if self._horizScrollbarOn:
-	    self._horizScrollbar.grid(row = 4, column = 2, sticky = 'news')
-	    interior.grid_rowconfigure(3, minsize = self['scrollmargin'])
+	    self._horizScrollbar.grid(row = 6, column = 4, sticky = 'news')
+	    interior.grid_rowconfigure(5, minsize = self['scrollmargin'])
 	else:
 	    self._horizScrollbar.grid_forget()
-	    interior.grid_rowconfigure(3, minsize = 0)
+	    interior.grid_rowconfigure(5, minsize = 0)
 
     def _toggleVertScrollbar(self):
 
@@ -327,11 +396,11 @@ class ScrolledText(Pmw.MegaWidget):
 
 	interior = self.interior()
 	if self._vertScrollbarOn:
-	    self._vertScrollbar.grid(row = 2, column = 4, sticky = 'news')
-	    interior.grid_columnconfigure(3, minsize = self['scrollmargin'])
+	    self._vertScrollbar.grid(row = 4, column = 6, sticky = 'news')
+	    interior.grid_columnconfigure(5, minsize = self['scrollmargin'])
 	else:
 	    self._vertScrollbar.grid_forget()
-	    interior.grid_columnconfigure(3, minsize = 0)
+	    interior.grid_columnconfigure(5, minsize = 0)
 
     # Need to explicitly forward this to override the stupid
     # (grid_)bbox method inherited from Tkinter.Frame.Grid.

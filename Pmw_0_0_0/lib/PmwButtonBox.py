@@ -57,7 +57,7 @@ class ButtonBox(Pmw.MegaWidget):
 	self._timerId = None
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ButtonBox)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self._timerId:

@@ -3,8 +3,6 @@
 import Tkinter
 import Pmw
 
-# A Toplevel with a ButtonBox and child site.
-
 class MessageDialog(Pmw.Dialog):
     def __init__(self, parent = None, **kw):
 
@@ -72,4 +70,4 @@ class MessageDialog(Pmw.Dialog):
 
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(MessageDialog)
+	self.initialiseoptions()

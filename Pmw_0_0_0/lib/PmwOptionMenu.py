@@ -32,6 +32,7 @@ class OptionMenu(Pmw.MegaWidget):
 		anchor = 'c',
 		highlightthickness = 2,
 		direction = 'flush',
+                takefocus = 1,
 	)
 	self._menubutton.grid(column = 2, row = 2, sticky = 'nsew')
 
@@ -53,7 +54,7 @@ class OptionMenu(Pmw.MegaWidget):
         self.setitems(self['items'], self['initialitem'])
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(OptionMenu)
+	self.initialiseoptions()
 
     def setitems(self, items, index = None):
 
@@ -71,15 +72,14 @@ class OptionMenu(Pmw.MegaWidget):
 		command = lambda self = self, item = item: self._invoke(item))
 
 	# Set the currently selected value.
-	var = self._menubutton.cget('textvariable')
-
 	if index is None:
+            var = self._menubutton.cget('textvariable')
 	    if var != '':
 		# None means do not change text variable.
 		return
 	    if len(items) == 0:
 		text = ''
-	    elif self.getcurselection() in items:
+	    elif self._menubutton.cget('text') in items:
                 # Do not change selection if it is still valid
 		return
 	    else:
@@ -88,10 +88,7 @@ class OptionMenu(Pmw.MegaWidget):
 	    index = self.index(index)
 	    text = self._itemList[index]
 
-	if var == '':
-	    self._menubutton.configure(text = text)
-	else:
-	    self._menu.tk.globalsetvar(var, text)
+        self.setvalue(text)
 
     def getcurselection(self):
 	var = self._menubutton.cget('textvariable')
@@ -99,6 +96,16 @@ class OptionMenu(Pmw.MegaWidget):
 	    return self._menubutton.cget('text')
 	else:
 	    return self._menu.tk.globalgetvar(var)
+
+    def getvalue(self):
+        return self.getcurselection()
+
+    def setvalue(self, text):
+	var = self._menubutton.cget('textvariable')
+	if var == '':
+	    self._menubutton.configure(text = text)
+	else:
+	    self._menu.tk.globalsetvar(var, text)
 
     def index(self, index):
 	listLength = len(self._itemList)
@@ -131,11 +138,7 @@ class OptionMenu(Pmw.MegaWidget):
         return self._invoke(text)
 
     def _invoke(self, text):
-	var = self._menubutton.cget('textvariable')
-	if var == '':
-	    self._menubutton.configure(text = text)
-	else:
-	    self._menu.tk.globalsetvar(var, text)
+        self.setvalue(text)
 
 	command = self['command']
 	if callable(command):

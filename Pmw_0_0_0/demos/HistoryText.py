@@ -15,7 +15,7 @@ class Demo:
         panedWidget = Pmw.PanedWidget(parent,
                 orient = 'vertical',
                 hull_height = 400,
-                hull_width = 450)
+                hull_width = 550)
         panedWidget.add('query', min = 0.05, size = 0.2)
         panedWidget.add('buttons', min = 0.1, max = 0.1)
         panedWidget.add('results', min = 0.05)
@@ -26,27 +26,33 @@ class Demo:
                 text_wrap = 'none',
                 text_width = 60,
                 text_height = 10,
-                statechangecmd = self.statechange,
+                historycommand = self.statechange,
         )
         self.historyText.pack(fill = 'both', expand = 1)
-        self.historyText.statechangecmd = self.statechange
         self.historyText.component('text').focus()
 
         buttonList = (
-            ['Prev', self.historyText.prev],
-            ['Next', self.historyText.next],
-            ['Search', Pmw.busycallback(self.search)],
+            [20, None],
             ['Clear', self.clear],
             ['Undo', self.historyText.undo],
             ['Redo', self.historyText.redo],
+            [20, None],
+            ['Prev', self.historyText.prev],
+            ['Next', self.historyText.next],
+            [30, None],
+            ['Execute', Pmw.busycallback(self.executeQuery)],
         )
         self.buttonDict = {}
 
+        buttonFrame = panedWidget.pane('buttons')
         for text, cmd in buttonList:
-            button = Tkinter.Button(panedWidget.pane('buttons'),
-                    text = text, command = cmd)
-            button.pack(side = 'left')
-            self.buttonDict[text] = button
+            if type(text) == type(69):
+                frame = Tkinter.Frame(buttonFrame, width = text)
+                frame.pack(side = 'left')
+            else:
+                button = Tkinter.Button(buttonFrame, text = text, command = cmd)
+                button.pack(side = 'left')
+                self.buttonDict[text] = button
 
         for text in ('Prev', 'Next'):
             self.buttonDict[text].configure(state = 'disabled')
@@ -70,14 +76,13 @@ class Demo:
             text = text + '\n'
         return text
 
-    def search(self):
+    def executeQuery(self):
         sql = self.historyText.get()
-        self.results.insert('end', self.addnewlines(sql))
+        self.results.insert('end', 'Query:\n' + self.addnewlines(sql))
         self.results.see('end')
         self.results.update_idletasks()
         self.historyText.addhistory()
-        deleteSemiColon = '[\n;]+$'
-        results = 'foo'
+        results = 'Results:\nfoo'
         if len(results) > 0:
             self.results.insert('end', self.addnewlines(results))
         self.results.see('end')

@@ -45,7 +45,7 @@ class ComboBoxDialog(Pmw.Dialog):
             self.configure(activatecommand = listbox.focus_set)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ComboBoxDialog)
+	self.initialiseoptions()
 
     # Need to explicitly forward this to override the stupid
     # (grid_)size method inherited from Tkinter.Toplevel.Grid.

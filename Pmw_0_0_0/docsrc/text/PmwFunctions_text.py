@@ -1,3 +1,115 @@
+aboutcontact = """
+    The value passed to this function is used to construct the text
+    displayed by ~AboutDialog~ megawidgets created subsequently.
+
+"""
+
+aboutcopyright = """
+    The value passed to this function is used to construct the text
+    displayed by ~AboutDialog~ megawidgets created subsequently.
+
+"""
+
+aboutversion = """
+    The value passed to this function is used to construct the text
+    displayed by ~AboutDialog~ megawidgets created subsequently.
+
+"""
+
+aligngrouptags = """
+    This function takes a sequence of ~Group~s and adjusts the
+    vertical position of the tags in each group so that they all have
+    the height of the tallest tag.  This can be used when groups are
+    positioned side-by-side but the natural height of the tags are
+    different because, for example, different fonts with different
+    sizes are used.
+
+"""
+
+drawarrow = """
+    Draw a triangle in the Tkinter.Canvas 'canvas' in the given
+    'color'.  The value of 'direction' may be *'up'*, *'down'*,
+    *'left'* or *'right'* and specifies which direction the arrow
+    should point.  The values of 'baseOffset' and 'edgeOffset' specify
+    how far from the edges of the canvas the points of the triangles
+    are as a fraction of the size of the canvas.
+
+"""
+
+pushgrab = """
+    The grab functions (/pushgrab()/, /popgrab()/, /releasegrabs()/
+    and /grabstacktopwindow()/) are an interface to the Tk *grab*
+    command which implements simple pointer and keyboard grabs.  When
+    a grab is set for a particular window, Tk restricts all pointer
+    events to the grab window and its descendants in Tk's window
+    hierarchy.  The functions are used by the /activate()/ and
+    /deactivate()/ methods to implement modal dialogs.
+
+    Pmw maintains a stack of grabbed windows, where the window on the
+    top of the stack is the window currently with the grab.  The grab
+    stack allows nested modal dialogs, where one modal dialog can be
+    activated while another modal dialog is activated.  When the
+    second dialog is deactivated, the first dialog becomes active
+    again.
+
+    Use /pushgrab()/ to add 'grabWindow' to the grab stack.  This
+    releases the grab by the window currently on top of the stack (if
+    there is one) and gives the grab and focus to the 'grabWindow'. 
+    If 'globalMode' is true, perform a global grab, otherwise perform
+    a local grab.  The value of 'deactivateFunction' specifies a
+    function to call (usually grabWindow.deactivate) if popgrab() is
+    called (usually from a deactivate() method) on a window which is
+    not at the top of the stack (that is, does not have the grab or
+    focus).  For example, if a modal dialog is deleted by the window
+    manager or deactivated by a timer.  In this case, all dialogs
+    above and including this one are deactivated, starting at the top
+    of the stack.
+
+    For more information, see the Tk grab manual page.
+
+"""
+
+popgrab = """
+    Remove 'window' from the grab stack.  If there are not more
+    windows in the grab stack, release the grab.  Otherwise set the
+    grab and the focus to the next window in the grab stack.  See also
+    /pushgrab()/.
+
+"""
+
+releasegrabs = """
+    Release grab and clear the grab stack.  This should normally not
+    be used, use /popgrab()/ instead.  See also /pushgrab()/.
+
+"""
+
+grabstacktopwindow = """
+    Return the window at the top of the grab stack (the window
+    currently with the grab) or *None* if the grab stack is empty (no
+    window has the grab).  See also /pushgrab()/.
+
+"""
+
+jdntoymd = """
+    Return the year, month and day of the Julian Day Number 'jdn'.  If
+    'julian' is *1*, then the date returned will be in the Julian
+    calendar.  If 'julian' is *0*, then the date returned will be in
+    the modern calendar.  If 'julian' is *-1*, then which calendar to
+    use will be automatically determined by the value of 'jdn' and
+    'papal'.  If 'papal' is true, then the date set by Pope Gregory
+    XIII's decree (4 October 1582) will be used as the last day to use
+    the Julian calendar.  If 'papal' is false, then the last day to
+    use the Julian calendar will be according to British-American
+    usage (2 September 1752).
+
+"""
+
+ymdtojdn = """
+    Return the Julian Day Number corresponding to 'year', 'month' and
+    'day'.  See /jdntoymd()/ for description of other arguments)
+
+"""
+
 busycallback = """
     Create a wrapper function which displays a busy cursor while
     executing 'command' and return the wrapper.  When the wrapper
@@ -163,9 +275,26 @@ initialise = """
 
 	    *'pmw1'*  --
                 If running under posix (Unix), set the default font to
-                be Helvetica with bold italic menus and italic scales. 
+                be Helvetica with bold italic menus, italic scales and
+                a special balloon font 6 points smaller than the base
+                font size and with the *'pixel'* field set to *'12'*.
                 For other operating systems (such as NT or Macintosh),
-                set the default font to be Helvetica.
+                simply set the default font to be Helvetica.  All
+                fonts are as returned by calls to /Pmw.logicalfont()/.
+
+	    *'pmw2'*  --
+                This is the same as *'pmw1'* except that under posix
+                the balloon font is 2 points smaller than the base
+                font size and the *'pixel'* field is not set.
+
+	    *'default'*  --
+                This sets the default fonts using the Tk font naming
+                convention, rather than that returned by
+                /Pmw.logicalfont()/.  The default font is bold
+                Helvetica.  The font for entry widgets is Helvetica. 
+                The font for text widgets is Courier The size of all
+                fonts is the application base font size as described
+                above.
 
 	- If 'root' is *None*, use the Tkinter default root window as the
 	  root, if it has been created, or create a new Tk root window.
@@ -179,6 +308,20 @@ initialise = """
 	  is the option name with the first letter capitalised.  If
 	  'useTkOptionDb' is false, then options for newly created
 	  megawidgets will be initialised to default values.
+
+	- If 'noBltBusy' is true, then /Pmw.showbusycursor()/ will not
+          display a busy cursor, even if the BLT busy command is
+          present.
+
+	- If 'disableKeyboardWhileBusy' is false, then do not disable
+          keyboard input while displaying the busy cursor.  Normally,
+          Pmw ignores keyboard input while displaying the busy cursor
+          by setting the focus for each toplevel window to the Blt
+          busy window.  However, under NT, this may cause the toplevel
+          windows to be raised.  If this is not acceptable, programs
+          running on NT can request show/hidebusycursor to not ignore
+          keyboard input by setting 'disableKeyboardWhileBusy' to true
+          in /Pmw.initialise()/.
 
     It is not absolutely necessary to call this function to be able to use
     Pmw.  However, some functionality will be lost.  Most importantly,
@@ -407,5 +550,44 @@ tracetk = """
     *Pmw.initialise()* must be called before *tracetk()* so that hooks
     are put into the Tkinter CallWrapper class to trace callbacks from
     Tk to python and also to handle recursive calls correctly.
+
+"""
+
+logicalfont = """
+    Return the full name of a Tk font, being a hyphen-separated list
+    of font properties.  The \'logical\' name of the font is given by
+    'name' and may be one of *'Helvetica'*, *'Times'*, *'Fixed'*,
+    *'Courier'* or *'Typewriter'*.  Pmw uses this name to define the
+    default values of many of the font properties.  The size of the
+    font is the base font size for the application specified in the
+    call to /Pmw.initialise()/ increased or decreased by the value of
+    'sizeIncr'.  The other properties of the font may be specified by
+    other named arguments.  These may be *'registry'*, *'foundry'*,
+    *'family'*, *'weight'*, *'slant'*, *'width'*, *'style'*,
+    *'pixel'*, *'size'*, *'xres'*, *'yres'*, *'spacing'*,
+    *'avgwidth'*, *'charset'* and *'encoding'*.
+
+"""
+
+logicalfontnames = """
+    Return the list of known logical font names that can be given
+    to /Pmw.logicalfont()/.
+
+"""
+
+timestringtoseconds = """
+    Return the number of seconds corresponding to the time in 'text'. 
+    The time must be specified as three integers separated by the
+    'separator' character and must be in the order hours, minutes and
+    seconds.  The first number may be negative, indicating a negative
+    time.
+
+"""
+
+setgeometryanddeiconify = """
+    Deiconify and raise the toplevel 'window' and set its position and
+    size according to 'geom'.  This overcomes some problems with the
+    window flashing under X and correctly positions the window under
+    NT (caused by Tk bugs).
 
 """

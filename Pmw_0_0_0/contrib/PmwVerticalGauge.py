@@ -103,7 +103,7 @@ class VerticalGauge(Pmw.MegaWidget):
 	
 	self._createGaugeAxes()
 	
-	self.initialiseoptions(VerticalGauge)
+	self.initialiseoptions()
     
     def _createGaugeAxes(self, event = None):
 	min = self['min']

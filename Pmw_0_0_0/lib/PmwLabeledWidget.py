@@ -27,7 +27,7 @@ class LabeledWidget(Pmw.MegaWidget):
 	self.createlabel(interior)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(LabeledWidget)
+	self.initialiseoptions()
 
     def interior(self):
 	return self._labelChildSite

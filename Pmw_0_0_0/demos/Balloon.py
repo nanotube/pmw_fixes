@@ -31,12 +31,18 @@ class Demo:
 	stop.pack(side='left', padx = 10)
 	self.balloon.bind(stop, 'Stop the command')
 
+	self.suicide = Tkinter.Button(frame, text='Kill me soon!',
+            command = self.killButton)
+	self.suicide.pack(side='left', padx = 10)
+	self.balloon.bind(self.suicide, 'Watch this button disappear!')
+
 	scrolledCanvas = Pmw.ScrolledCanvas(parent,
-		canvas_width = 200,
+		canvas_width = 300,
 		canvas_height = 115,
 	)
 	scrolledCanvas.pack()
         canvas = scrolledCanvas.component('canvas')
+        self.canvas = canvas
 
 	# Create some canvas items and individual help.
 	item = canvas.create_arc(5, 5, 35, 35, fill = 'red', extent = 315)
@@ -45,19 +51,25 @@ class Demo:
 	self.balloon.tagbind(canvas, item, 'This is help for\na bitmap')
 	item = canvas.create_line(50, 60, 70, 80, 85, 20, width = 5)
 	self.balloon.tagbind(canvas, item, 'This is help for\na line item')
-	item = canvas.create_text(80, 90, text = 'Canvas items with balloons')
+	item = canvas.create_text(10, 90, text = 'Canvas items with balloons',
+                anchor = 'nw', font = field.cget('entry_font'))
 	self.balloon.tagbind(canvas, item, 'This is help for\na text item')
 
 	# Create two canvas items which have the same tag and which use
 	# the same help.
-	item = canvas.create_rectangle(100, 10, 170, 50, fill = 'aliceblue',
+	canvas.create_rectangle(100, 10, 170, 50, fill = 'aliceblue',
 		tags = 'TAG1')
-	item = canvas.create_oval(110, 30, 160, 80, fill = 'blue',
+	self.bluecircle = canvas.create_oval(110, 30, 160, 80, fill = 'blue',
 		tags = 'TAG1')
 	self.balloon.tagbind(canvas, 'TAG1',
 		'This is help for the two blue items' + '\n' * 10 +
                     'It is very, very big.',
                 'This is help for the two blue items')
+	item = canvas.create_text(180, 10, text = 'Delete',
+                anchor = 'nw', font = field.cget('entry_font'))
+	self.balloon.tagbind(canvas, item,
+                'After 2 seconds,\ndelete the blue circle')
+	canvas.tag_bind(item, '<ButtonPress>', self._canvasButtonpress)
 	scrolledCanvas.resizescrollregion()
 
 	scrolledText = Pmw.ScrolledText(parent,
@@ -67,6 +79,7 @@ class Demo:
         )
 	scrolledText.pack(pady = 5)
         text = scrolledText.component('text')
+        self.text = text
 
 	text.insert('end',
 		'This is a text widget with ', '',
@@ -75,14 +88,20 @@ class Demo:
 		' text ', 'TAG1',
 		' tagged with', '',
 		' help.', 'TAG2',
-		'\n\nAnother line.\nAnd another', '',
+		'\n', '',
+                'Remove tag 1.', 'TAG3',
+                '\nAnother line.\nAnd another', '',
 	)
-	text.tag_configure('TAG1', borderwidth = 2, relief = 'raised')
+	text.tag_configure('TAG1', borderwidth = 2, relief = 'sunken')
+	text.tag_configure('TAG3', borderwidth = 2, relief = 'raised')
 
 	self.balloon.tagbind(text, 'TAG1',
 		'There is one secret\nballoon help.\nCan you find it?')
 	self.balloon.tagbind(text, 'TAG2',
 		'Well done!\nYou found it!')
+	self.balloon.tagbind(text, 'TAG3',
+		'After 2 seconds\ndelete the tag')
+	text.tag_bind('TAG3', '<ButtonPress>', self._textButtonpress)
 
 	frame = Tkinter.Frame(parent)
 	frame.pack(padx = 10)
@@ -129,12 +148,35 @@ class Demo:
 	    else:
 		self.balloon.configure(state = 'none')
 
+    def killButton(self):
+        # Test for old bug when destroying widgets 1) while the
+        # balloon was up and 2) during the initwait period.
+        print 'Destroying button in 2 seconds'
+        self.suicide.after(2000, self.suicide.destroy)
+
+    def _canvasButtonpress(self, event):
+        print 'Destroying blue circle in 2 seconds'
+	self.canvas.after(2000, self.deleteBlueCircle)
+
+    def deleteBlueCircle(self):
+        self.balloon.tagunbind(self.canvas, self.bluecircle)
+        self.canvas.delete(self.bluecircle)
+
+    def _textButtonpress(self, event):
+        print 'Deleting the text tag in 2 seconds'
+	self.text.after(2000, self.deleteTextTag)
+
+    def deleteTextTag(self):
+	self.balloon.tagunbind(self.text, 'TAG1')
+        self.text.tag_delete('TAG1')
+
+
 ######################################################################
 
 # Create demo in root window for testing.
 if __name__ == '__main__':
     root = Tkinter.Tk()
-    Pmw.initialise(root, fontScheme = 'pmw1')
+    Pmw.initialise(root, 12, fontScheme = 'default')
     root.title(title)
 
     exitButton = Tkinter.Button(root, text = 'Exit', command = root.destroy)

@@ -136,7 +136,7 @@ class ComboBox(Pmw.MegaWidget):
 	    self._entryfield.configure(command=self._addHistory)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ComboBox)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self['dropdown'] and self._isPosted:

@@ -40,7 +40,7 @@ class SelectionDialog(Pmw.Dialog):
             self.configure(activatecommand = listbox.focus_set)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(SelectionDialog)
+	self.initialiseoptions()
 
     # Need to explicitly forward this to override the stupid
     # (grid_)size method inherited from Tkinter.Toplevel.Grid.

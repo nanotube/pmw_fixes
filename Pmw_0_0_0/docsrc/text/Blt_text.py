@@ -1,10 +1,13 @@
+reviewdate = "25 May 2002"
+
 name = """
     interface to some BLT widgets and commands
     
 """
 
 description = """
-    This contains the classes *Pmw.Blt.Vector*, *Pmw.Blt.Graph*,
+    This module contains function interfaces to the BLT /busy/ command
+    as well as the classes *Pmw.Blt.Vector*, *Pmw.Blt.Graph*,
     *Pmw.Blt.Stripchart* and *Pmw.Blt.Tabset*, which are interfaces to
     the vector, graph, stripchart and tabset commands of version 2.4
     of the *BLT* extension to Tk.  The interfaces are complete except
@@ -51,11 +54,21 @@ text['functions']['busy_forget'] = """
 """
 
 text['functions']['haveblt'] = """
-    Returns true if any commands in the BLT extension are available.
+    Return true if any commands in the BLT extension are available.
 
 """
 
 text['functions']['havebltbusy'] = """
-    Returns true if the BLT *busy* command is available.
+    Return true if the BLT *busy* command is available.
+
+"""
+
+text['functions']['vector_expr'] = """
+    Interface to the BLT /vector expr/ command.
+
+"""
+
+text['functions']['vector_names'] = """
+    Interface to the BLT /vector names/ command.
 
 """

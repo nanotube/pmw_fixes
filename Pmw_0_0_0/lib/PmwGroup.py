@@ -86,7 +86,7 @@ class Group( Pmw.MegaWidget ):
 		minsize = tagHeight - topBorder - ringBorder)
 
         # Check keywords and initialise options.
-        self.initialiseoptions(Group)
+        self.initialiseoptions()
 
     def interior(self):
         return self._groupChildSite

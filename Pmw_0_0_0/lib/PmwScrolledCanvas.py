@@ -86,7 +86,7 @@ class ScrolledCanvas(Pmw.MegaWidget):
 	self.setregionTimer = None
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(ScrolledCanvas)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self.scrollTimer is not None:

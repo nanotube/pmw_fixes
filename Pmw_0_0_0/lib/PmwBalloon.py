@@ -10,6 +10,7 @@ class Balloon(Pmw.MegaToplevel):
 	optiondefs = (
             ('initwait',                 500,            None), # milliseconds
             ('label_background',         'lightyellow',  None),
+            ('label_foreground',         'black',        None),
             ('label_justify',            'left',         None),
             ('master',                   'parent',       None),
             ('relmouse',                 'none',         self._relmouse),
@@ -43,10 +44,17 @@ class Balloon(Pmw.MegaToplevel):
 
 	# Initialise instance variables.
 	self._timer = None
-        # self._currentTrigger = None    ### TODO - see bugs list
+
+        # The widget or item that is currently triggering the balloon. 
+        # It is None if the balloon is not being displayed.  It is a
+        # one-tuple if the balloon is being displayed in response to a
+        # widget binding (value is the widget).  It is a two-tuple if
+        # the balloon is being displayed in response to a canvas or
+        # text item binding (value is the widget and the item).
+        self._currentTrigger = None
 	
 	# Check keywords and initialise options.
-	self.initialiseoptions(Balloon)
+	self.initialiseoptions()
 
     def destroy(self):
 	if self._timer is not None:
@@ -65,28 +73,38 @@ class Balloon(Pmw.MegaToplevel):
 	if statusHelp is None:
 	    statusHelp = balloonHelp
 	enterId = widget.bind('<Enter>', 
-		lambda event = None, self = self, w = widget,
+		lambda event, self = self, w = widget,
 			sHelp = statusHelp, bHelp = balloonHelp:
-				self._enter(w, sHelp, bHelp, 0))
-	# Note: The Motion binding only works for basic widgets,
-	# not megawidgets.
+				self._enter(event, w, sHelp, bHelp, 0))
+
+        # Set Motion binding so that if the pointer remains at rest
+        # within the widget until the status line removes the help and
+        # then the pointer moves again, then redisplay the help in the
+        # status line.
+	# Note:  The Motion binding only works for basic widgets, and
+        # the hull of megawidgets but not for other megawidget components.
 	motionId = widget.bind('<Motion>', 
 		lambda event = None, self = self, statusHelp = statusHelp:
 			self.showstatus(statusHelp))
+
 	leaveId = widget.bind('<Leave>', self._leave)
 	buttonId = widget.bind('<ButtonPress>', self._buttonpress)
+
+        # Set Destroy binding so that the balloon can be withdrawn and
+        # the timer can be cancelled if the widget is destroyed.
+	destroyId = widget.bind('<Destroy>', self._destroy)
 
         # Use the None item in the widget's private Pmw dictionary to
         # store the widget's bind callbacks, for later clean up.
         if not hasattr(widget, '_Pmw_BalloonBindIds'):
             widget._Pmw_BalloonBindIds = {}
         widget._Pmw_BalloonBindIds[None] = \
-                (enterId, motionId, leaveId, buttonId)
+                (enterId, motionId, leaveId, buttonId, destroyId)
 
     def unbind(self, widget):
         if hasattr(widget, '_Pmw_BalloonBindIds'):
             if widget._Pmw_BalloonBindIds.has_key(None):
-                (enterId, motionId, leaveId, buttonId) = \
+                (enterId, motionId, leaveId, buttonId, destroyId) = \
                         widget._Pmw_BalloonBindIds[None]
                 # Need to pass in old bindings, so that Tkinter can
                 # delete the commands.  Otherwise, memory is leaked.
@@ -94,7 +112,20 @@ class Balloon(Pmw.MegaToplevel):
                 widget.unbind('<Motion>', motionId)
                 widget.unbind('<Leave>', leaveId)
                 widget.unbind('<ButtonPress>', buttonId)
+                widget.unbind('<Destroy>', destroyId)
                 del widget._Pmw_BalloonBindIds[None]
+
+        if self._currentTrigger is not None and len(self._currentTrigger) == 1:
+            # The balloon is currently being displayed and the current
+            # trigger is a widget.
+            triggerWidget = self._currentTrigger[0]
+            if triggerWidget == widget:
+                if self._timer is not None:
+                    self.after_cancel(self._timer)
+                    self._timer = None
+                self.withdraw()
+                self.clearstatus()
+                self._currentTrigger = None
 
     def tagbind(self, widget, tagOrItem, balloonHelp, statusHelp = None):
 
@@ -107,9 +138,9 @@ class Balloon(Pmw.MegaToplevel):
 	if statusHelp is None:
 	    statusHelp = balloonHelp
 	enterId = widget.tag_bind(tagOrItem, '<Enter>', 
-		lambda event = None, self = self, w = widget,
+		lambda event, self = self, w = widget,
 			sHelp = statusHelp, bHelp = balloonHelp:
-				self._enter(w, sHelp, bHelp, 1))
+				self._enter(event, w, sHelp, bHelp, 1))
 	motionId = widget.tag_bind(tagOrItem, '<Motion>', 
 		lambda event = None, self = self, statusHelp = statusHelp:
 			self.showstatus(statusHelp))
@@ -134,6 +165,37 @@ class Balloon(Pmw.MegaToplevel):
                 widget.tag_unbind(tagOrItem, '<ButtonPress>', buttonId)
                 del widget._Pmw_BalloonBindIds[tagOrItem]
 
+        if self._currentTrigger is None:
+            # The balloon is not currently being displayed.
+            return
+
+        if len(self._currentTrigger) == 1:
+            # The current trigger is a widget.
+            return
+
+        if len(self._currentTrigger) == 2:
+            # The current trigger is a canvas item.
+            (triggerWidget, triggerItem) = self._currentTrigger
+            if triggerWidget == widget and triggerItem == tagOrItem:
+                if self._timer is not None:
+                    self.after_cancel(self._timer)
+                    self._timer = None
+                self.withdraw()
+                self.clearstatus()
+                self._currentTrigger = None
+        else: # The current trigger is a text item.
+            (triggerWidget, x, y) = self._currentTrigger
+            if triggerWidget == widget:
+                currentPos = widget.index('@%d,%d' % (x, y))
+                currentTags = widget.tag_names(currentPos)
+                if tagOrItem in currentTags:
+                    if self._timer is not None:
+                        self.after_cancel(self._timer)
+                        self._timer = None
+                    self.withdraw()
+                    self.clearstatus()
+                    self._currentTrigger = None
+
     def showstatus(self, statusHelp):
 	if self['state'] in ('status', 'both'):
 	    cmd = self['statuscommand']
@@ -154,8 +216,17 @@ class Balloon(Pmw.MegaToplevel):
 	    raise ValueError, 'bad relmouse option ' + repr(self['relmouse'])+ \
 		': should be one of \'both\', \'x\', ' + '\'y\' or \'none\''
 
-    def _enter(self, widget, statusHelp, balloonHelp, isItem):
-	if balloonHelp is not None and self['state'] in ('balloon', 'both'):
+    def _enter(self, event, widget, statusHelp, balloonHelp, isItem):
+
+        # Do not display balloon if mouse button is pressed.  This
+        # will only occur if the button was pressed inside a widget,
+        # then the mouse moved out of and then back into the widget,
+        # with the button still held down.  The number 0x1f00 is the
+        # button mask for the 5 possible buttons in X.
+        buttonPressed = (event.state & 0x1f00) != 0
+
+	if not buttonPressed and balloonHelp is not None and \
+                self['state'] in ('balloon', 'both'):
 	    if self._timer is not None:
 		self.after_cancel(self._timer)
 		self._timer = None
@@ -165,6 +236,21 @@ class Balloon(Pmw.MegaToplevel):
 			    isItem = isItem:
 			    self._showBalloon(widget, help, isItem))
 
+        if isItem:
+            if hasattr(widget, 'canvasx'):
+		# The widget is a canvas.
+                item = widget.find_withtag('current')
+                if len(item) > 0:
+                    item = item[0]
+                else:
+                    item = None
+                self._currentTrigger = (widget, item)
+            else:
+		# The widget is a text widget.
+                self._currentTrigger = (widget, event.x, event.y)
+        else:
+            self._currentTrigger = (widget,)
+
 	self.showstatus(statusHelp)
 
     def _leave(self, event):
@@ -173,14 +259,36 @@ class Balloon(Pmw.MegaToplevel):
 	    self._timer = None
 	self.withdraw()
 	self.clearstatus()
-        # self._currentTrigger = None
+        self._currentTrigger = None
+
+    def _destroy(self, event):
+
+        # Only withdraw the balloon and cancel the timer if the widget
+        # being destroyed is the widget that triggered the balloon. 
+        # Note that in a Tkinter Destroy event, the widget field is a
+        # string and not a widget as usual.
+
+        if self._currentTrigger is None:
+            # The balloon is not currently being displayed
+            return
+
+        if len(self._currentTrigger) == 1:
+            # The current trigger is a widget (not an item)
+            triggerWidget = self._currentTrigger[0]
+            if str(triggerWidget) == event.widget:
+                if self._timer is not None:
+                    self.after_cancel(self._timer)
+                    self._timer = None
+                self.withdraw()
+                self.clearstatus()
+                self._currentTrigger = None
 
     def _buttonpress(self, event):
 	if self._timer is not None:
 	    self.after_cancel(self._timer)
 	    self._timer = None
 	self.withdraw()
-        # self._currentTrigger = None
+        self._currentTrigger = None
 
     def _showBalloon(self, widget, balloonHelp, isItem):
 
@@ -254,9 +362,3 @@ class Balloon(Pmw.MegaToplevel):
             y = y - self._label.winfo_reqheight() - self['yoffset'] - edges
 
         Pmw.setgeometryanddeiconify(self, '+%d+%d' % (x, y))
-
-	# if isItem:
-        #     item = widget.find_withtag('current')  # Only works for canvas
-        #     self._currentTrigger = (widget, item)
-        # else:
-        #     self._currentTrigger = (widget,)

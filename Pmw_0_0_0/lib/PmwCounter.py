@@ -11,17 +11,17 @@ class Counter(Pmw.MegaWidget):
 	# Define the megawidget options.
 	INITOPT = Pmw.INITOPT
 	optiondefs = (
-	    ('autorepeat',     1,             INITOPT),
+	    ('autorepeat',     1,             None),
 	    ('buttonaspect',   1.0,           INITOPT),
 	    ('datatype',       'numeric',     self._datatype),
 	    ('increment',      1,             None),
-	    ('initwait',       300,           INITOPT),
+	    ('initwait',       300,           None),
 	    ('labelmargin',    0,             INITOPT),
 	    ('labelpos',       None,          INITOPT),
 	    ('orient',         'horizontal',  INITOPT),
 	    ('padx',           0,             INITOPT),
 	    ('pady',           0,             INITOPT),
-	    ('repeatrate',     50,            INITOPT),
+	    ('repeatrate',     50,            None),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -119,7 +119,7 @@ class Counter(Pmw.MegaWidget):
 	self._downArrowBtn.bind('<Unmap>', self._stopCounting)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(Counter)
+	self.initialiseoptions()
 
     def _resizeArrow(self, event):
 	for btn in (self._upArrowBtn, self._downArrowBtn):

@@ -70,10 +70,10 @@ class Demo:
 	self._any.component('entry').focus_set()
 
     def changed(self):
-	print 'Text changed, value is', self._real.get()
+	print 'Text changed, value is', self._real.getvalue()
 
     def execute(self):
-	print 'Return pressed, value is', self._any.get()
+	print 'Return pressed, value is', self._any.getvalue()
 
     # This implements a custom validation routine.  It simply checks
     # if the string is of odd length.

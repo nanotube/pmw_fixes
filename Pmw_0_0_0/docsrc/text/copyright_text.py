@@ -1,6 +1,6 @@
 text = """
-   Copyright (c) 1997, 1998, 1999, 2000, 2001
-   Telstra Corporation Limited, Australia (ACN 051 775 556)
+   Copyright 1997-1999 Telstra Corporation Limited, Australia
+   Copyright 2000-2002 Really Good Software Pty Ltd, Australia
 
    Permission is hereby granted, free of charge, to any person
    obtaining a copy of this software and associated documentation

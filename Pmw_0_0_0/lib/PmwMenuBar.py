@@ -34,7 +34,7 @@ class MenuBar(Pmw.MegaWidget):
         # Cache this method for use later.
 
         # Check keywords and initialise options.
-        self.initialiseoptions(MenuBar)
+        self.initialiseoptions()
 
     def deletemenuitems(self, menuName, start, end = None):
         self.component(menuName + '-menu').delete(start, end)

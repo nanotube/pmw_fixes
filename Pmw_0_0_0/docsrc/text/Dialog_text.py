@@ -1,18 +1,17 @@
 complete = 1
+reviewdate = "18 May 2002"
 
 name = """
     toplevel window with button box
 """
 
 description = """
-    This class creates a toplevel window composed of a button box and
-    a child site area.  The child site area can be used to specialise
-    the megawidget by creating other widgets within it.  This can be
-    done by using this class directly or by deriving from it.
+    A dialog is a toplevel window composed of a button box and a child
+    site area.  The child site area can be used to specialise the
+    megawidget by creating other widgets within it.  This can be done
+    by using this class directly or by deriving from it.
 
 """
-
-no_auto_default = ('buttons',)
 
 text = {}
 text['options'] = {}
@@ -25,7 +24,7 @@ text['options']['buttonboxpos'] = """
 
 text['options']['buttons'] = """
     This must be a tuple or a list and specifies the names on the
-    buttons in the button box.  The default is *(\\'OK\\',)*.
+    buttons in the button box.
 
 """
 

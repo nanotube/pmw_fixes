@@ -284,18 +284,15 @@ text['methods']['defineoptions'] = """
     option, 'default' is its default value and 'callback' is the
     function to call when the value of the option is set by a call to
     /configure()/.  The 'keywords' argument should be the keyword
-    arguments passed in to the constructor of a megawidget.  The user
+    arguments passed in to the constructor of the megawidget.  The user
     may override the default value of an option by supplying a keyword
     argument to the constructor.
 
-    If any option already created by a base class is redefined by
-    'optionDefs', then the base class's value will be overridden.  If
-    the 'callback' field is not *None*, then this will also override
-    the callback set by the base class.
-
-    This should be called before the constructor of the base class, so
-    that default values defined in a derived class override those in a
-    base class.
+    If any option created by a base class is also defined by
+    'optionDefs', then the derived class's default value will take
+    precedence over the base class's.  If the 'callback' field is not
+    *None*, then this will also override the callback set by the base
+    class.
 
     If 'callback' is *Pmw.INITOPT*, then the option is an
     'initialisation option'.
@@ -305,6 +302,11 @@ text['methods']['defineoptions'] = """
     included in this list, then it not an error if a keyword argument
     for the group is given to the constructor or to /configure()/,
     even when no components with this group have been created.
+
+    If /defineoptions()/ is called, it must be called once in the
+    megawidget constructor before the call to the constructor of the
+    base class and there must be a matching call to
+    /initialiseoptions()/ at the end of the constructor.
 
 """
 
@@ -318,7 +320,7 @@ text['methods']['addoptions'] = """
     depending on the value of other options.  Usually, megawidgets
     unconditionally define all their options in the call to
     /defineoptions()/ and do not need to use /addoptions()/.  This
-    method may be called after the call to /defineoptions()/ and
+    method must be called after the call to /defineoptions()/ and
     before the call to /initialiseoptions()/.
 
 """
@@ -345,8 +347,10 @@ text['methods']['hulldestroyed'] = """
 
 text['methods']['initialiseoptions'] = """
     Check keyword arguments and call option callback functions.  This
-    must be called at the end of a megawidget constructor with
-    'myClass' set to the class being defined.
+    method must be called, at the end of a megawidget constructor, if
+    and only if /defineoptions()/ was also called in the constructor. 
+    The 'dummy' argument is not required, but is retained for
+    backwards compatibility.
     
     It checks that all keyword arguments given to the constructor have
     been used.  If not, it raises an error indicating which arguments
@@ -355,13 +359,13 @@ text['methods']['initialiseoptions'] = """
     /defineoptions()/ or /addoptions()/ (by the megawidget or one of
     its base classes), or it references, by name, a component of the
     megawidget, or it references, by group, at least one component. 
-    It also calls the configuration callback function for all
-    configuration options.
+    It also calls the configuration callback function for all options
+    that have a callback.
 
     This method is only effective when called by the constructor of
-    the 'leaf' class, that is, if 'myClass' is the same as the class
-    of the object being constructed.  The method returns immediately
-    when called by the constructors of base classes.
+    the 'leaf' class, that is, the class in the class hierarchy which
+    first called /defineoptions()/.  For all other classes in the
+    class hierarchy (base classes), the method returns immediately.
 
 """
 

@@ -3,14 +3,15 @@
 </p></center>
 
 <dl>
-<dt> <h2>Introduction</h2><dd>
+<dt> <h2>Introduction</h2></dt><dd>
 <p>
 This document describes how to fetch and install Pmw, and how to run
 the demonstrations and tests.
 
 </p>
 
-<dt> <h2>Requirements</h2><dd>
+</dd>
+<dt> <h2>Requirements</h2></dt><dd>
 <p>
 Pmw.PMW_VERSION requires the _tkinter and Tkinter modules.  It works
 with python versions 1.5.2 and greater (tested up to 2.0) and Tk
@@ -28,7 +29,8 @@ supported (tested up to 2.4u).  You can find BLT at
 
 </p>
 
-<dt> <h2>Distribution and installation</h2><dd>
+</dd>
+<dt> <h2>Distribution and installation</h2></dt><dd>
 <p>
 Releases of the Pmw distribution are available via http from
 <code>http://download.sourceforge.net/pmw/</code>.  This release is available
@@ -36,6 +38,7 @@ as <a href="http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.tar.gz">
 <code>Pmw.PMW_VERSION.tar.gz</code></a>, released on VERSION_DATE. 
 This is a compressed tar file which, under Unix, can be unpacked like
 this:
+</p>
 
 <dl>
 <dd>
@@ -43,8 +46,8 @@ this:
 gunzip Pmw.PMW_VERSION.tar.gz
 tar xvf Pmw.PMW_VERSION.tar
 </pre>
+</dd>
 </dl>
-</p>
 
 <p>
 Under Microsoft Windows, you will need a program such as WinZip (<a
@@ -59,9 +62,9 @@ the file to <strong>.tgz</strong> for WinZip to recognise it.
 This will unpack into a directory named Pmw.  You now need to put this
 directory somewhere python can find it, preferably in one of the
 standard places, such as in the <code>site-packages</code> directory
-(eg: <code>/usr/local/lib/python1.5/site-packages/Pmw</code>) or the
+(eg: <code>/usr/lib/python1.5/site-packages/Pmw</code>) or the
 <code>sys.prefix</code> directory (eg: <code>C:\Program
-Files\Python\Pmw</code> or <code>/usr/local/lib/python1.5</code>).
+Files\Python\Pmw</code> or <code>/usr/lib/python1.5</code>).
 
 </p>
 
@@ -101,7 +104,8 @@ systems please contribute it and I will place it here.
 
 </p>
 
-<dt> <h2>Documentation</h2><dd>
+</dd>
+<dt> <h2>Documentation</h2></dt><dd>
 <p>
 The <code>doc</code> directory for each Pmw version contains all the
 documentation for that version of Pmw.  See the local <a
@@ -111,13 +115,25 @@ href="http://pmw.sourceforge.net/">official Pmw home page</a>.
 
 </p>
 
-<dt> <h2>Demonstrations and tests</h2><dd>
+<p>
+An excellent tutorial and reference covering the Pmw interface to the
+powerful Blt graph widget, "<a
+href="http://www.ifi.uio.no/~hpl/Pmw.Blt/doc/">A User's Guide to
+Pmw.Blt</a>" written by Bjørn Ove Thue and Hans Petter Langtangen, is
+available.  You can also download <a
+href="http://www.ifi.uio.no/~hpl/Pmw.Blt/Pmw.Blt.doc.tar.gz">the full
+HTML document</a> for local viewing.
+
+</p>
+</dd>
+<dt> <h2>Demonstrations and tests</h2></dt><dd>
 <p>
   A good way to get an overview of the functionality provided by Pmw
   is to run the demonstrations and tests and look at the demonstration
   code.  To view a comprehensive demonstration of many of the features
   of Pmw run the <code>All.py</code> script, which can be found in the
   <code>demos</code> subdirectory of each version of Pmw.
+</p>
 
 <p>
 
@@ -127,6 +143,7 @@ href="http://pmw.sourceforge.net/">official Pmw home page</a>.
   href="demosandtests.html">Demonstrations and tests</a> for more
   information about running the demonstrations and tests and how to
   create your own.
+</p>
 
 <p>
 
@@ -136,7 +153,8 @@ python2.0 under Linux.  These tests have been commented out (until BLT
 is fixed).
 
 <a name=contributions></a>
-<dt> <h2>Contributions welcome</h2><dd>
+</dd>
+<dt> <h2>Contributions welcome</h2></dt><dd>
 
 <p>
 If you create some whiz-bang megawidgets and would like to contribute
@@ -153,6 +171,7 @@ If you would like to contribute a megawidget, it would be preferable if it
 also came with a simple demonstration and a test script.  See <a
 href="demosandtests.html">Demonstrations and tests</a> for information
 about how to create new demonstrations and tests.
+</p>
 
 <p>
 Each megawidget should also have a reference manual describing its
@@ -161,7 +180,8 @@ options, components and methods.
 </p>
 
 <a name=docgen></a>
-<dt> <h2>Generating the documentation</h2><dd>
+</dd>
+<dt> <h2>Generating the documentation</h2></dt><dd>
 
 <p>
 The released reference manuals are
@@ -184,11 +204,13 @@ directory to <code>docsrc</code> and run <code>createmanuals.py</code>.
 After printing lots of warnings about documentation that has not been
 written yet, this will create a new <code>doc</code> directory
 containing all the html documentation.
+</p>
 
 <p>
 Here is an example set of commands to unpack the documentation source
 and regenerate the documentation, assuming you have downloaded the
 source in the Pmw/Pmw_PMW_DIR directory:
+</p>
 
 <dl>
 <dd>
@@ -200,8 +222,8 @@ mv doc doc.old
 cd docsrc
 ./createmanuals.py
 </pre>
+</dd>
 </dl>
-</p>
 
 <p>
 If running under Unix, you will need to run the
@@ -212,12 +234,13 @@ requires a connection to an X server to run.
 
 </p>
 
-<dt> <h2>Future plans and bugs</h2><dd>
+</dd>
+<dt> <h2>Future plans and bugs</h2></dt><dd>
 
 <p>
 The <a href="todo.html">todo list</a> contains a long list of of
 suggestions, bugs and enhancements for Pmw.  If you are interested in
-doing any of these, please let me
+doing any of these, please let the maintainer
 (<a href="mailto:gregm@iname.com"><i>gregm@iname.com</i></a>) know.
 Some of the items in the todo list may be considered bugs.  There are
 also some other problems due to idiosyncrasies in the implementation
@@ -225,7 +248,18 @@ of Tk.
 
 </p>
 
-<dt> <h2>Acknowledgements</h2><dd>
+</dd>
+<dt> <h2>Licence</h2></dt><dd>
+
+<p>
+The official Pmw licence (see <a href="copyright.html">copyright</a>
+basically lets you do anything with Pmw as long as you don't blame me
+for it.  There is also another licence, the "Postcard Licence":
+XXXXXXXXXXXXXXXXXXXXXXXXXXX
+</p>
+
+</dd>
+<dt> <h2>Acknowledgements</h2></dt><dd>
 
 <p>
 The initial ideas for Pmw were blatantly stolen from the itcl
@@ -287,9 +321,14 @@ The Pmw home page and project site is made available courtesy of
 
 </p>
 <p>
-The current maintainer is Greg McFarlane.  If you have any
-comments, enhancements or new contributions, please contact me at
-<a href="mailto:gregm@iname.com"><i>gregm@iname.com</i></a>.
-</p>
 
+The current maintainer is Greg McFarlane.  I monitor the <a
+href="http://lists.sourceforge.net/lists/listinfo/pmw-general">Pmw
+discussion and announcement mailing list</a> so please send any
+problems, comments, suggestions or enhancements to the list.  You may
+also contact me directly at <a
+href="mailto:gregm@iname.com"><i>gregm@iname.com</i></a>.
+
+</p>
+</dd>
 </dl>

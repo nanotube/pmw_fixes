@@ -1,11 +1,12 @@
 complete = 1
 reviewdate = "1 November 1998"
 
-name = """ dropdown or simple combination box widget
+name = """
+    dropdown or simple combination box
 """
 
 description = """
-    This class creates an entry field and an associated scrolled
+    A combobox contains an entry field and an associated scrolled
     listbox.  When an item in the listbox is selected, it is displayed
     in the entry field.  Optionally, the user may also edit the entry
     field directly.
@@ -36,8 +37,7 @@ text['options']['buttonaspect'] = """
 """
 
 text['options']['dropdown'] = """
-    Specifies whether the combobox megawidget should be dropdown or
-    simple.
+    Specifies whether the combobox should be dropdown or simple.
 
 """
 
@@ -61,9 +61,10 @@ text['options']['listheight'] = """
 
 text['options']['selectioncommand'] = """
     The function to call when an item is selected.
-    If this function takes a long time to run, and you want the display
-    to be updated, call /update_idletasks()/ at the beginning of the
-    function.  Alternatively, wrap the function using /Pmw.busycallback()/.
+    If this function takes a long time to run, and you want the entry
+    field to be updated quickly, call /update_idletasks()/ at the
+    beginning of the function.  Alternatively, wrap the function using
+    /Pmw.busycallback()/.
 
 """
 
@@ -122,6 +123,12 @@ text['methods']['selectitem'] = """
 
 """
 
+text['methods']['clear'] = """
+    Delete all items from the scrolled listbox and delete all text
+    from the entry widget.
+
+"""
+
 text['methods']['size'] = """
     This method is explicitly forwarded to the *scrolledlist*
     component's /size()/ method.  Without this explicit forwarding,
@@ -130,3 +137,10 @@ text['methods']['size'] = """
 
 """
 
+text['methods']['bbox'] = """
+    This method is explicitly forwarded to the *scrolledlist*
+    component's /bbox()/ method.  Without this explicit forwarding,
+    the /bbox()/ method (aliased to /grid_bbox()/) of the *hull* would
+    be invoked, which is probably not what the programmer intended.
+
+"""

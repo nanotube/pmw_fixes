@@ -70,7 +70,7 @@ def _cdiv(a, b):
     else:
 	return -(abs(a) / abs(b))
 
-def ymdtojdn(y, m, d, julian = -1, papal = 1):
+def ymdtojdn(year, month, day, julian = -1, papal = 1):
 
     # set Julian flag if auto set
     if julian < 0:
@@ -79,20 +79,20 @@ def ymdtojdn(y, m, d, julian = -1, papal = 1):
 	else:                              # British-American usage
 	    lastJulianDate = 17520902L     # last day to use Julian calendar
 
-	julian = ((y * 100L) + m) * 100 + d  <=  lastJulianDate
+	julian = ((year * 100L) + month) * 100 + day  <=  lastJulianDate
 
-    if y < 0:
+    if year < 0:
 	# Adjust BC year
-	y = y + 1
+	year = year + 1
 
     if julian:
-	return 367L * y - _cdiv(7 * (y + 5001L + _cdiv((m - 9), 7)), 4) + \
-	    _cdiv(275 * m, 9) + d + 1729777L
+	return 367L * year - _cdiv(7 * (year + 5001L + _cdiv((month - 9), 7)), 4) + \
+	    _cdiv(275 * month, 9) + day + 1729777L
     else:
-	return (d - 32076L) + \
-	    _cdiv(1461L * (y + 4800L + _cdiv((m - 14), 12)), 4) + \
-	    _cdiv(367 * (m - 2 - _cdiv((m - 14), 12) * 12), 12) - \
-	    _cdiv((3 * _cdiv((y + 4900L + _cdiv((m - 14), 12)), 100)), 4) + \
+	return (day - 32076L) + \
+	    _cdiv(1461L * (year + 4800L + _cdiv((month - 14), 12)), 4) + \
+	    _cdiv(367 * (month - 2 - _cdiv((month - 14), 12) * 12), 12) - \
+	    _cdiv((3 * _cdiv((year + 4900L + _cdiv((month - 14), 12)), 100)), 4) + \
 	    1            # correction by rdg
 
 def jdntoymd(jdn, julian = -1, papal = 1):

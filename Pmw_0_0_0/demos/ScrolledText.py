@@ -5,85 +5,85 @@ import sys
 sys.path[:0] = ['../../..']
 
 import os
+import math
+import string
 import Tkinter
 import Pmw
 
 class Demo:
     def __init__(self, parent):
-	# Create the ScrolledText.
+
+	# Create the ScrolledText with headers.
+        fixedFont = Pmw.logicalfont('Fixed')
 	self.st = Pmw.ScrolledText(parent,
-		borderframe = 1,
+		# borderframe = 1,
 		labelpos = 'n',
-		label_text='ScrolledText.py',
+		label_text='ScrolledText with headers',
+                columnheader = 1,
+                rowheader = 1,
+                rowcolumnheader = 1,
 		usehullsize = 1,
 		hull_width = 400,
 		hull_height = 300,
-		text_padx = 10,
-		text_pady = 10,
-		text_wrap='none'
+		text_wrap='none',
+                text_font = fixedFont,
+                Header_font = fixedFont,
+                Header_foreground = 'blue',
+                rowheader_width = 3,
+                rowcolumnheader_width = 3,
+		text_padx = 4,
+		text_pady = 4,
+		Header_padx = 4,
+		rowheader_pady = 4,
 	)
 
-	# Create a group widget to contain the scrollmode options.
-	w = Pmw.Group(parent, tag_text='Scroll mode')
-	w.pack(side = 'bottom', padx = 5, pady = 5)
-
-	hmode = Pmw.OptionMenu(w.interior(),
-		labelpos = 'w',
-		label_text = 'Horizontal:',
-		items = ['none', 'static', 'dynamic'],
-		command = self.sethscrollmode,
-		menubutton_width = 8,
-	)
-	hmode.pack(side = 'left', padx = 5, pady = 5)
-	hmode.invoke('dynamic')
-
-	vmode = Pmw.OptionMenu(w.interior(),
-		labelpos = 'w',
-		label_text = 'Vertical:',
-		items = ['none', 'static', 'dynamic'],
-		command = self.setvscrollmode,
-		menubutton_width = 8,
-	)
-	vmode.pack(side = 'left', padx = 5, pady = 5)
-	vmode.invoke('dynamic')
-
-	buttonBox = Pmw.ButtonBox(parent)
-	buttonBox.pack(side = 'bottom')
-	buttonBox.add('yview', text = 'Show\nyview', command = self.showYView)
-	buttonBox.add('scroll', text = 'Page\ndown', command = self.pageDown)
-	buttonBox.add('center', text = 'Center', command = self.centerPage)
-
-	# Pack this last so that the buttons do not get shrunk when
-	# the window is resized.
 	self.st.pack(padx = 5, pady = 5, fill = 'both', expand = 1)
 
-	# Read this file into the text widget.
-	head, tail = os.path.split(sys.argv[0])
-	self.st.importfile(os.path.join(head,'ScrolledText.py'))
+        funcs = 'atan cos cosh exp log log10 sin sinh sqrt tan tanh'
+        funcs = string.split(funcs)
 
-	self.st.insert('end', '\nThis demonstrates how to\n' +
-	    'add a window to a text widget:  ')
-	counter = Pmw.Counter(self.st.component('text'),
-	    entryfield_value = 9999)
-	self.st.window_create('end', window = counter)
+        # Create the header for the row headers
+        self.st.component('rowcolumnheader').insert('end', 'x')
 
-    def sethscrollmode(self, tag):
-	self.st.configure(hscrollmode = tag)
+        # Create the column headers
+        headerLine = ''
+        for column in range(len(funcs)):
+            headerLine = headerLine + ('%-7s   ' % (funcs[column],))
+        headerLine = headerLine[:-3]
+        self.st.component('columnheader').insert('0.0', headerLine)
 
-    def setvscrollmode(self, tag):
-	self.st.configure(vscrollmode = tag)
+        self.st.tag_configure('yellow', background = 'yellow')
 
-    def showYView(self):
-        print self.st.yview()
+        # Create the data rows and the row headers
+        numRows = 50
+        tagList = []
+        for row in range(1, numRows):
+            dataLine = ''
+            x = row / 5.0
+            for column in range(len(funcs)):
+                value = eval('math.' + funcs[column] + '(' + str(x) + ')')
+                data = str(value)[:7]
+                if value < 0:
+                    tag1 = '%d.%d' % (row, len(dataLine))
+                    tag2 = '%d.%d' % (row, len(dataLine) + len(data))
+                    tagList.append(tag1)
+                    tagList.append(tag2)
+                data = '%-7s' % (data,)
+                dataLine = dataLine + data + '   '
+            dataLine = dataLine[:-3]
+            header = '%.1f' % (x,)
+            if row < numRows - 1:
+                dataLine = dataLine + '\n'
+                header = header + '\n'
+            self.st.insert('end', dataLine)
+            self.st.component('rowheader').insert('end', header)
+        apply(self.st.tag_add, ('yellow',) + tuple(tagList))
 
-    def pageDown(self):
-        self.st.yview('scroll', 1, 'page')
-
-    def centerPage(self):
-        top, bottom = self.st.yview()
-        size = bottom - top
-        middle = 0.5 - size / 2
-        self.st.yview('moveto', middle)
+        # Prevent users' modifying text and headers
+        self.st.configure(
+            text_state = 'disabled',
+            Header_state = 'disabled',
+        )
 
 ######################################################################
 

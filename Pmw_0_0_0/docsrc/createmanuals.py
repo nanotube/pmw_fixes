@@ -30,8 +30,8 @@ sys.path[:0] = [pmwTextDir]
 import cgi
 import dis
 import os
-import regex
-import regsub
+import re
+import shutil
 import string
 import time
 import types
@@ -47,7 +47,7 @@ if len(sys.argv) != 1:
     sys.exit()
 
 PMW_DIR = os.path.basename(os.path.dirname(os.getcwd()))[4:]
-VERSION = regsub.gsub('_', '.', PMW_DIR)
+VERSION = re.sub('_', '.', PMW_DIR)
 VERSION_DATE = string.strip(
     time.strftime('%e %B %Y', time.localtime(time.time())))
 Pmw.setversion(VERSION)
@@ -71,15 +71,15 @@ if pmwDocHtmlDir[-1] != '/':
 # ======================================================================
 # Define pattern to find forwarded methods.
 
-pattern = regex.symcomp(
-    '.*forwardmethods('
+pattern = re.compile(
+    '.*forwardmethods\('
     ' *'
-    '\(<fromClass>[^,]*\)'
+    '(?P<fromClass>[^,]*)'
     ' *, *'
-    '\(<toClass>[^,]*\)'
+    '(?P<toClass>[^,]*)'
     ' *, *'
-    "'\(<toPart>[^']*\)'"
-    ' *).*'
+    "'(?P<toPart>[^']*)'"
+    ' *\).*'
     '.*'
 )
 
@@ -95,7 +95,12 @@ def extractWidgetInfo (fileName, widgetName):
     # following until the megawidget is created.
     tryKeywords = (
 	{'separatorwidth' : 1, 'iconpos' : 'w'},# AboutDialog, MessageDialog
-	{'labelpos' : 'w', 'borderframe' : 1},  # ScrolledCanvas, ScrolledText
+	{'labelpos' : 'w', 'borderframe' : 1,   # ScrolledText, HistoryText
+         'columnheader' : 1,
+         'rowheader' : 1,
+         'rowcolumnheader' : 1,
+        },
+	{'labelpos' : 'w', 'borderframe' : 1},  # ScrolledCanvas
 	{'labelpos' : 'w'},                     # ButtonBox, ComboBox, Counter,
 						# EntryField, OptionMenu,
 						# LabeledWidget, MessageBar,
@@ -126,7 +131,7 @@ def extractWidgetInfo (fileName, widgetName):
     bases = []
     for base in cls.__bases__:
 	bases.append(base.__name__)
-	if widgetgroup is None and base in (Pmw.MegaWidget, Pmw.MegaArchetype):
+	if widgetgroup is None and base in widgetBaseClasses:
 	    widgetgroup = 'Widgets'
     if widgetgroup is None:
 	widgetgroup = 'Miscellaneous'
@@ -152,9 +157,11 @@ def extractWidgetInfo (fileName, widgetName):
 
     forwardedcomponents = []
     for line in open(fileName).readlines():
-	if pattern.match(line) >= 0:
-	    fromClass, toClass, toPart = \
-		    pattern.group('fromClass', 'toClass', 'toPart')
+        match = pattern.match(line)
+	if match is not None:
+	    fromClass = match.group('fromClass')
+            toClass = match.group('toClass')
+            toPart = match.group('toPart')
 	    if widgetName == fromClass:
 		toWidget = getattr(field, toPart)
 		for name, megawidget, cls, group in components:
@@ -240,7 +247,7 @@ def getFunctionArgs(function, isMethod = 0):
 	arg = '<em>' + arg + '</em>'
 	if index >= normalArgs:
 	    arg = arg + ' = <strong>' + \
-		    repr(defaults[index - normalArgs]) + '</strong>'
+		    getRepr(defaults[index - normalArgs]) + '</strong>'
 	args.append(arg)
 
     # Now add the varargs argument, eg '*args'.
@@ -258,9 +265,36 @@ def getFunctionArgs(function, isMethod = 0):
 
     return '(' + string.join(args, ', ') + ')'
 
+def getRepr(obj):
+    if obj is Pmw.DEFAULT:
+        return 'Pmw.DEFAULT'
+    if obj is Pmw.SELECT:
+        return 'Pmw.SELECT'
+    if type(obj) == type(0.1):
+        return str(obj)
+    return repr(obj)
+
 # ======================================================================
 
 def getPartText(widgetName, part, type):
+    # Find the description for the 'type' (option, component or
+    # method) named 'part' for the widget class named 'widgetName'.
+
+    # First check if the widget-specific description contains the
+    # part.
+    textDict = widgetInfo[widgetName]['text'].text[type]
+    if textDict.has_key(part):
+	return string.strip(textDict[part])
+
+    # No text was found specific to the widget, try the base class
+    # descriptions.
+    for base in widgetInfo[widgetName]['bases']:
+        text = getPartText(base, part, type)
+        if text is not None:
+            return string.strip(text)
+
+    # No text was found specific to the widget or base classes, try
+    # the special createlabel descriptions.
     if type == 'options':
 	if part == 'labelmargin':
 	    return string.strip(default_text.labelmargin_option)
@@ -271,14 +305,8 @@ def getPartText(widgetName, part, type):
 	if part == 'label':
 	    return string.strip(default_text.label_component)
 
-    textDict = widgetInfo[widgetName]['text'].text[type]
-    if textDict.has_key(part):
-	return string.strip(textDict[part])
-    else:
-	for base in widgetInfo[widgetName]['bases']:
-	    text = getPartText(base, part, type)
-	    if text is not None:
-		return string.strip(text)
+    # No description found
+    return None
 
 # ======================================================================
 
@@ -341,7 +369,6 @@ def header(title = None, heading = None):
 	vlink="551a8b" alink="ff0000">
 
     <h1 ALIGN="CENTER">%(heading)s</h1>
-    <p>
     """
 
     return headerStr % locals()
@@ -351,15 +378,13 @@ def trailer(noBack = 0, extra = ''):
     if noBack:
         back = ''
     else:
-        back = '<a href="index.html">Home</a>.'
+        back = ' - <a href="index.html">Home</a>'
     trailerStr = """
     <font size=-1>
     <center><P ALIGN="CENTER">
-    %(back)s 
-    Pmw %(version)s
-    Maintainer
-    <a href="mailto:gregm@iname.com">gregm@iname.com</a>.
+    Pmw %(version)s -
     %(date)s
+    %(back)s
     %(extra)s
     </p></center>
     </font>
@@ -408,35 +433,39 @@ def printSection(widgetName, sectionName):
     for name, after, relative, text in info['text'].sections:
 	if not after and relative == sectionName:
 	    sectionsUsed = sectionsUsed + 1
-	    print '<dt> <h3>' + name + '</h3><dd>'
+	    print '<dt> <h3>' + name + '</h3></dt><dd>'
 	    print StructuredText.gethtml(text)
+            print '</dd>'
 
     if sectionName == 'Name':
-	print '<dt> <h3>Name</h3><dd>'
+	print '<dt> <h3>Name</h3></dt><dd>'
 	text = fullWidgetName + '() - ' + info['text'].name
 	print StructuredText.gethtml(text)
+        print '</dd>'
 
     elif sectionName == 'Inherits':
 	if len(info['bases']) > 0:
-	    print '<dt> <h3>Inherits</h3><dd>'
+	    print '<dt> <h3>Inherits</h3></dt><dd>'
 	    for base in info['bases']:
 		print link(base) + '<br>'
+            print '</dd>'
 
     elif sectionName == 'Description':
-	print '<dt> <h3>Description</h3><dd>'
+	print '<dt> <h3>Description</h3></dt><dd>'
 	text = info['text'].description
 	print StructuredText.gethtml(text)
+        print '</dd>'
 
     elif sectionName == 'Options':
 	if len(info['options']) > 0:
-	    print '<dt> <h3>Options</h3><dd>'
+	    print '<dt> <h3>Options</h3></dt><dd>'
 	    print 'Options for this megawidget and its base'
-	    print 'classes are described below.<p>'
+	    print 'classes are described below.<p></p>'
 	    options_with_text = info['text'].text['options'].keys()
 	    for option, default, isinit in info['options']:
 		print '<a name=option.' + option + '></a>'
 		print '<dl><dt> <strong>' + option
-		print '</strong><dd>'
+		print '</strong></dt><dd>'
 		text = ''
 		if isinit:
 		    text = 'Initialisation option. '
@@ -451,13 +480,24 @@ def printSection(widgetName, sectionName):
 		if info['text'].text['options'].has_key(option):
 		    options_with_text.remove(option)
 		if option not in info['text'].no_auto_default:
-		    text = text + ' The default is *' + repr(default) + '*.'
+                    if type(default) == type(()) and len(default) > 0:
+                        text = text + ' The default is *('
+                        for s in default:
+                            text = text + "\\'" + default[0] + "\\', "
+                        if len(default) == 1:
+                            text = text[:-1]
+                        else:
+                            text = text[:-2]
+                        text = text + ")*."
+                    else:
+                        text = text + ' The default is *' + getRepr(default) + '*.'
 		text = StructuredText.gethtml(text)
 		if text[:3] == '<p>':
 		    print text[3:]
 		else:
 		    print text
-		print '</dt></dl>'
+		print '</dd></dl>'
+            print '</dd>'
 
 	    if len(options_with_text) > 0:
 		sys.stderr.write('ERROR: unknown options ' +
@@ -467,15 +507,15 @@ def printSection(widgetName, sectionName):
 	global componentClass
 	componentClass = {}
 	if len(info['components']) > 0:
-	    print '<dt> <h3>Components</h3><dd>'
+	    print '<dt> <h3>Components</h3></dt><dd>'
 	    print 'Components created by this megawidget and its base'
-	    print 'classes are described below.<p>'
+	    print 'classes are described below.<p></p>'
 	    components_with_text = info['text'].text['components'].keys()
 	    for component, megawidget, cls, group in info['components']:
 		componentClass[component] = cls
 		print '<a name=component.' + component + '></a>'
 		print '<dl><dt> <strong>' + component
-		print '</strong><dd>'
+		print '</strong></dt><dd>'
 		componentText = getPartText(widgetName, component, 'components')
 		if componentText is None:
 		    sys.stderr.write('ERROR: no text for ' + widgetName +
@@ -494,7 +534,8 @@ def printSection(widgetName, sectionName):
 		    print text[3:]
 		else:
 		    print text
-		print '</dt></dl>'
+		print '</dd></dl>'
+            print '</dd>'
 
 	    if len(components_with_text) > 0:
 		sys.stderr.write('ERROR: unknown components ' +
@@ -502,26 +543,42 @@ def printSection(widgetName, sectionName):
 
     elif sectionName == 'Component aliases':
 	if len(info['aliases']) > 0:
-	    print '<dt> <h3>Component aliases</h3><dd>'
+	    print '<dt> <h3>Component aliases</h3></dt><dd>'
 	    print 'Sub-components of components of this megawidget'
-	    print 'may be accessed via the following aliases.<p>'
+	    print 'may be accessed via the following aliases.<p></p>'
 	    for alias, name in info['aliases']:
 		print '<dl><dt> <strong>' + alias
-		print '</strong><dd>'
+		print '</strong></dt><dd>'
 		print 'Alias for <strong>' + name + '</strong>.'
-		print '</dt></dl>'
+		print '</dd></dl>'
+            print '</dd>'
 
     elif sectionName == 'Methods':
 	print '<a name=methods></a>'
-	print '<dt> <h3>Methods</h3><dd>'
-	if len(info['bases']) > 0:
+	print '<dt> <h3>Methods</h3></dt><dd>'
+	bases = info['bases']
+	if len(bases) > 0:
 	    if len(info['methods']) == 0:
 		print 'This megawidget has no methods of its own.'
 	    else:
 		print 'Only methods specific to this megawidget are ' + \
 		    'described below.'
-	    print 'For a description of its inherited methods, see the'
-	    print 'manuals for its base classes.'
+            print 'For a description of its inherited methods, see the'
+            if len(bases) == 1:
+                base = bases[0]
+                print 'manual for its base class'
+                print '<strong>' + link(base, 'methods') + '</strong>.'
+            else:
+                print 'manuals for its base classes '
+                linkText = '<strong>' + link(base, 'methods') + '</strong>.'
+                for i in len(bases):
+                    base = bases[i]
+                    if i == len(bases) - 1:
+                        print linkText + '.'
+                    elif i == len(bases) - 2:
+                        print linkText + ' and '
+                    else:
+                        print linkText + ', '
 
 	    if len(info['forwardedcomponents']) > 0:
 		if len(info['forwardedcomponents']) == 1:
@@ -542,7 +599,7 @@ def printSection(widgetName, sectionName):
 			print '<strong>' + component + '</strong> component.'
 		    print 'Forwarded methods are searched in the order given.'
 
-	    print '<p>'
+	    print '<p></p>'
 
 	methods_with_text = info['text'].text['methods'].keys()
 	for method, args in info['methods']:
@@ -551,7 +608,7 @@ def printSection(widgetName, sectionName):
 		# Many widgets need to override destroy() just to unset timers.
 		continue
 	    print '<a name=method.' + method + '></a>'
-	    print '<dl><dt> <strong>' + method + '</strong>' + args + '<dd>'
+	    print '<dl><dt> <strong>' + method + '</strong>' + args + '</dt><dd>'
 	    text = getPartText(widgetName, method, 'methods')
 	    if text is None:
 		sys.stderr.write('ERROR: no text for ' + widgetName +
@@ -565,7 +622,8 @@ def printSection(widgetName, sectionName):
 		    print text
 	    if info['text'].text['methods'].has_key(method):
 		methods_with_text.remove(method)
-	    print '</dt></dl>'
+	    print '</dd></dl>'
+        print '</dd>'
 
 	if len(methods_with_text) > 0:
 	    sys.stderr.write('ERROR: unknown methods ' +
@@ -574,13 +632,13 @@ def printSection(widgetName, sectionName):
     elif sectionName == 'Example':
         demoFile = '../demos/' + widgetName + '.py'
         if os.path.isfile(demoFile):
-	    print '<dt> <h3>Example</h3><dd>'
+	    print '<dt> <h3>Example</h3></dt><dd>'
             if gotImage:
                 print 'The image at the top of this manual is a snapshot'
                 print 'of the window (or part of the window) produced'
-                print 'by the following code.<p>'
+                print 'by the following code.<p></p>'
             else:
-                print 'Example code using %s.<p>' % fullWidgetName
+                print 'Example code using %s.<p></p>' % fullWidgetName
             lines = []
             for line in open(demoFile).readlines():
                 if len(lines) != 0:
@@ -598,15 +656,18 @@ def printSection(widgetName, sectionName):
             escapedText = cgi.escape(string.join(lines, ''))
             print StructuredText.untabify(escapedText)
 	    print '</pre>'
+            print '</dd>'
         else:
-	    sys.stderr.write('ERROR: no %s demo for %s\n' %
-                (demoFile, fullWidgetName))
+            if widgetName not in baseClassList:
+                sys.stderr.write('ERROR: no %s demo for %s\n' %
+                    (demoFile, fullWidgetName))
 
     for name, after, relative, text in info['text'].sections:
 	if after and relative == sectionName:
 	    sectionsUsed = sectionsUsed + 1
-	    print '<dt> <h3>' + name + '</h3><dd>'
+	    print '<dt> <h3>' + name + '</h3></dt><dd>'
 	    print StructuredText.gethtml(text)
+            print '</dd>'
 
 def create_index_file():
     sys.stdout = open(pmwDocHtmlDir + 'refindex.html', 'w')
@@ -624,7 +685,7 @@ def create_index_file():
 	    groups.append(info['widgetgroup'])
 
     for group in groups:
-	print '<dl><dt> <strong>' + group + '</strong><dd>'
+	print '<dl><dt> <strong>' + group + '</strong></dt><dd>'
 	if group == 'Base classes':
 	    orderedlist = baseClassList
 	else:
@@ -644,17 +705,17 @@ def create_index_file():
 	    modules = list(_modules)
 	    modules.sort()
 	    for module in modules:
-		print '<IMG SRC = halfblueball.gif ALT = "" WIDTH=14 HEIGHT=14>' + \
+		print '<IMG SRC = blueball.gif ALT = "" WIDTH=14 HEIGHT=14>' + \
 		    '<a href="' + module + '.html">Pmw.' + module + '</a>'
 		#print '<br>'
-	    print '<IMG SRC = halfblueball.gif ALT = "" WIDTH=14 HEIGHT=14>' \
+	    print '<IMG SRC = blueball.gif ALT = "" WIDTH=14 HEIGHT=14>' \
 		    '<a href="PmwFunctions.html">Module functions</a>'
 	    #print '<br>'
-	print '</dt></dl>'
+	print '</dd></dl>'
 
-    print 'Documentation key:'
-    print '<IMG SRC = blueball.gif ALT = "" WIDTH=14 HEIGHT=14> = complete,'
-    print '<IMG SRC = halfblueball.gif ALT = "" WIDTH=14 HEIGHT=14> = some descriptions missing'
+    # print 'Documentation key:'
+    # print '<IMG SRC = blueball.gif ALT = "" WIDTH=14 HEIGHT=14> = complete,'
+    # print '<IMG SRC = halfblueball.gif ALT = "" WIDTH=14 HEIGHT=14> = some descriptions missing'
     print blue_line()
     print trailer()
 
@@ -665,7 +726,7 @@ def getWidgetInfo():
     files = os.listdir(pmwLibDir)
     files.sort()
     for file in files:
-	if regex.search('^Pmw.+\.py$', file) == 0:
+        if file[:3] == 'Pmw' and file[-3:] == '.py':
 	    fileName = pmwLibDir + '/' + file
 	    moduleName = file[:-3]
 	    module = __import__(moduleName)
@@ -700,8 +761,9 @@ def create_widget_manuals():
             print '<center><IMG SRC=%s ALT="" WIDTH=%s HEIGHT=%s></center>' % \
                 (fileName, image.width(), image.height())
         else:
-	    sys.stderr.write('ERROR: no %s image for %s\n' %
-                (path, fullWidgetName))
+            if widgetName not in baseClassList:
+                sys.stderr.write('ERROR: no %s image for %s\n' %
+                    (path, fullWidgetName))
 
 	sectionsUsed = 0
 	print '<dl>'
@@ -758,7 +820,7 @@ def create_function_manual():
     import PmwFunctions_text
     print '<dl>'
     for name, args in functionNames:
-	print '<dt> <strong>Pmw.' + name + '</strong>' + args + '<dd>'
+	print '<dt> <strong>Pmw.' + name + '</strong>' + args + '</dt><dd>'
 	if hasattr(PmwFunctions_text, name):
 	    text = getattr(PmwFunctions_text, name)
 	    text = StructuredText.gethtml(text)
@@ -766,7 +828,7 @@ def create_function_manual():
 	else:
 	    sys.stderr.write('ERROR: no text for function ' + name + '\n')
 	    print '<p></p>'
-	print '</dt>'
+	print '</dd>'
     print '</dl>'
 
     print blue_line()
@@ -783,9 +845,14 @@ def create_module_manual(moduleName):
 
     print '<dl>'
     textModule = __import__(moduleName + '_text')
-    print '<dt> <h3>Description</h3><dd>'
+    print '<dt> <h3>Name</h3></dt><dd>'
+    text = 'Pmw.' + moduleName + ' - ' + textModule.name
+    print StructuredText.gethtml(text)
+    print '</dd>'
+    print '<dt> <h3>Description</h3></dt><dd>'
     text = textModule.description
     print StructuredText.gethtml(text)
+    print '</dd>'
 
     functionNames = []
     module = __import__('Pmw' + moduleName)
@@ -794,14 +861,14 @@ def create_module_manual(moduleName):
 	    functionNames.append((name, value))
     functionNames.sort()
 
-    print '<dt> <h3>Functions</h3><dd>'
-    print 'The following functions are available.<p>'
+    print '<dt> <h3>Functions</h3></dt><dd>'
+    print 'The following functions are available.<p></p>'
     functions_with_text = textModule.text['functions'].keys()
 
     print '<dl>'
     for name, function in functionNames:
 	args = getFunctionArgs(function)
-	print '<dt> <strong>Pmw.' + moduleName + '.' + name + '</strong>' + args + '<dd>'
+	print '<dt> <strong>Pmw.' + moduleName + '.' + name + '</strong>' + args + '</dt><dd>'
 	if textModule.text['functions'].has_key(name):
 	    text = textModule.text['functions'][name]
 	    text = StructuredText.gethtml(text)
@@ -813,16 +880,20 @@ def create_module_manual(moduleName):
 	else:
 	    sys.stderr.write('ERROR: no text for function ' + name + '\n')
 	    print '<p></p>'
-	print '</dt>'
+	print '</dd>'
     print '</dl>'
-    print '</dl>'
+    print '</dd></dl>'
 
     if len(functions_with_text) > 0:
 	sys.stderr.write('ERROR: unknown functions ' +
 		str(functions_with_text) + ' for module' + moduleName + '\n')
 
     print blue_line()
-    print trailer()
+    if textModule.reviewdate != '':
+        extra = '<br>Manual page last reviewed: ' + textModule.reviewdate
+    else:
+        extra = ''
+    print trailer(extra = extra)
 
 # ======================================================================
 
@@ -843,9 +914,9 @@ def copy_page(sourceName, pageName, title, heading = None, noBack = 0):
     sys.stdout = open(pmwDocHtmlDir + pageName, 'w')
     print header(title = title, heading = heading)
     text = open(os.path.join(pmwTextDir,sourceName)).read()
-    text = regsub.gsub('PMW_VERSION', VERSION, text)
-    text = regsub.gsub('PMW_DIR', PMW_DIR, text)
-    text = regsub.gsub('VERSION_DATE', VERSION_DATE, text)
+    text = re.sub('PMW_VERSION', VERSION, text)
+    text = re.sub('PMW_DIR', PMW_DIR, text)
+    text = re.sub('VERSION_DATE', VERSION_DATE, text)
     print text
     print blue_line()
     print trailer(noBack = noBack)
@@ -855,17 +926,18 @@ def copy_page(sourceName, pageName, title, heading = None, noBack = 0):
 def copy_images():
     files = os.listdir(imageDir)
     for file in files:
-	if regex.search('.+\.gif$', file) == 0:
-	    os.system('cp ' + os.path.join(imageDir,file) + ' ' + pmwDocHtmlDir)
+        if file[-4:] == '.gif':
+	    shutil.copy(os.path.join(imageDir,file), pmwDocHtmlDir)
 
 # ======================================================================
 
 def copy_file(fileName):
-    os.system('cp ' + os.path.join(pmwTextDir,fileName) + ' ' + pmwDocHtmlDir)
+    shutil.copy(os.path.join(pmwTextDir,fileName), pmwDocHtmlDir)
 
 # ======================================================================
 
 baseClassList = ('MegaArchetype', 'MegaWidget', 'MegaToplevel')
+widgetBaseClasses = (Pmw.MegaWidget, Pmw.MegaArchetype, Pmw.ScrolledText)
 
 root = Pmw.initialise()
 

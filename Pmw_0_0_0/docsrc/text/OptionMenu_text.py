@@ -2,11 +2,11 @@ complete = 1
 reviewdate = "23 October 1998"
 
 name = """
-    single item selection widget
+    single item selection megawidget
 """
 
 description = """
-    This class creates an option menu which consists of a menu button
+    An option menu consists of a menu button
     and an associated menu which pops up when the button is pressed. 
     The text displayed in the menu button is updated whenever an item
     is selected in the menu.  The currently selected value can be
@@ -50,6 +50,16 @@ text['components']['menu'] = """
 
 text['methods'] = {}
 
+text['methods']['getvalue'] = """
+    Return the currently selected value.
+
+"""
+
+text['methods']['setvalue'] = """
+    Set the text displayed by the *menubutton* component to 'text'.
+    
+"""
+
 text['methods']['setitems'] = """
     Replace all the items in the *menu* component with those specified
     by 'items', which must be a sequence of strings.
@@ -73,7 +83,7 @@ text['methods']['setitems'] = """
 """
 
 text['methods']['getcurselection'] = """
-    Return the currently selected value.
+    Same as /getvalue()/ method.
     
 """
 

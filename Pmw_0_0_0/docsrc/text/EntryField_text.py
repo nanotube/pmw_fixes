@@ -6,7 +6,7 @@ name = """
 """
 
 description = """
-    This class consists of an entry widget with optional validation of
+    An entry field contains an entry widget with optional validation of
     various kinds.  Built-in validation may be used, such as
     *integer*, *real*, *time* or *date*, or an external validation
     function may be supplied.  If valid text is entered, it will be
@@ -78,7 +78,7 @@ text['options']['invalidcommand'] = """
 """
 
 text['options']['modifiedcommand'] = """
-    This is called whenever the contents of the entry has been changed
+    This is called whenever the text of the entry has been changed
     due to user action or by a call to /setentry()/.
 
 """
@@ -141,7 +141,7 @@ text['options']['validate'] = """
     *'real'* -- A number, with or without a decimal point and optional
 	exponent (e or E), as accepted by /string.atof()/.  This
 	validator accepts a *'separator'* argument, which specifies
-	the charactor used to represent the decimal point.  The
+	the character used to represent the decimal point.  The
 	default *'separator'* is *'.'*.
 
     *'alphabetic'* -- Consisting of the letters *'a-z'* and *'A-Z'*.
@@ -155,12 +155,12 @@ text['options']['validate'] = """
     *'time'* -- Hours, minutes and seconds, in the format
 	*'HH:MM:SS'*, as accepted by /Pmw.timestringtoseconds()/. 
 	This validator accepts a *'separator'* argument, which
-	specifies the charactor used to separate the three fields. 
+	specifies the character used to separate the three fields. 
 	The default separator is *':'*.  The time may be negative.
 
     *'date'* -- Day, month and year, as accepted by
 	/Pmw.datestringtojdn()/.  This validator accepts a
-	*'separator'* argument, which specifies the charactor used to
+	*'separator'* argument, which specifies the character used to
 	separate the three fields.  The default is *':'*.  This
 	validator also accepts a *'format'* argument, which is passed to
 	/Pmw.datestringtojdn()/ to specify the desired ordering of the
@@ -187,7 +187,7 @@ text['options']['validate'] = """
     into a value which can then be compared with any minimum or
     maximum values specified for the validator.  If the *'min'* or
     *'max'* fields are specified as strings, they are converted using
-    the 'stringtovalue' function.  The 'stringtovalue* function is
+    the 'stringtovalue' function.  The 'stringtovalue' function is
     called with the same arguments as the 'validator' function.  The
     'stringtovalue' function for the standard number validators
     convert the string to a number.  Those for the standard alpha
@@ -294,12 +294,22 @@ text['methods']['invoke'] = """
     
 """
 
-text['methods']['setentry'] = """
+text['methods']['getvalue'] = """
+    Return the text displayed by the entry.
+
+"""
+
+text['methods']['setvalue'] = """
     Set the contents of the entry widget to 'text' and carry out
     validation as if the text had been entered by the user.  If the
     text is invalid, the entry widget will not be changed and the
     *invalidcommand* function will be called.  Return the validity
     of 'text'.
+    
+"""
+
+text['methods']['setentry'] = """
+    Same as /setvalue()/ method.
     
 """
 

@@ -1,5 +1,6 @@
 # Based on iwidgets2.2.0/tests/dialog.test code.   
 
+import sys
 import Tkinter
 import Test
 import Pmw
@@ -7,7 +8,11 @@ import Pmw
 Test.initialise()
 
 if Tkinter.TkVersion >= 8.3:
-  expected1 = "AttributeError: 'Dialog' instance has no attribute 'bogus'"
+  version = sys.version_info
+  if version[0] > 2 or (version[0] == 2 and version[1] > 0):
+      expected1 = "AttributeError: Dialog instance has no attribute 'bogus'"
+  else:
+      expected1 = "AttributeError: 'Dialog' instance has no attribute 'bogus'"
 else:
   expected1 = 'AttributeError: bogus'
 

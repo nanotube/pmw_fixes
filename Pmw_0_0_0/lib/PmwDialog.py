@@ -90,7 +90,7 @@ class Dialog(Pmw.MegaToplevel):
         self.usermodaldeletefunc(self._doCommand)
 	
 	# Check keywords and initialise options.
-	self.initialiseoptions(Dialog)
+	self.initialiseoptions()
 
     def interior(self):
 	return self.__dialogChildSite

@@ -35,7 +35,7 @@ class TextDisplay(Pmw.MegaWidget):
 	self._text.configure(yscrollcommand = self._scrollbar.set)
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(TextDisplay)
+	self.initialiseoptions()
 
     def display(self, info):
 	self._text.configure(state = 'normal')

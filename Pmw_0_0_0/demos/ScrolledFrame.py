@@ -112,7 +112,7 @@ class Demo:
             self.sf.reposition()
 
         if 'center' in self.radio.getcurselection():
-            root.update_idletasks()
+            self.sf.update_idletasks()
             self.centerPage()
 
 	if self.col == self.row:

@@ -1,15 +1,17 @@
 complete = 1
+reviewdate = "6 June 2002"
 
 name = """
     a set of buttons, some of which may be selected
 """
 
 description = """
-    This class creates a manager widget for containing buttons.  The
-    buttons may be laid out either horizontally or vertically.  In
-    single selection mode, only one button may be selected at any one
-    time.  In multiple selection mode, several buttons may be selected
-    at the same time and clicking on a selected button will deselect it. 
+    A radio select is a container megawidget which manages a number of
+    buttons.  The buttons may be laid out either horizontally or
+    vertically.  In single selection mode, only one button may be
+    selected at any one time.  In multiple selection mode, several
+    buttons may be selected at the same time and clicking on a
+    selected button will deselect it. 
 
     The buttons displayed can be either standard buttons, radio
     buttons or check buttons.  When selected, standard buttons are
@@ -57,14 +59,14 @@ text['options']['orient'] = """
 text['options']['padx'] = """
     Specifies a padding distance to leave between each button in the x
     direction and also between the buttons and the outer edge of the
-    radio select widget.
+    radio select.
 
 """
 
 text['options']['pady'] = """
     Specifies a padding distance to leave between each button in the y
     direction and also between the buttons and the outer edge of the
-    radio select widget.
+    radio select.
 
 """
 
@@ -103,7 +105,7 @@ text['components']['frame'] = """
 text['methods'] = {}
 
 text['methods']['add'] = """
-    Add a button to the end of the radio select widget as a component
+    Add a button to the end of the radio select as a component
     named 'componentName'.  with a default type as specified by
     *buttontype*.  Any keyword arguments present (except *command*)
     will be passed to the constructor when creating the button.  If
@@ -113,17 +115,40 @@ text['methods']['add'] = """
 
 """
 
+text['methods']['button'] = """
+    Return the button specified by 'buttonIndex', which may have any
+    of the forms accepted by the /index()/ method.
+
+"""
+
 text['methods']['deleteall'] = """
     Delete all buttons and clear the current selection.
 
 """
 
-text['methods']['getcurselection'] = """
+text['methods']['getvalue'] = """
     In single selection mode, return the name of the currently
     selected button, or *None* if no buttons have been selected yet.
 
     In multiple selection mode, return a list of the names of the
     currently selected buttons.
+
+"""
+
+text['methods']['setvalue'] = """
+    Set the current selection for the radio select to 'textOrList',
+    but do not invoke *command*.
+
+    In single selection mode, select only the button specified by the
+    string 'textOrList'.
+
+    In multiple selection mode, select only the buttons specified by
+    the list 'textOrList'.
+    
+"""
+
+text['methods']['getcurselection'] = """
+    Same as /getvalue()/ method.
 
 """
 
@@ -153,6 +178,6 @@ text['methods']['invoke'] = """
 """
 
 text['methods']['numbuttons'] = """
-    Return the number of buttons in the radio select widget.
+    Return the number of buttons in the radio select.
 
 """

@@ -1,6 +1,21 @@
 text = """
 This is a list of some of the known bugs in Pmw.  If you fix any of
-these, please let me ('gregm@iname.com') know.
+these, please let the maintainer ('gregm@iname.com') know.
+
+    - Under the Enlightenment window manager, if show() is called when
+      a window is already displayed (and is not obscured by other
+      windows), then the application will hang for two seconds.  This
+      is either a bug in Tcl/Tk or in Enlightenment.  See the comment
+      in the Tk function WaitForConfigureNotify() in the Tk source
+      file tk8.3.2/unix/tkUnixWm.c:
+
+	# /*
+	#  * One more tricky detail about this procedure.  In some cases the
+	#  * window manager will decide to ignore a configure request (e.g.
+	#  * because it thinks the window is already in the right place).
+	#  * To avoid hanging in this situation, only wait for a few seconds,
+	#  * then give up.
+	#  */
 
     - On NT, Pmw.MenuBar does not display message bar help for menu
       items.  It seems that Tk menu widgets do not support <Motion>
@@ -18,7 +33,10 @@ these, please let me ('gregm@iname.com') know.
 
     - Pmw.Balloons bind to widgets and canvas items.  This means that
       bindings made by other users are deleted when the balloon makes
-      its bindings.
+      its bindings.  (For example, the "Delete" canvas item in the
+      Balloon demo overrides that <ButtonPress> binding and so that
+      balloon is not withdrawn when the mouse button is pressed over
+      the item.)
 
       The obvious solution is for Pmw.Balloon to add its bindings with
       a '+'.  But this would make the unbind and tagunbind methods
@@ -50,6 +68,11 @@ these, please let me ('gregm@iname.com') know.
 	# 
 	# root.mainloop()
 
+    - In Pmw.Balloon, the balloon should not be withdrawn when the
+      pointer leaves a widget or item and it immediatly enters another
+      widget or item with balloon help.  Instead, the balloon should
+      be moved and its contents changed immediately.
+
     - When a Pmw.Balloon is bound to a canvas item, moving the item
       becomes very slow.  (Reported by Joe Saltiel)
 
@@ -74,58 +97,6 @@ these, please let me ('gregm@iname.com') know.
       20 in demo - initial drag jumps to right by about 20 pixels. 
       Also right hand side border is missing.  (Fix may be similar to
       method used in Pmw.ScrolledFrame to give canvas border.)
-
-    - Bug in Pmw.Balloon:  the following script demonstrates two bugs. 
-      Firstly, if the mouse is moved into the button so that the
-      balloon window appears before the toplevel is destroyed, then
-      the balloon window will be stuck on the screen.  Secondly, if
-      the mouse is moved in and out of the button so that the balloon
-      window does not have time to appear (may need to increase the
-      iniwait option to do this reliably), then an error occurs - see
-      below.  (Reported by Stefan Schone.)
-      
-      Solution:  Balloon should bind to <Destroy> as well as <Leave> (but
-      Tkinter gets an error in nametowidget!).  Perhaps the timer callback
-      should check that the widget still exists.
-
-	# import Pmw
-	# import Tkinter
-	# Pmw.initialise()
-	# balloon = Pmw.Balloon()
-	# top = Tkinter.Toplevel()
-	# button= Tkinter.Button(top, text = 'My button')
-	# button.pack()
-	# balloon.bind(button, 'Help!')
-	# balloon.after(5000, top.destroy)
-	# top.mainloop()
-	# # Now quickly move the mouse into the button, so that the balloon 
-	# # window appears before the toplevel is destroyed.
-
-      The error raised by the second bug is:
-
-	# Error: 1
-	# TclError Exception in Tk callback
-	#   Function: <function callit at 311540> (type: <type 'function'>)
-	#   Args: ()
-	# Traceback (innermost last):
-	#   File "/home/nmsse/workareas/INMS_TEST_AREA/python/imported/lib/1.5/Pmw/Pmw_0_7/lib/PmwBase.py", line 1349, in __call__
-	#     None
-	#   File "Tkinter.py", line 222, in callit
-	#     apply(func, args)
-	#   File "/home/nmsse/workareas/INMS_TEST_AREA/python/imported/lib/1.5/Pmw/Pmw_0_7/lib/PmwBalloon.py", line 133, in <lambda>
-	#     None
-	#   File "/home/nmsse/workareas/INMS_TEST_AREA/python/imported/lib/1.5/Pmw/Pmw_0_7/lib/PmwBalloon.py", line 154, in _showBalloon
-	#     None
-	#   File "Tkinter.py", line 380, in winfo_rootx
-	#     return self.tk.getint(
-	# TclError: bad window path name ".2318176.2320688"
-
-    - Bug in Pmw.Balloon:  if a balloon is currently being displayed
-      for a canvas item and that item is deleted (by a timer
-      callback), then the balloon is not withdrawn (until another
-      binding for the balloon is triggered).  Finish attempt at
-      solving this problem using /self._currentTrigger/ in
-      Pmw.Balloon (currently commented out).
 
     - Fix ButtonRelease events so they do not trigger without a
       corresponding ButtonPress event.
@@ -317,5 +288,30 @@ these, please let me ('gregm@iname.com') know.
         - For toplevel main menus, several Tk commands, such as
           /winfo_height()/, do not work.  This prevents the use of
           balloon help for Pmw.MainMenuBar.
+
+  - Bug in Pmw.ComboBox:  Tab to combobox arrow, use up/down arrow
+     keys to change selection, hit return, nothing happens, <Shift
+     Tab> to entry window, hit return, combobox changes
+
+        - actually, it would be better if you could not tab to
+          the arrow, only the entry field, like the Pmw.Counter.
+
+        - the problem is if the entry field is not editable, what to
+          do then?
+
+  - Bug in TimeCounter: Arrow keys don't work when focus is on entry.
+
+  - Bug in Pmw.NoteBook: The size of the tab does not change when
+    the text value changes
+
+  - Bug in Pmw.NoteBook: The name of the tab components has a "-" sign
+    in it, which means that component options can not be used in the
+    configure command. Eg:
+
+    # n = Pmw.NoteBook()
+    # p = n.add('page1')
+    # n.configure(page1_background = 'red')   # works
+    # n.configure(page1-tab_background = 'red')   # fail, must do this:
+    # n.component('page1-tab').configure(background = 'red')   # works
 
 """

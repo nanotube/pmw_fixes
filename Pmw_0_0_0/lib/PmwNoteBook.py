@@ -118,7 +118,7 @@ class NoteBook(Pmw.MegaArchetype):
                 fill = self._darkBorderColor, tags = 'darktag')
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(NoteBook)
+	self.initialiseoptions()
 
     def insert(self, pageName, before = 0, **kw):
 	if self._pageAttrs.has_key(pageName):

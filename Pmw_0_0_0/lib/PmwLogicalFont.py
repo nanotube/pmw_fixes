@@ -24,6 +24,13 @@ def _font_initialise(root, size=None, fontScheme = None):
         else:
             defaultFont = logicalfont('Helvetica')
             root.option_add('*Font', defaultFont,  'userDefault')
+    elif fontScheme == 'default':
+        defaultFont = ('Helvetica', '-%d' % (_fontSize,), 'bold')
+        entryFont = ('Helvetica', '-%d' % (_fontSize,))
+        textFont = ('Courier', '-%d' % (_fontSize,))
+        root.option_add('*Font',            defaultFont,  'userDefault')
+        root.option_add('*Entry*Font',      entryFont,    'userDefault')
+        root.option_add('*Text*Font',       textFont,     'userDefault')
 
 def logicalfont(name='Helvetica', sizeIncr = 0, **kw):
   if not _fontInfo.has_key(name):

@@ -2,15 +2,15 @@ complete = 1
 reviewdate = "24 May 1998"
 
 name = """
-    manager widget for buttons
+    manager megawidget for buttons
 """
 
 description = """
-    This class creates a manager widget for containing buttons.  One
-    of these buttons may be specified as the default and it will be
-    displayed with the platform specific appearance for a default
-    button.  The buttons may be laid out either horizontally or
-    vertically.
+    A button box is a container megawidget which manages a number of
+    buttons.  One of these buttons may be specified as the default and
+    it will be displayed with the platform specific appearance for a
+    default button.  The buttons may be laid out either horizontally
+    or vertically.
 
 """
 
@@ -79,6 +79,12 @@ text['methods']['alignbuttons'] = """
     interpreter next becomes idle, otherwise the resizing will occur
     immediately.
     
+"""
+
+text['methods']['button'] = """
+    Return the button specified by 'buttonIndex', which may have any
+    of the forms accepted by the /index()/ method.
+
 """
 
 text['methods']['delete'] = """

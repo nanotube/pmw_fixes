@@ -48,7 +48,7 @@ class ThresholdScale(Pmw.MegaWidget):
             self.scale.set(value)
  
         # Check keywords and initialise options.
-        self.initialiseoptions(ThresholdScale)
+        self.initialiseoptions()
 
     def _doCommand(self, valueStr):
 	if self.scale.get() > self['threshold']:

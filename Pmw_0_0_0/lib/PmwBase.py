@@ -231,7 +231,8 @@ def setgeometryanddeiconify(window, geom):
     # To avoid flashes on X and to position the window correctly on NT
     # (caused by Tk bugs).
 
-    if os.name == 'nt':
+    if os.name == 'nt' or \
+            (os.name == 'posix' and sys.platform[:6] == 'cygwin'):
         # Require overrideredirect trick to stop window frame
         # appearing momentarily.
         redirect = window.overrideredirect()
@@ -249,8 +250,29 @@ def setgeometryanddeiconify(window, geom):
     else:
         if geom is not None:
             window.geometry(geom)
+
+        # Problem!?  Which way around should the following two calls
+        # go?  If deiconify() is called first then I get complaints
+        # from people using the enlightenment or sawfish window
+        # managers that when a dialog is activated it takes about 2
+        # seconds for the contents of the window to appear.  But if
+        # tkraise() is called first then I get complaints from people
+        # using the twm window manager that when a dialog is activated
+        # it appears in the top right corner of the screen and also
+        # takes about 2 seconds to appear.
+
+        #window.tkraise()
+        # Call update_idletasks to ensure certain window managers (eg: 
+        # enlightenment and sawfish) do not cause Tk to delay for
+        # about two seconds before displaying window.
+        #window.update_idletasks()
+        #window.deiconify()
+
         window.deiconify()
-        window.tkraise()
+        if window.overrideredirect():
+            # The window is not under the control of the window manager
+            # and so we need to raise it ourselves.
+            window.tkraise()
 
 #=============================================================================
 
@@ -372,11 +394,14 @@ class MegaArchetype:
 	# override those in the base class.
 
 	if not hasattr(self, '_constructorKeywords'):
+            # First time defineoptions has been called.
 	    tmp = {}
 	    for option, value in keywords.items():
 		tmp[option] = [value, 0]
 	    self._constructorKeywords = tmp
 	    self._optionInfo = {}
+	    self._initialiseoptions_counter = 0
+        self._initialiseoptions_counter = self._initialiseoptions_counter + 1
 
         if not hasattr(self, '_dynamicGroups'):
             self._dynamicGroups = ()
@@ -425,6 +450,9 @@ class MegaArchetype:
     def createcomponent(self, componentName, componentAliases,
             componentGroup, widgetClass, *widgetArgs, **kw):
 	# Create a component (during construction or later).
+
+	if self.__componentInfo.has_key(componentName):
+	    raise ValueError, 'Component "%s" already exists' % componentName
 
 	if '_' in componentName:
 	    raise ValueError, \
@@ -535,8 +563,9 @@ class MegaArchetype:
 	    label.grid(column=col, row=2, rowspan=childRows, sticky=labelpos)
 	    parent.grid_columnconfigure(margin, minsize=labelmargin)
 
-    def initialiseoptions(self, myClass):
-	if self.__class__ is myClass:
+    def initialiseoptions(self, dummy = None):
+        self._initialiseoptions_counter = self._initialiseoptions_counter - 1
+	if self._initialiseoptions_counter == 0:
 	    unusedOptions = []
 	    keywords = self._constructorKeywords
 	    for name in keywords.keys():
@@ -555,7 +584,7 @@ class MegaArchetype:
 		else:
 		    text = 'Unknown options "'
 		raise KeyError, text + string.join(unusedOptions, ', ') + \
-			'" for ' + myClass.__name__
+			'" for ' + self.__class__.__name__
 
 	    # Call the configuration callback function for every option.
 	    FUNCTION = _OPT_FUNCTION
@@ -835,17 +864,17 @@ class MegaArchetype:
 #
 # Use releasegrabs() to release the grab and clear the grab stack.
 
-def pushgrab(window, globalMode, deactivateFunction):
-    prevFocus = window.tk.call('focus')
+def pushgrab(grabWindow, globalMode, deactivateFunction):
+    prevFocus = grabWindow.tk.call('focus')
     grabInfo = {
-        'grabWindow' : window,
+        'grabWindow' : grabWindow,
         'globalMode' : globalMode,
         'previousFocus' : prevFocus,
         'deactivateFunction' : deactivateFunction,
     }
     _grabStack.append(grabInfo)
     _grabtop()
-    window.focus_set()
+    grabWindow.focus_set()
 
 def popgrab(window):
     # Return the grab to the next window in the grab stack, if any.
@@ -962,7 +991,7 @@ class MegaToplevel(MegaArchetype):
 	self._userModalDeleteFunc = self.deactivate
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(MegaToplevel)
+	self.initialiseoptions()
 
     def _settitle(self):
 	title = self['title']
@@ -998,19 +1027,34 @@ class MegaToplevel(MegaArchetype):
 
             MegaArchetype.destroy(self)
 
-    def show(self):
-	if self.state() == 'normal':
-	    self.tkraise()
-	else:
+    def show(self, master = None):
+	if self.state() != 'normal':
 	    if self._firstShowing:
 		# Just let the window manager determine the window
 		# position for the first time.
-	        self._firstShowing = 0
 		geom = None
 	    else:
 		# Position the window at the same place it was last time.
 		geom = self._sameposition()
             setgeometryanddeiconify(self, geom)
+
+        if self._firstShowing:
+            self._firstShowing = 0
+        else:
+            if self.transient() == '':
+                self.tkraise()
+
+        # Do this last, otherwise get flashing on NT:
+        if master is not None:
+            if master == 'parent':
+                parent = self.winfo_parent()
+                # winfo_parent() should return the parent widget, but the
+                # the current version of Tkinter returns a string.
+                if type(parent) == types.StringType:
+                    parent = self._hull._nametowidget(parent)
+                master = parent.winfo_toplevel()
+            self.transient(master)
+
         self.focus()
 
     def _centreonscreen(self):
@@ -1144,6 +1188,9 @@ class MegaWidget(MegaArchetype):
 
 	# Initialise the base class (after defining the options).
 	MegaArchetype.__init__(self, parent, Tkinter.Frame)
+
+	# Check keywords and initialise options.
+	self.initialiseoptions()
 
 forwardmethods(MegaWidget, Tkinter.Frame, '_hull')
 
@@ -1574,16 +1621,13 @@ class _BusyWrapper:
 
 #=============================================================================
 
-def drawarrow(canvas, fg, direction, tag):
+def drawarrow(canvas, color, direction, tag, baseOffset = 0.25, edgeOffset = 0.15):
     canvas.delete(tag)
 
     bw = (string.atoi(canvas['borderwidth']) + 
             string.atoi(canvas['highlightthickness']))
     width = string.atoi(canvas['width'])
     height = string.atoi(canvas['height'])
-
-    baseOffset = 0.25
-    edgeOffset = 0.15
 
     if direction in ('up', 'down'):
         majorDimension = height
@@ -1611,7 +1655,7 @@ def drawarrow(canvas, fg, direction, tag):
         coords = (low, base, high, base, middle, apex)
     else:
         coords = (base, low, base, high, apex, middle)
-    kw = {'fill' : fg, 'outline' : fg, 'tag' : tag}
+    kw = {'fill' : color, 'outline' : color, 'tag' : tag}
     apply(canvas.create_polygon, coords, kw)
 
 #=============================================================================
@@ -1671,7 +1715,8 @@ class __TkinterCallWrapper:
                 if not _callToTkReturned:
                     _traceTkFile.write('\n')
                 if hasattr(self.func, 'im_class'):
-                    name = self.func.im_class.__name__ + '.' + self.func.__name__
+                    name = self.func.im_class.__name__ + '.' + \
+                        self.func.__name__
                 else:
                     name = self.func.__name__
                 if len(args) == 1 and hasattr(args[0], 'type'):
@@ -1766,6 +1811,7 @@ class _ErrorWindow:
 	self._errorQueue = []
 	self._errorCount = 0
 	self._open = 0
+        self._firstShowing = 1
 
 	# Create the toplevel window
 	self._top = Tkinter.Toplevel()
@@ -1821,16 +1867,25 @@ class _ErrorWindow:
 	    # infinite loop if an error occurs in an omp callback.
 	    # self._top.update_idletasks()
 
-	    self._top.tkraise()
+            pass
 	else:
-	    geometry = self._top.geometry()
-	    index = string.find(geometry, '+')
-            if index >= 0:
-                geom = geometry[index:]
-            else:
-                geom = None
-
+	    if self._firstShowing:
+		geom = None
+	    else:
+                geometry = self._top.geometry()
+                index = string.find(geometry, '+')
+                if index >= 0:
+                    geom = geometry[index:]
+                else:
+                    geom = None
             setgeometryanddeiconify(self._top, geom)
+
+        if self._firstShowing:
+            self._firstShowing = 0
+        else:
+            self._top.tkraise()
+
+        self._top.focus()
 
 	self._updateButtons()
 

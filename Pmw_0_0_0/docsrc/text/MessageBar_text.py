@@ -5,7 +5,7 @@ name = """
 """
 
 description = """
-    This class creates a single-line message display area.  Messages
+    A message bar contains a single-line message display area.  Messages
     of several different types may displayed.  Messages are cleared
     after a period defined for each message type.  Each message type
     has a priority so that if the application attempts to display more
@@ -13,7 +13,33 @@ description = """
     will be displayed.  Messages may be accompanied by a number of
     audible bells.
 
+    This megawidget can be used for both interactive help messages
+    (when the mouse enters certain widgets) and also for other general
+    messages.
+
+    To perform the help function it can cooperate with the ~Balloon~
+    megawidget so that the programmer (or user) can choose either
+    balloon help, message bar help, both or neither.
+
+    This megawidget supports a configurable number of message types. 
+    The default types include *'state'*, *'help'*, *'usererror'* and
+    *'systemerror'*.  The difference between these are the length of
+    time they are displayed, the number of bells that are rung and the
+    priority of the message.  For example, the *'help'* message type
+    is lower in priority than the *'usererror'*, so that error
+    messages will always be displayed in preference to help messages
+    regardless of the order the messages are created.  The *'state'*
+    message type is lowest in priority but has no timeout, so it
+    should contain messages describing the current state of the
+    application, such as 'Waiting for database connection' or 'Waiting
+    for file to be unlocked'.  Generally this should be set to the
+    empty string when the application is running normally.  By default
+    the help messages (with message type *'help'*) time out after 5
+    seconds, so that if the cursor happens to be left over a widget,
+    the application state will be redisplayed after a short time.
+
 """
+
 
 no_auto_default = ('messagetypes',)
 

@@ -1,7 +1,7 @@
 #!/bin/env python
 
 # This is a rough collection of tests that can not be automated.
-# To add a new test, create a function with name ending in '_bug'.
+# To add a new test, create a function with name ending in '_test'.
 
 import os
 import string
@@ -13,7 +13,7 @@ import Pmw
 
 # ----------------------------------------------------------------------
 
-def scrolledframeflashing_bug():
+def scrolledframeflashing_test():
     # Script which demonstrates continuous flashing of dynamic scrollbars
     # in Pmw.ScrolledFrame.
     #
@@ -36,7 +36,7 @@ def scrolledframeflashing_bug():
 
 # ----------------------------------------------------------------------
 
-def scrolledlistboxflashing_bug():
+def scrolledlistboxflashing_test():
     # Script which demonstrates continuous flashing of dynamic scrollbars
     # in Pmw.ScrolledListBox.
     #
@@ -56,7 +56,7 @@ def scrolledlistboxflashing_bug():
 
 # ----------------------------------------------------------------------
 
-def scrolledlistboxflashing2_bug():
+def scrolledlistboxflashing2_test():
     # Another script which demonstrates continuous flashing of dynamic
     # scrollbars in Pmw.ScrolledListBox under Pmw.0.8.
     #
@@ -86,7 +86,7 @@ def scrolledlistboxflashing2_bug():
 
 # ----------------------------------------------------------------------
 
-def scrolledtextflashing_bug():
+def scrolledtextflashing_test():
     # Script which demonstrates continuous flashing of dynamic scrollbars
     # in Pmw.ScrolledText.
     #
@@ -110,7 +110,7 @@ def scrolledtextflashing_bug():
 
 # ----------------------------------------------------------------------
 
-def scrolledcanvasflashing_bug():
+def scrolledcanvasflashing_test():
     # Script which demonstrates continuous flashing of dynamic scrollbars
     # in Pmw.ScrolledCanvas.
     #
@@ -130,7 +130,7 @@ def scrolledcanvasflashing_bug():
 
 # ----------------------------------------------------------------------
 
-def scrolledframeflashing2_bug():
+def scrolledframeflashing2_test():
     # The two scrollbars will be continuously mapped and unmapped, but
     # the toplevel window will remain the same size.
 
@@ -152,7 +152,7 @@ def scrolledframeflashing2_bug():
 
 # ----------------------------------------------------------------------
 
-def reinitialise_bug():
+def reinitialise_test():
     global text
     text = """
     Demonstrates bug in Pmw.0.8.1 and earlier.
@@ -179,33 +179,63 @@ def reinitialise_bug():
 
 # ----------------------------------------------------------------------
 
-def componentgroup_bug():
-    global changecolour
-    def changecolour():
-        b.configure(Button_background = 'yellow')
+def componentgroup_test():
+    def addbutton(bb):
+        bb.configure(Button_background = 'yellow')
+        bb.add('Apples')
+        bb.after(3000, lambda bb = bb:
+                bb.configure(Button_background = 'green'))
 
-    def addbutton():
-        b.configure(Button_background = 'green')
-        b.add('OK')
-        b.after(3000, changecolour)
-
-    global b
-    b = Pmw.ButtonBox(Button_background = 'red')
-    b.pack()
+    bb = Pmw.ButtonBox(Button_background = 'red')
+    bb.add('Bananas')
+    bb.pack()
 
     mb = Pmw.MenuBar(Button_background = 'red')
     mb.configure(Button_background = 'yellow')
     mb.pack()
 
-    mb = Pmw.PanedWidget(Frame_background = 'red')
-    mb.configure(Frame_background = 'yellow')
-    mb.pack()
+    pw = Pmw.PanedWidget(Frame_background = 'red')
+    pw.configure(Frame_background = 'yellow')
+    pw.pack()
 
-    mb = Pmw.RadioSelect(Button_background = 'red')
-    mb.configure(Button_background = 'yellow')
-    mb.pack()
+    rs = Pmw.RadioSelect(Button_background = 'red')
+    rs.configure(Button_background = 'yellow')
+    rs.pack()
 
-    b.after(3000, addbutton)
+    bb.after(3000, lambda bb = bb, addbutton = addbutton: addbutton(bb))
+
+# ----------------------------------------------------------------------
+
+def balloon_test():
+
+    # TODO
+
+    # Test that the balloon does not reappear if the mouse button is
+    # pressed down inside a widget and then, while the mouse button is
+    # being held down, the mouse is moved outside of the widget and
+    # then moved back over the widget.
+
+    # Test that when a widget is destroyed while a balloon is being
+    # displayed for it then the balloon is withdrawn.
+
+    # Test that when a widget is destroyed while a balloon is being
+    # displayed for another widget then the balloon is not withdrawn.
+
+    # Test that there is no eror when a widget is destroyed during the
+    # initwait period (between when the mouse enters the widget and
+    # when the initwait timer goes off).
+
+    # Test that if unbind() is called on a widget that triggered the
+    # balloon to be displayed then the balloon is withdrawn.  Also
+    # test that if another widget triggered the balloon then the
+    # balloon is not withdrawn.
+
+    # Test that if tagunbind() is called on a canvas or text item that
+    # triggered the balloon to be displayed then the balloon is
+    # withdrawn.  Also test that if another widget or item triggered
+    # the balloon then the balloon is not withdrawn.
+
+    pass
 
 # ----------------------------------------------------------------------
 
@@ -261,7 +291,7 @@ all Pmw megawidgets. Then click on the "Destroy" button.
 The message "Window deleted" should be printed to
 standard output.
 """
-def memoryleak_bug():
+def memoryleak_test():
     label = Tkinter.Label(text = memoryLeakMessage)
     label.pack()
     run = Tkinter.Button(text = 'Run test', command = _runMemoryLeakTest)
@@ -271,7 +301,7 @@ def memoryleak_bug():
 
 # ----------------------------------------------------------------------
 
-def memoryleak2_bug():
+def memoryleak2_test():
 
     print 'This test continuously creates and deletes megawidgets and'
     print 'their components.  It calls the "top" program, so'
@@ -422,7 +452,7 @@ def usageExit():
 
 tests = []
 for name in locals().keys():
-    if name[-4:] == '_bug':
+    if name[-5:] == '_test':
         tests.append(name)
 tests.sort()
 
@@ -434,9 +464,9 @@ if testName not in tests:
     print 'Unknown test "' + testName + '"'
     usageExit()
 
-if testName == 'reinitialise_bug':
+if testName == 'reinitialise_test':
     # Run this by itself, since it calls Tkinter.Tk, mainloop, etc.
-    reinitialise_bug()
+    reinitialise_test()
     sys.exit()
 
 # Use Pmw version in this distribution:
@@ -453,6 +483,6 @@ root.deiconify()
 testFunction = locals()[testName]
 testFunction()
 
-if testName != 'memoryleak2_bug':
+if testName != 'memoryleak2_test':
     # This does not use mainloop.
     root.mainloop()

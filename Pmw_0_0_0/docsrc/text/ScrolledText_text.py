@@ -6,12 +6,20 @@ name = """
 """
 
 description = """
-    This megawidget consists of a standard text widget with optional
-    scrollbars which can be used to scroll the text widget.  The
+    A scrolled text consists of a standard text widget with optional
+    scrollbars which can be used to scroll the text.  The
     scrollbars can be 'dynamic', which means that a scrollbar will
     only be displayed if it is necessary.  That is, if the text widget
     does not contain enough text (either horizontally or vertically),
-    the scrollbar will be automatically hidden.
+    the scrollbar will be automatically hidden.  If it is displayed,
+    the horizontal scrollbar is under the text widget.  Similarly, if
+    it is displayed, the vertical scrollbar is to the right of the
+    text widget.
+
+    Row and column headers may also be displayed, which scroll in sync
+    with the text widget and may be useful when displaying tabular
+    data.  To assist in ensuring that columns line up when using a
+    column header, a fixed width font should be used.
 
 """
 
@@ -20,6 +28,21 @@ text['options'] = {}
 
 text['options']['borderframe'] = """
     If true, the *borderframe* component will be created.
+
+"""
+
+text['options']['columnheader'] = """
+    If true, the *columnheader* component will be created.
+
+"""
+
+text['options']['rowcolumnheader'] = """
+    If true, the *rowcolumnheader* component will be created.
+
+"""
+
+text['options']['rowheader'] = """
+    If true, the *rowheader* component will be created.
 
 """
 
@@ -63,6 +86,27 @@ text['components']['borderframe'] = """
     the appearance of a text border.  It is created with a border so
     that the text widget, which is created without a border, looks
     like it has a border.
+
+"""
+
+text['components']['columnheader'] = """
+    A text widget with a default height of 1 displayed above the main
+    text widget and which scrolls horizontally in sync with the
+    horizontal scrolling of the main text widget.
+
+"""
+
+text['components']['rowcolumnheader'] = """
+    A text widget displayed to the top left of the main text widget,
+    above the row header and to the left of the column header if they
+    exist.  The widget is not scrolled  automatically.
+
+"""
+
+text['components']['rowheader'] = """
+    A text widget displayed to the left of the main text widget and
+    which scrolls vertically in sync with the vertical scrolling of
+    the main text widget.
 
 """
 
@@ -114,6 +158,16 @@ text['methods']['get'] = """
 
 """
 
+text['methods']['getvalue'] = """
+    Return the entire contents of the text widget.
+
+"""
+
+text['methods']['setvalue'] = """
+    Replace the entire contents of the *text* component with 'text'.
+    
+"""
+
 text['methods']['importfile'] = """
     Read the contents of the file 'fileName' and insert into the
     *text* component at the position given by 'where'.
@@ -121,6 +175,6 @@ text['methods']['importfile'] = """
 """
 
 text['methods']['settext'] = """
-    Replace the entire contents of the *text* component with 'text'.
+    Same as /setvalue()/ method.
 
 """

@@ -53,7 +53,7 @@ class MessageBar(Pmw.MegaWidget):
 	self._activemessage = [0] * self._numPriorities
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(MessageBar)
+	self.initialiseoptions()
 
     def destroy(self):
 	for timerId in self._timer:

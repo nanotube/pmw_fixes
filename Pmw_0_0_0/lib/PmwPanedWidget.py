@@ -60,7 +60,7 @@ class PanedWidget(Pmw.MegaWidget):
 	self._minorSize = 100
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(PanedWidget)
+	self.initialiseoptions()
 
     def insert(self, name, before = 0, **kw):
 	# Parse <kw> for options.
@@ -88,24 +88,24 @@ class PanedWidget(Pmw.MegaWidget):
 	    size = self._size[name]
 	    if size > 0 or self._relsize[name] is not None:
 		if self['orient'] == 'vertical':
-		    self._frame[name].place(x=0, relwidth=1, 
+		    self._frame[name].place(x=0, relwidth=1,
 					    height=size, y=self._totalSize)
 		else:
-		    self._frame[name].place(y=0, relheight=1, 
+		    self._frame[name].place(y=0, relheight=1,
 					    width=size, x=self._totalSize)
 	    else:
 		if self['orient'] == 'vertical':
-		    self._frame[name].place(x=0, relwidth=1, 
+		    self._frame[name].place(x=0, relwidth=1,
 					    y=self._totalSize)
 		else:
-		    self._frame[name].place(y=0, relheight=1, 
+		    self._frame[name].place(y=0, relheight=1,
 					    x=self._totalSize)
 	else:
 	    self._updateSizes()
 
 	self._totalSize = self._totalSize + self._size[name]
-	return self._frame[name] 
-    
+	return self._frame[name]
+
     def add(self, name, **kw):
         return apply(self.insert, (name, len(self._paneNames)), kw)
 
@@ -125,19 +125,13 @@ class PanedWidget(Pmw.MegaWidget):
 	last = len(self._paneNames)
 	del self._separator[last]
 	del self._button[last]
-	self.destroycomponent(self._sepName(last))
-	self.destroycomponent(self._buttonName(last))
+        if last > 0:
+            self.destroycomponent(self._sepName(last))
+            self.destroycomponent(self._buttonName(last))
 
 	self._plotHandles()
 
     def setnaturalsize(self):
-        # If oriented horizontally, set width to the sum of the
-        # requested widths of all panes and set height to the maximum
-        # requested height of all panes.
-        # If oriented vertically, set height to the sum of the
-        # requested heights of all panes and set width to the maximum
-        # requested width of all panes.
-
         self.update_idletasks()
         totalWidth = 0
         totalHeight = 0
@@ -169,6 +163,34 @@ class PanedWidget(Pmw.MegaWidget):
                     (len(self._paneNames) - 1) * self._separatorThickness)
             maxWidth = maxWidth + extra
             self.configure(hull_width = maxWidth, hull_height = totalHeight)
+
+    def move(self, name, newPos, newPosOffset = 0):
+
+        # see if we can spare ourselves some work
+        numPanes = len(self._paneNames)
+        if numPanes < 2:
+            return
+
+        newPos = self._nameToIndex(newPos) + newPosOffset
+        if newPos < 0 or newPos >=numPanes:
+            return
+
+        deletePos = self._nameToIndex(name)
+
+        if deletePos == newPos:
+            # inserting over ourself is a no-op
+            return
+
+        # delete name from old position in list
+        name = self._paneNames[deletePos]
+        del self._paneNames[deletePos]
+
+        # place in new position
+        self._paneNames[newPos:newPos] = [name]
+
+        # force everything to redraw
+        self._plotHandles()
+        self._updateSizes()
 
     def _nameToIndex(self, nameOrIndex):
 	try:
@@ -343,11 +365,11 @@ class PanedWidget(Pmw.MegaWidget):
 	    if self._size[name] < self._min[name]:
 		self._size[name] = self._min[name]
 		self._setrel(name)
-	    
+
 	    if self._size[name] > self._max[name]:
 		self._size[name] = self._max[name]
 		self._setrel(name)
-	    
+
 	    self._totalSize = self._totalSize + self._size[name]
 
 	# adjust for separators
@@ -399,11 +421,11 @@ class PanedWidget(Pmw.MegaWidget):
 	for name in self._paneNames:
 	    size = self._size[name]
 	    if self['orient'] == 'vertical':
-		self._frame[name].place(x = 0, relwidth = 1, 
+		self._frame[name].place(x = 0, relwidth = 1,
 					y = totalSize,
 					height = size)
 	    else:
-		self._frame[name].place(y = 0, relheight = 1, 
+		self._frame[name].place(y = 0, relheight = 1,
 					x = totalSize,
 					width = size)
 
@@ -422,7 +444,7 @@ class PanedWidget(Pmw.MegaWidget):
 	    btnp = self._minorSize - 13
 	else:
 	    h = self._minorSize
-	    
+
 	    if h > 18:
 		btnp = 9
 	    else:
@@ -460,7 +482,7 @@ class PanedWidget(Pmw.MegaWidget):
 		    offset2 = (nextSize - 8) / 2
 
 	    handlepos = handlepos + offset1
-	    
+
 	    if self['orient'] == 'vertical':
 		height = 8 - offset1 + offset2
 
@@ -470,7 +492,7 @@ class PanedWidget(Pmw.MegaWidget):
 		else:
 		    self._button[i].place_forget()
 
-		self._separator[i].place(x = 0, y = totalSize, 
+		self._separator[i].place(x = 0, y = totalSize,
 					 relwidth = 1)
 	    else:
 		width = 8 - offset1 + offset2
@@ -481,7 +503,7 @@ class PanedWidget(Pmw.MegaWidget):
 		else:
 		    self._button[i].place_forget()
 
-		self._separator[i].place(y = 0, x = totalSize, 
+		self._separator[i].place(y = 0, x = totalSize,
 					 relheight = 1)
 
 	    totalSize = totalSize + nextSize + self._separatorThickness
@@ -496,6 +518,9 @@ class PanedWidget(Pmw.MegaWidget):
     def configurepane(self, name, **kw):
 	name = self._paneNames[self._nameToIndex(name)]
 	self._parsePaneOptions(name, kw)
+	self._handleConfigure()
+
+    def updatelayout(self):
 	self._handleConfigure()
 
     def _getMotionLimit(self, item):
@@ -555,10 +580,10 @@ class PanedWidget(Pmw.MegaWidget):
 
 	if p < self._beforeLimit:
 	    p = self._beforeLimit
-	
+
 	if p >= self._afterLimit:
 	    p = self._afterLimit
-	
+
 	self._calculateChange(item, p)
 	self.update_idletasks()
 	self._movePending = 0

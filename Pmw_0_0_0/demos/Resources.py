@@ -44,7 +44,7 @@ class DemoClass(Pmw.MegaWidget):
 	entry.insert(0, 'Hello, World!')
 
 	# Check keywords and initialise options.
-	self.initialiseoptions(DemoClass)
+	self.initialiseoptions()
 
 class Demo:
     def __init__(self, parent):

@@ -16,7 +16,17 @@ class Demo:
 
         self.timerId = None
 
-	self.dialog2 = Pmw.Dialog(
+	self.dialog1 = Pmw.MessageDialog(parent,
+		message_text = 'This is the first modal dialog.\n' +
+			'You can see how dialogs nest by\n' +
+			'clicking on the "Next" button.',
+		title = 'Dialog 1',
+		buttons = ('Next', 'Cancel'),
+		defaultbutton = 'Next',
+		command = self.next_dialog)
+	self.dialog1.withdraw()
+
+	self.dialog2 = Pmw.Dialog(self.dialog1.interior(),
 		title = 'Dialog 2',
 		buttons = ('Cancel',),
 		deactivatecommand = self.cancelTimer,
@@ -28,16 +38,7 @@ class Demo:
 	w.pack(padx = 10, pady = 10)
 
     def showFirstDialog(self):
-	self.dialog1 = Pmw.MessageDialog(
-		message_text = 'This is the first modal dialog.\n' +
-			'You can see how dialogs nest by\n' +
-			'clicking on the "Next" button.',
-		title = 'Dialog 1',
-		buttons = ('Next', 'Cancel'),
-		defaultbutton = 'Next',
-		command = self.next_dialog)
 	self.dialog1.activate()
-	self.dialog1.destroy()
 
     def cancelTimer(self):
         if self.timerId is not None:

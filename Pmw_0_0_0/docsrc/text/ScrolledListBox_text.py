@@ -6,8 +6,8 @@ name = """
 """
 
 description = """
-    This megawidget consists of a standard listbox widget with
-    optional scrollbars which can be used to scroll the listbox.  The
+    A scrolled listbox consists of a standard listbox widget with optional
+    scrollbars which can be used to scroll the listbox.  The
     scrollbars can be 'dynamic', which means that a scrollbar will
     only be displayed if it is necessary.  That is, if the listbox
     does not contain enough entries, the vertical scrollbar will be
@@ -106,6 +106,12 @@ text['methods']['size'] = """
 
 """
 
+text['methods']['clear'] = """
+    Delete all items from the scrolled listbox.  Equivalent to
+    /setlist(())/.
+
+"""
+
 text['methods']['get'] = """
     This is the same as the /get()/ method of the *listbox* component,
     except that if 'first' is *None* all list
@@ -113,10 +119,23 @@ text['methods']['get'] = """
 
 """
 
+text['methods']['getvalue'] = """
+    Return a list of the currently selected items of the listbox.
+
+"""
+
+text['methods']['setvalue'] = """
+    Set the current selection for the scrolled list to 'textOrList'.
+
+    If 'textOrList' is a string, select only the list item specified.
+
+    Otherwise, select only the list items specified by 'textOrList',
+    which must be a sequence of strings.
+    
+"""
+
 text['methods']['getcurselection'] = """
-    Return the currently selected items of the listbox.  This returns
-    the text of the selected items, rather than their indexes as
-    returned by /curselection()/.
+    Same as /getvalue()/ method.
 
 """
 
