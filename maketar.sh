@@ -40,8 +40,8 @@ EOF
 find . -type d | sort > /tmp/Pmw.dirs2
 diff /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
 /bin/rm /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
-cat > /tmp/Pmw.dirs1<< EOF
-./Pmw_1_0/docsrc/Pmw.announce
+cat << EOF | sed "s/0_0_0/${DIR}/" > /tmp/Pmw.dirs1
+./Pmw_0_0_0/docsrc/Pmw.announce
 EOF
 find . -type f | egrep -v "\.(py|html|gif|bmp)$" | \
     egrep -v "(README|Pmw.def)" > /tmp/Pmw.dirs2
