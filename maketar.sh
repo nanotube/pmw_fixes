@@ -11,15 +11,44 @@ mv /tmp/Pmw/${SRC_DIR} /tmp/Pmw/TEMP
 /bin/rm -rf /tmp/Pmw/Pmw_*
 mv /tmp/Pmw/TEMP /tmp/Pmw/Pmw_${DIR}
 cd /tmp/Pmw
-find . -name CVS -exec /bin/rm -rf {} \;
-find . -name "*.pyc" -exec /bin/rm -f {} \;
+for dir in `find . -name CVS -type d`
+do
+    /bin/rm -r $dir
+done
+for file in `find . -name "*.pyc" -type f`
+do
+    /bin/rm -r $file
+done
 
 /bin/rm ReleaseProcedure maketar.sh
 echo Unexpected files:
-/bin/ls | egrep -v "Alpha_99_9_example|__init__.py|README|Pmw_$DIR"
-/bin/ls -lLR | egrep -v "\.(py|html|gif|bmp)$" | \
-    egrep -v "^(total|d)" | egrep -v "^$" | egrep -v "(README|Pmw.def)"
-cd Pmw_${DIR}
+echo ===== start =====
+cat << EOF | sed "s/0_0_0/${DIR}/" > /tmp/Pmw.dirs1
+.
+./Alpha_99_9_example
+./Alpha_99_9_example/lib
+./Pmw_0_0_0
+./Pmw_0_0_0/bin
+./Pmw_0_0_0/contrib
+./Pmw_0_0_0/demos
+./Pmw_0_0_0/docsrc
+./Pmw_0_0_0/docsrc/images
+./Pmw_0_0_0/docsrc/text
+./Pmw_0_0_0/lib
+./Pmw_0_0_0/tests
+EOF
+find . -type d | sort > /tmp/Pmw.dirs2
+diff /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
+/bin/rm /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
+cat > /tmp/Pmw.dirs1<< EOF
+./Pmw_1_0/docsrc/Pmw.announce
+EOF
+find . -type f | egrep -v "\.(py|html|gif|bmp)$" | \
+    egrep -v "(README|Pmw.def)" > /tmp/Pmw.dirs2
+diff /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
+echo ====== end ======
+/bin/rm /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
+cd /tmp/Pmw/Pmw_${DIR}
 
 # Create documentation source:
 tar cf Pmw.${VERSION}.docsrc.tar ./docsrc
@@ -27,27 +56,23 @@ gzip Pmw.${VERSION}.docsrc.tar
 mv Pmw.${VERSION}.docsrc.tar.gz /tmp
 
 /bin/rm -rf doc
-cd docsrc
+cd /tmp/Pmw/Pmw_${DIR}/docsrc
 ./createmanuals.py
-cd ..
+cd /tmp/Pmw/Pmw_${DIR}
 
 /bin/rm -rf docsrc
-cd ..
-find . -name "*.pyc" -exec /bin/rm -f {} \;
-cd ..
+cd /tmp/Pmw
+for file in `find . -name "*.pyc" -type f`
+do
+    /bin/rm -r $file
+done
+cd /tmp
 /bin/rm -f Pmw.${VERSION}.tar.gz
 tar cf Pmw.${VERSION}.tar ./Pmw
 gzip Pmw.${VERSION}.tar
 
 # Now that the tar file has been created, unpack and run the tests.
-cd /tmp
 /bin/rm -rf pmw.tmp
 mkdir pmw.tmp
-cd pmw.tmp
+cd /tmp/pmw.tmp
 gzip -dc /tmp/Pmw.${VERSION}.tar.gz | tar xf -
-echo "Now do this:"
-echo "  cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/tests"
-echo "  All.py"
-echo "  cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/demos"
-echo "  All.py"
-echo "  netscape /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html"

@@ -1,14 +1,14 @@
 # Change these as required:
 
 # Version to be released
-VERSION=0.8.5
+VERSION=1.0
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="8 February 2001"
+VERSION_DATE="24 August 2002"
 
 BASEDIR=/home/workareas/gregm.on.sourceforge
 
-PYTHON=python2.0
+PYTHON=python2.2.1
 
 # ==================================================================
 
@@ -43,8 +43,14 @@ cd ${BASEDIR}
 PYTHON=$PYTHON VERSION=${VERSION} SRC_DIR=${SRC_DIR} \
   DIR=${DIR} VERSION_DATE=${VERSION_DATE} sh Pmw/maketar.sh
 
-# Check tests and documentation as instructed.
-# Check for unexpected files.
+# Make sure there are no unexpected files displayed by maketar.sh
+
+# Check tests, demos and documentation:
+cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/tests
+All.py
+cd /tmp/pmw.tmp/Pmw/Pmw_${DIR}/demos
+All.py
+mozilla /tmp/pmw.tmp/Pmw/Pmw_${DIR}/doc/index.html
 
 # Ftp distribution to incoming on SourceForge:
 cd /tmp

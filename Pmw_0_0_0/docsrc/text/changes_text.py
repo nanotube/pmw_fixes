@@ -1273,7 +1273,8 @@ text = """
 
   - Improved /MegaToplevel.show()/ so that tkraise is not called
     unecessarily, thus avoiding 2 second delay under certain window
-    managers (such as sawfish).
+    managers (such as sawfish) in most circumstances.  There are still
+    problems with the Enlightenment window manager.
 
   18 August 2002
 
@@ -1290,5 +1291,9 @@ text = """
     defineoptions().  Also, initialiseoptions() no longer requires an
     argument (for backwards compatibility it may take an argument, but
     it is ignored).
+
+  24 August 2002
+
+  - Release of version 1.0
 
 """

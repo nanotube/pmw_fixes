@@ -5,6 +5,11 @@ text = """
     enhancements.  For details of all changes, see
     ~~changes.html~~Changes to Pmw versions~~.
     
+    *Porting from 0.8.5 to 1.0*
+
+    - Bug fix, documention and new features only.  No
+      backwards-incompatible changes.
+
     *Porting from 0.8.4 to 0.8.5*
 
     - Bug fix release only. No interface changes.
