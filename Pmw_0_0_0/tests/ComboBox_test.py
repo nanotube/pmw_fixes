@@ -7,6 +7,13 @@ import Pmw
 
 Test.initialise()
 
+if Tkinter.TkVersion >= 8.3:
+  expected1 = 'TclError: bad relief "bogus": must be '
+  expected2 = 'TclError: bad state "bogus": must be disabled or normal'
+else:
+  expected1 = 'TclError: bad relief type "bogus": must be '
+  expected2 = 'TclError: bad state value "bogus": must be normal or disabled'
+
 c = Pmw.ComboBox
 
 kw_1a = {
@@ -81,11 +88,9 @@ tests_1 = (
     'ValueError: bad hscrollmode option "bogus": should be static, dynamic, ' +
 	'or none'),
   ('listbox_cursor', 'bogus', 'TclError: bad cursor spec "bogus"'),
-  ('entry_relief', 'bogus',
-      'TclError: bad relief type "bogus": must be ' + Test.reliefs),
+  ('entry_relief', 'bogus', expected1 + Test.reliefs),
   ('entry_selectborderwidth', 'bogus', 'TclError: bad screen distance "bogus"'),
-  ('entry_state', 'bogus',
-    'TclError: bad state value "bogus": must be normal or disabled'),
+  ('entry_state', 'bogus', expected2),
   ('entryfield_validate', 'bogus',
     "ValueError: bad validate value \"bogus\":  must be a function or one of " +
 	"the standard validators ('alphabetic', 'alphanumeric', 'date', " +

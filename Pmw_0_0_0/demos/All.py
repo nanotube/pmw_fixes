@@ -57,7 +57,6 @@ import sys
 import types
 import Tkinter
 import DemoVersion
-import FontText
 
 # Find where the other scripts are, so they can be listed.
 if __name__ == '__main__':
@@ -136,7 +135,6 @@ class Demo(Pmw.MegaWidget):
 	self.codeWindow = Pmw.TextDialog(parent,
 	    title = 'Python source',
 	    buttons = ('Dismiss',),
-	    text_pyclass = FontText.Text,
 	    scrolledtext_labelpos = 'n',
 	    label_text = 'Source')
 	self.codeWindow.withdraw()
@@ -227,7 +225,7 @@ class Demo(Pmw.MegaWidget):
 	others = []
 	for file in files:
 	    if re.search('.py$', file) is not None and \
-		    file not in ['All.py', 'FontText.py', 'DemoVersion.py']:
+		    file not in ['All.py', 'DemoVersion.py']:
 		demoName = file[:-3]
 		index = string.find(demoName, '_')
 		if index < 0:
@@ -263,7 +261,11 @@ class StdOut:
 	    text = self.text
 	self.displayCommand(text)
 
-Pmw.initialise(root, fontScheme = 'pmw1', useTkOptionDb = 1)
+if os.name == 'nt':
+    size = 16
+else:
+    size = 12
+Pmw.initialise(root, size = size, fontScheme = 'pmw2', useTkOptionDb = 1)
 
 root.title('Pmw ' + Pmw.version() + ' megawidget demonstration')
 root.geometry('700x550')

@@ -1,14 +1,14 @@
 # Change these as required:
 
 # Version to be released
-VERSION=0.8.4
+VERSION=0.8.5
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="12 May 2000"
+VERSION_DATE="26 January 2001"
 
 BASEDIR=/home/workareas/gregm
 
-PYTHON=python1.5.2
+PYTHON=python2.0
 
 # ==================================================================
 
@@ -18,7 +18,7 @@ SRC_DIR=Pmw_0_0_0
 DIR=`echo ${VERSION} | tr . _`
 cd ${BASEDIR}/Pmw
 
-# Check that change file ends with "Released version $VERSION"
+# Check that change file ends with "Release of version $VERSION"
 tail ${SRC_DIR}/docsrc/text/changes_text.py
 
 # In the home page:        vi ${SRC_DIR}/docsrc/text/root_index.html
@@ -32,7 +32,8 @@ vi ${SRC_DIR}/docsrc/text/porting_text.py
 ls -lR | sort -u > /tmp/foosh
 vi /tmp/foosh
 
-# Check cvs for any unknown files:
+# Check cvs for any unknown files or files not checked in:
+export CVS_RSH=ssh
 cvs -nq update -I \! -I CVS -I "*.pyc"
 
 cd ${BASEDIR}

@@ -6,7 +6,7 @@ def _font_initialise(root, size=None, fontScheme = None):
     if size is not None:
         _fontSize = size
 
-    if fontScheme == 'pmw1':
+    if fontScheme in ('pmw1', 'pmw2'):
         if os.name == 'posix':
             defaultFont = logicalfont('Helvetica')
             menuFont = logicalfont('Helvetica', weight='bold', slant='italic')
@@ -16,7 +16,10 @@ def _font_initialise(root, size=None, fontScheme = None):
             root.option_add('*Menubutton*Font', menuFont,     'userDefault')
             root.option_add('*Scale.*Font',     scaleFont,    'userDefault')
 
-            balloonFont = logicalfont('Helvetica', -6, pixel = '12')
+            if fontScheme == 'pmw1':
+                balloonFont = logicalfont('Helvetica', -6, pixel = '12')
+            else: # fontScheme == 'pmw2'
+                balloonFont = logicalfont('Helvetica', -2)
             root.option_add('*Balloon.*Font', balloonFont, 'userDefault')
         else:
             defaultFont = logicalfont('Helvetica')

@@ -6,6 +6,11 @@ import Pmw
 
 Test.initialise()
 
+if Tkinter.TkVersion >= 8.3:
+  expected1 = "AttributeError: 'Dialog' instance has no attribute 'bogus'"
+else:
+  expected1 = 'AttributeError: bogus'
+
 c = Pmw.Dialog
 
 def _addListbox():
@@ -87,7 +92,7 @@ tests_1 = (
   (_hideOtherToplevel, ()),
   ('buttons', ('Apply', 'OK', 'Cancel', 'Foo', '1')),
   (c.show, (), {}),
-  (_bogus, (), 'AttributeError: bogus'),
+  (_bogus, (), expected1),
 )
 
 kw_2 = {'buttonboxpos' : 'e', 'separatorwidth' : 5}

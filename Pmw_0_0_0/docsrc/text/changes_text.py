@@ -1144,4 +1144,23 @@ text = """
   - Fixed bug in Pmw.ScrolledFrame when given invalid flex options. 
     (Stephen D Evans)
 
+  23 January 2001
+
+  - Moved Pmw home from www.dscpl.com.au to pmw.sourceforge.net.
+
+  - Added pmw2 font scheme, since the font used for balloon text with
+    pmw1 is too small on Linux.
+
+  - Removed syntax coloring from code window in demos.  It did not
+    look good and the pattern matching was not always correct.
+
+  - Changed font size used for demos to 12 for Unix, since 14 looked
+    too big under Linux.
+
+  - Minor fixes to tests for Tk 8.3.
+
+  25 January 2001
+
+  - Release of version 0.8.5
+
 """

@@ -5,6 +5,10 @@ text = """
     enhancements.  For details of all changes, see
     ~~changes.html~~Changes to Pmw versions~~.
     
+    *Porting from 0.8.4 to 0.8.5*
+
+    - Bug fix release only. No interface changes.
+
     *Porting from 0.8.3 to 0.8.4*
 
     - Change the /setnaturalpagesize()/ method of Pmw.NoteBook to

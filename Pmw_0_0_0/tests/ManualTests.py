@@ -279,6 +279,8 @@ def memoryleak2_bug():
     print 'long time and check that the process memory size does not'
     print 'continue to increase.  Kill with <Control-C>.'
 
+    pid = os.getpid()
+
     label = Tkinter.Label()
     label.pack()
 
@@ -396,11 +398,14 @@ def memoryleak2_bug():
         scrollcanvas.configure(hscrollmode = 'dynamic')
 
         # Check memory usage:
-        lines = os.popen('top').readlines()
+        # lines = os.popen('top').readlines()
+        lines = os.popen('top -b -n 1 -p %d' % pid).readlines()
         for line in lines:
-            if string.find(line, 'python1.5.2') > 0:
+            # if string.find(line, 'python1.5.2') > 0:
+            if string.find(line, '^ *%d' % pid) > 0:
                 break
-        size = string.atoi(string.lstrip(line[27:32]))
+        # size = string.atoi(string.lstrip(line[27:32]))
+        size = string.atoi(string.lstrip(line[22:29]))
         if prevSize != size:
             print time.strftime('%H:%M:%S', time.localtime(time.time())),
             print line[:-1]

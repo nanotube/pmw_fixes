@@ -29,7 +29,8 @@ you are interested in doing any of these, please let me
     - Tree browser.
 
     - Check out Doug Hellmann's contributed megawidgets at
-      <http://www.mindspring.com/~doughellmann/Projects/PmwContribD>
+      <http://www.mindspring.com/~doughellmann/Projects/PmwContribD> or
+      <http://members.home.net/doughellmann/PmwContribD/>
       and integrate into Pmw.
 
 *Changes to current megawidgets*
