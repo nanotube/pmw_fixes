@@ -191,6 +191,19 @@ class ScrolledText(Pmw.MegaWidget):
     def setvalue(self, text):
         return self.settext(text)
 
+    def appendtext(self, text):
+        oldTop, oldBottom = self._textbox.yview()
+     
+        disabled = (self._textbox.cget('state') == 'disabled')
+        if disabled:
+            self._textbox.configure(state='normal')
+        self._textbox.insert('end', text)
+        if disabled:
+            self._textbox.configure(state='disabled')
+     
+        if oldBottom == 1.0:
+            self._textbox.yview('moveto', 1.0)
+
     # ======================================================================
 
     # Configuration methods.
