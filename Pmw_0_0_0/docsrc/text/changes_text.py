@@ -1302,4 +1302,25 @@ text = """
 
   - Release of version 1.1
 
+  4 September 2002
+
+  - Added collapse, expand and toggle methods and collapsedsize option
+    to Pmw.Group.  (Rob Pearson)
+
+  5 September 2002
+
+  - Added sticky option to several megawidgets.
+
+  18 September 2002
+
+  - Added appendtext method to Pmw.ScrolledText.  (Graham Dumpleton)
+
+  26 September 2002
+
+  - Modified Pmw.ScrolledListBox to call dblclickcommand on
+    <Double-ButtonRelease-1> rather than <Double-ButtonPress-1> which
+    caused problems if the double button press unmapped the
+    ScrolledListBox.  In this case, the second button release of the
+    double click is given to another widget.  (Eric Pettersen)
+
 """
