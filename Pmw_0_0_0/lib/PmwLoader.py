@@ -1,5 +1,5 @@
-# This module is used by the Pmw package system for python version
-# 1.5.  The PmwLoader class can be used to simulate a python module,
+# This module is used by the Pmw package system.
+# The PmwLoader class can be used to simulate a python module,
 # but also supports importing of submodules on demand.  This technique
 # reduces startup time because Pmw submodules which are not used are
 # not loaded.
