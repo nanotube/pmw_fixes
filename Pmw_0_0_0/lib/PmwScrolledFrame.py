@@ -108,6 +108,13 @@ class ScrolledFrame(Pmw.MegaWidget):
 	self._frame.bind('<Configure>', self._reposition)
 	self._clipper.bind('<Configure>', self._reposition)
 
+        # Work around a bug in Tk where the value returned by the
+        # scrollbar get() method is (0.0, 0.0, 0.0, 0.0) rather than
+        # the expected 2-tuple.  This occurs if xview() is called soon
+        # after the Pmw.ScrolledFrame has been created.
+        self._horizScrollbar.set(0.0, 1.0)
+        self._vertScrollbar.set(0.0, 1.0)
+
 	# Check keywords and initialise options.
 	self.initialiseoptions(ScrolledFrame)
 
