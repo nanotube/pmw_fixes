@@ -9,6 +9,7 @@ class ScrolledField(Pmw.MegaWidget):
 	optiondefs = (
 	    ('labelmargin',   0,      INITOPT),
 	    ('labelpos',      None,   INITOPT),
+	    ('sticky',        'ew',   INITOPT),
 	    ('text',          '',     self._text),
 	)
 	self.defineoptions(kw, optiondefs)
@@ -21,7 +22,7 @@ class ScrolledField(Pmw.MegaWidget):
 	self._scrolledFieldEntry = self.createcomponent('entry',
 		(), None,
 		Tkinter.Entry, (interior,), state = 'disabled')
-	self._scrolledFieldEntry.grid(column=2, row=2, sticky='nsew')
+	self._scrolledFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
 	interior.grid_columnconfigure(2, weight=1)
 	interior.grid_rowconfigure(2, weight=1)
 

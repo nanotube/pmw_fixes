@@ -9,6 +9,7 @@ class LabeledWidget(Pmw.MegaWidget):
 	optiondefs = (
 	    ('labelmargin',            0,      INITOPT),
 	    ('labelpos',               None,   INITOPT),
+	    ('sticky',                 'nsew', INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -20,7 +21,7 @@ class LabeledWidget(Pmw.MegaWidget):
 	self._labelChildSite = self.createcomponent('labelchildsite',
 		(), None,
 		Tkinter.Frame, (interior,))
-	self._labelChildSite.grid(column=2, row=2, sticky='nsew')
+	self._labelChildSite.grid(column=2, row=2, sticky=self['sticky'])
 	interior.grid_columnconfigure(2, weight=1)
 	interior.grid_rowconfigure(2, weight=1)
 

@@ -24,6 +24,7 @@ class MessageBar(Pmw.MegaWidget):
 	    ('labelpos',       None,                  INITOPT),
 	    ('messagetypes',   defaultMessageTypes,   INITOPT),
 	    ('silent',         0,                     None),
+	    ('sticky',         'ew',                  INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -35,7 +36,7 @@ class MessageBar(Pmw.MegaWidget):
 	self._messageBarEntry = self.createcomponent('entry',
 		(), None,
 		Tkinter.Entry, (interior,), state = 'disabled')
-	self._messageBarEntry.grid(column=2, row=2, sticky='nsew')
+	self._messageBarEntry.grid(column=2, row=2, sticky=self['sticky'])
 	interior.grid_columnconfigure(2, weight=1)
 	interior.grid_rowconfigure(2, weight=1)
 

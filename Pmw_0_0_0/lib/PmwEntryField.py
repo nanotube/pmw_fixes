@@ -25,6 +25,7 @@ class EntryField(Pmw.MegaWidget):
 	    ('labelmargin',       0,           INITOPT),
 	    ('labelpos',          None,        INITOPT),
 	    ('modifiedcommand',   None,        None),
+	    ('sticky',            'ew',        INITOPT),
 	    ('validate',          None,        self._validate),
 	    ('extravalidators',   {},          None),
 	    ('value',             '',          INITOPT),
@@ -39,7 +40,7 @@ class EntryField(Pmw.MegaWidget):
 	self._entryFieldEntry = self.createcomponent('entry',
 		(), None,
 		Tkinter.Entry, (interior,))
-	self._entryFieldEntry.grid(column=2, row=2, sticky='nsew')
+	self._entryFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
 	if self['value'] != '':
 	    self.__setEntry(self['value'])
 	interior.grid_columnconfigure(2, weight=1)

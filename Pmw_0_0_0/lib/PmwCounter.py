@@ -22,6 +22,7 @@ class Counter(Pmw.MegaWidget):
 	    ('padx',           0,             INITOPT),
 	    ('pady',           0,             INITOPT),
 	    ('repeatrate',     50,            None),
+	    ('sticky',         'ew',          INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -50,7 +51,7 @@ class Counter(Pmw.MegaWidget):
 		    (), None,
 		    Tkinter.Frame, (interior,),
                     relief = 'raised', borderwidth = 1)
-	    frame.grid(column=2, row=2, sticky='nsew')
+	    frame.grid(column=2, row=2, sticky=self['sticky'])
 	    interior.grid_columnconfigure(2, weight=1)
 	    interior.grid_rowconfigure(2, weight=1)
 
@@ -76,7 +77,8 @@ class Counter(Pmw.MegaWidget):
 	orient = self['orient']
 	if orient == 'horizontal':
 	    self._downArrowBtn.grid(column = 0, row = 0)
-	    self._counterEntry.grid(column = 1, row = 0, sticky = 'news')
+	    self._counterEntry.grid(column = 1, row = 0,
+                    sticky = self['sticky'])
 	    self._upArrowBtn.grid(column = 2, row = 0)
 	    frame.grid_columnconfigure(1, weight = 1)
 	    frame.grid_rowconfigure(0, weight = 1)
@@ -85,11 +87,13 @@ class Counter(Pmw.MegaWidget):
 		frame.grid_columnconfigure(2, pad = padx)
 		frame.grid_rowconfigure(0, pad = pady)
 	elif orient == 'vertical':
-	    self._upArrowBtn.grid(column = 0, row = 0)
-	    self._counterEntry.grid(column = 0, row = 1, sticky = 'news')
-	    self._downArrowBtn.grid(column = 0, row = 2)
+	    self._upArrowBtn.grid(column = 0, row = 0, sticky = 's')
+	    self._counterEntry.grid(column = 0, row = 1,
+                    sticky = self['sticky'])
+	    self._downArrowBtn.grid(column = 0, row = 2, sticky = 'n')
 	    frame.grid_columnconfigure(0, weight = 1)
-	    frame.grid_rowconfigure(1, weight = 1)
+	    frame.grid_rowconfigure(0, weight = 1)
+	    frame.grid_rowconfigure(2, weight = 1)
 	    if Tkinter.TkVersion >= 4.2:
 		frame.grid_rowconfigure(0, pad = pady)
 		frame.grid_rowconfigure(2, pad = pady)

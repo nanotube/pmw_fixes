@@ -14,6 +14,7 @@ class OptionMenu(Pmw.MegaWidget):
             ('initialitem',    None,       INITOPT),
 	    ('labelmargin',    0,          INITOPT),
 	    ('labelpos',       None,       INITOPT),
+	    ('sticky',         'ew',       INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
 
@@ -34,7 +35,7 @@ class OptionMenu(Pmw.MegaWidget):
 		direction = 'flush',
                 takefocus = 1,
 	)
-	self._menubutton.grid(column = 2, row = 2, sticky = 'nsew')
+	self._menubutton.grid(column = 2, row = 2, sticky = self['sticky'])
 
 	self._menu = self.createcomponent('menu',
 		(), None,

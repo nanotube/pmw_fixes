@@ -21,6 +21,7 @@ class ComboBox(Pmw.MegaWidget):
 	    ('labelpos',           None,       INITOPT),
 	    ('listheight',         200,        INITOPT),
 	    ('selectioncommand',   None,       None),
+	    ('sticky',            'ew',        INITOPT),
 	    ('unique',             1,          INITOPT),
 	)
 	self.defineoptions(kw, optiondefs)
@@ -34,7 +35,7 @@ class ComboBox(Pmw.MegaWidget):
 	self._entryfield = self.createcomponent('entryfield',
 		(('entry', 'entryfield_entry'),), None,
 		Pmw.EntryField, (interior,))
-	self._entryfield.grid(column=2, row=2, sticky='nsew')
+	self._entryfield.grid(column=2, row=2, sticky=self['sticky'])
 	interior.grid_columnconfigure(2, weight = 1)
 	self._entryWidget = self._entryfield.component('entry')
 
@@ -48,7 +49,13 @@ class ComboBox(Pmw.MegaWidget):
 		    Tkinter.Canvas, (interior,), borderwidth = 2,
 		    relief = 'raised',
 		    width = 16, height = 16)
-	    self._arrowBtn.grid(column=3, row=2)
+            if 'n' in self['sticky']:
+                sticky = 'n'
+            else:
+                sticky = ''
+            if 's' in self['sticky']:
+                sticky = sticky + 's'
+	    self._arrowBtn.grid(column=3, row=2, sticky = sticky)
 	    self._arrowRelief = self._arrowBtn.cget('relief')
 
 	    # Create the label.
