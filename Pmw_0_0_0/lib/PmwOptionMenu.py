@@ -68,7 +68,7 @@ class OptionMenu(Pmw.MegaWidget):
 	# Set the items in the menu component.
         for item in items:
             self._menu.add_command(label = item,
-		command = lambda self = self, item = item: self.invoke(item))
+		command = lambda self = self, item = item: self._invoke(item))
 
 	# Set the currently selected value.
 	var = self._menubutton.cget('textvariable')
@@ -120,14 +120,17 @@ class OptionMenu(Pmw.MegaWidget):
 		    raise ValueError, 'OptionMenu has no items'
             if index in self._itemList:
                 return self._itemList.index(index)
-	    validValues = 'a name, a number, Pmw.END or Pmw.SELECT'
 	    raise ValueError, \
-		    'bad index "%s": must be %s' % (index, validValues)
+		    'bad index "%s": must be a ' \
+                    'name, a number, Pmw.END or Pmw.SELECT' % (index,)
 
     def invoke(self, index = Pmw.SELECT):
 	index = self.index(index)
 	text = self._itemList[index]
 
+        return self._invoke(text)
+
+    def _invoke(self, text):
 	var = self._menubutton.cget('textvariable')
 	if var == '':
 	    self._menubutton.configure(text = text)

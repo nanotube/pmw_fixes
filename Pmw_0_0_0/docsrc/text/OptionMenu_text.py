@@ -31,8 +31,8 @@ text['options']['initialitem'] = """
 """
 
 text['options']['items'] = """
-    A sequence containing the initial items to be displayed in the
-    *menu* component.
+    A sequence of strings containing the initial items to be displayed
+    in the *menu* component.
 
 """
 
@@ -52,9 +52,10 @@ text['methods'] = {}
 
 text['methods']['setitems'] = """
     Replace all the items in the *menu* component with those specified
-    by the 'items' sequence.  If 'index' is not *None*, set the
-    selected value to 'index', which may have any of the forms
-    accepted by the /index()/ method.
+    by 'items', which must be a sequence of strings.
+    
+    If 'index' is not *None*, set the selected value to 'index', which
+    may have any of the forms accepted by the /index()/ method.
 
     If 'index' is *None* and the *textvariable* option of the
     *menubutton* component is the empty string, then if

@@ -1176,4 +1176,12 @@ text = """
   - Fixed problem in Pmw.ScrolledFrame in python 1.5 - string.atof
     does not accept a number as argument, but it does in python 2.0.
 
+  24 February 2001
+
+  - Modified Pmw.OptionMenu documentation to specify that list
+    elements must be strings (problem reported by Guy Middleton).
+
+  - Fixed bug in Pmw.OptionMenu where the wrong item was displayed
+    when an integer item in the menu was selected with the mouse.
+
 """
