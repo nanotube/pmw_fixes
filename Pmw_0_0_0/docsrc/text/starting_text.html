@@ -14,7 +14,7 @@ the demonstrations and tests.
 <dt> <h2>Requirements</h2></dt><dd>
 <p>
 Pmw.PMW_VERSION requires the _tkinter and Tkinter modules.  It works
-with python versions 1.5.2 and greater (tested up to 2.0) and Tk
+with python versions 1.5.2 and greater (tested up to 2.2.1) and Tk
 versions 8.0 and greater (tested up to 8.3.2).
 
 </p>
@@ -36,20 +36,9 @@ Releases of the Pmw distribution are available via http from
 <code>http://download.sourceforge.net/pmw/</code>.  This release is available
 as <a href="http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.tar.gz">
 <code>Pmw.PMW_VERSION.tar.gz</code></a>, released on VERSION_DATE. 
-This is a compressed tar file which, under Unix, can be unpacked like
-this:
-</p>
-
-<dl>
-<dd>
-<pre>
-gunzip Pmw.PMW_VERSION.tar.gz
-tar xvf Pmw.PMW_VERSION.tar
-</pre>
-</dd>
-</dl>
-
-<p>
+This is a compressed tar file.  Under Linux, Unix, etc, you will need to
+unpack it using <code>tar</code> and you may also need to use
+<code>gzip</code> or <code>gunzip</code> to uncompress it.
 Under Microsoft Windows, you will need a program such as WinZip (<a
 href="http://www.winzip.com">http://www.winzip.com</a>) that can
 unpack the gzipped tar files.  You may need to change the suffix of
@@ -62,15 +51,34 @@ the file to <strong>.tgz</strong> for WinZip to recognise it.
 This will unpack into a directory named Pmw.  You now need to put this
 directory somewhere python can find it, preferably in one of the
 standard places, such as in the <code>site-packages</code> directory
-(eg: <code>/usr/lib/python1.5/site-packages/Pmw</code>) or the
+(eg: <code>/usr/lib/python2.2/site-packages/Pmw</code>) or the
 <code>sys.prefix</code> directory (eg: <code>C:\Program
-Files\Python\Pmw</code> or <code>/usr/lib/python1.5</code>).
+Files\Python\Pmw</code> or <code>/usr/lib/python2.2</code>).
 
 </p>
 
 <p>
 
-If you do not have access to these standard directories, place the Pmw
+For example, under Unix, assuming you have placed the tar file in the
+<code>/tmp</code> directory, you can simply run the following
+commands:
+
+</p>
+
+<dl>
+<dd>
+<pre>
+cd /usr/lib/python2.2/site-packages
+gunzip /tmp/Pmw.PMW_VERSION.tar.gz (or gzip -d /tmp/Pmw.PMW_VERSION.tar.gz)
+tar xvf /tmp/Pmw.PMW_VERSION.tar
+</pre>
+</dd>
+</dl>
+
+<p>
+
+If you do not have write permission for these standard directories,
+place the Pmw
 directory somewhere on your <code>PYTHONPATH</code> or
 <code>sys.path</code>.  If this is not possible, place the Pmw
 directory somewhere else and add the parent directory to your
@@ -317,7 +325,7 @@ Chris Wright,
 Guido van Rossum.
 
 Special thanks to Case Roole and Michael McLay for help with getting
-Pmw to work with python 1.5 packages and many other nifty features.
+Pmw to work with python packages and many other nifty features.
 
 My deepest apologies if I have forgotten anyone. Please let me know.
 
