@@ -1182,6 +1182,15 @@ text = """
     elements must be strings (problem reported by Guy Middleton).
 
   - Fixed bug in Pmw.OptionMenu where the wrong item was displayed
-    when an integer item in the menu was selected with the mouse.
+    when an integer item in the menu was selected with the mouse (even
+    though items should be strings).
+
+  - Added work around to Pmw.ScrolledFrame for bug in Tk when
+    retrieving value from scrollbars soon after creation.
+
+  27 February 2001
+
+  - Added HistoryText and MainMenuBar to bin/bundlepmw.py - accidently
+    left out.
 
 """
