@@ -36,9 +36,14 @@ Releases of the Pmw distribution are available via http from
 <code>http://download.sourceforge.net/pmw/</code>.  This release is available
 as <a href="http://download.sourceforge.net/pmw/Pmw.PMW_VERSION.tar.gz">
 <code>Pmw.PMW_VERSION.tar.gz</code></a>, released on VERSION_DATE. 
-This is a compressed tar file.  Under Linux, Unix, etc, you will need to
+This is a compressed tar file.  
+
+<br>
+Under Linux, Unix, etc, you will need to
 unpack it using <code>tar</code> and you may also need to use
 <code>gzip</code> or <code>gunzip</code> to uncompress it.
+
+<br>
 Under Microsoft Windows, you will need a program such as WinZip (<a
 href="http://www.winzip.com">http://www.winzip.com</a>) that can
 unpack the gzipped tar files.  You may need to change the suffix of
@@ -48,18 +53,39 @@ the file to <strong>.tgz</strong> for WinZip to recognise it.
 
 <p>
 
-This will unpack into a directory named Pmw.  You now need to put this
-directory somewhere python can find it, preferably in one of the
+This will unpack into a directory named src containing the directory Pmw and the
+installation utility setup.py.  You now need to put this
+directory Pmw somewhere python can find it, preferably in one of the
 standard places, such as in the <code>site-packages</code> directory
 (eg: <code>/usr/lib/python2.2/site-packages/Pmw</code>) or the
 <code>sys.prefix</code> directory (eg: <code>C:\Program
 Files\Python\Pmw</code> or <code>/usr/lib/python2.2</code>).
 
+<br>
+<br>
+One easy way to install the Pmw directory in the site-packages directory of your 
+installation is to use the setup.py utility. <br>
+
+<br>
+This is done as follows:
+<br>
+<br>
+
+<code> python setup.py install </code> (as root) 
+<br>
+<br>
+or
+<br>
+<br>
+
+<code> sudo python setup.py install </code>  (under Ubuntu or Mac OS X)<br>
+
+
 </p>
 
 <p>
 
-For example, under Unix, assuming you have placed the tar file in the
+Alternatively, to install manually, for example under Unix, assuming you have placed the tar file in the
 <code>/tmp</code> directory, you can simply run the following
 commands:
 

@@ -1,12 +1,12 @@
 # Change these as required:
 
 # Version to be released
-VERSION=1.2
+VERSION=1.3
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="5 August 2003"
+VERSION_DATE="5 August 2007"
 
-BASEDIR=/home/workareas/gregm.on.sourceforge
+BASEDIR=/home/workspace/Pmw_CVS_1.3.1
 
 # ==================================================================
 
@@ -103,6 +103,7 @@ cd /tmp
 scp Pmw.$VERSION.tar.gz gregm@shell.sourceforge.net:/home/groups/p/pm/pmw/htdocs
 
 ssh pmw.sourceforge.net
+  umask 002
   # set VERSION as ABOVE
   DIR=`echo ${VERSION} | tr . _`
   cd /home/groups/p/pm/pmw/htdocs

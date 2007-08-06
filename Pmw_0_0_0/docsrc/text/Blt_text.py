@@ -27,7 +27,7 @@ description = """
 
     *Note:* Full documentation of Pmw.Blt.Graph is available in
     ~~http://www.ifi.uio.no/~hpl/Pmw.Blt/doc/~~A User's Guide to Pmw.Blt~~
-    written by Bjørn Ove Thue and Hans Petter Langtangen.
+    written by Bjorn Ove Thue and Hans Petter Langtangen.
     You can also download 
     ~~http://www.ifi.uio.no/~hpl/Pmw.Blt/Pmw.Blt.doc.tar.gz~~the full HTML document~~
     of the guide for local viewing.

@@ -68,7 +68,19 @@ do
 done
 cd /tmp
 /bin/rm -f Pmw.${VERSION}.tar.gz
-tar cf Pmw.${VERSION}.tar ./Pmw
+
+#create a source dir to hold setup.py and Pmw
+
+
+if [ ! -d 'src' ]; then
+    mkdir src    
+fi
+
+
+mv Pmw/setup.py src
+cp -r Pmw ./src/.
+
+tar cf Pmw.${VERSION}.tar ./src
 gzip Pmw.${VERSION}.tar
 
 # Now that the tar file has been created, unpack and run the tests.

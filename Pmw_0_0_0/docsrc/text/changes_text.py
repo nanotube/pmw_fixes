@@ -1101,7 +1101,7 @@ text = """
     of an interactive text-based database query gui.  It maintains a
     history of each query and allows editing of prior queries.
 
-  - Added references to the Pmw.Blt.Graph documentation by Bjørn Ove
+  - Added references to the Pmw.Blt.Graph documentation by Bjorn Ove
     Thue and Hans Petter Langtangen.
 
   - Searched for and fixed memory leaks. There are no more known memory leaks.
@@ -1356,5 +1356,15 @@ text = """
   5 August 2003
 
   - Release of version 1.2
+
+
+ - Changes for python 2.4 and 2.5:
+
+  5 August 2007
+
+	- In module PmwBase.py: An explicit cast is now required from exception to string (str) .
+
+  - Release of version 1.3
+
 
 """

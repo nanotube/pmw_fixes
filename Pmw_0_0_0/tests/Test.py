@@ -481,7 +481,7 @@ def _getErrorValue():
         exc_value_str = str(exc_value)
         if exc_value_str[:1] == "'" and exc_value_str[-1:] == "'":
             exc_value_str = exc_value_str[1:-1]
-        return exc_type + ': ' + exc_value_str
+        return str(exc_type) + ': ' + exc_value_str
 
 def _methodTest(w, testData):
     func = testData[0]
