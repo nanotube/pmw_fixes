@@ -14,7 +14,7 @@ Subject: ANNOUNCE: Pmw megawidgets 1.3
 A new release of Pmw is out.  This release makes Pmw compatable with
 recent releases of python and Tcl/Tk.
 
-This version of Pmw was tested against python 2.3, Tcl/Tk 8.4.2 and
+This version of Pmw was tested against python 2.3, 2.4, 2.5 Tcl/Tk 8.4.2 and
 Blt 2.4z.  Except for Blt, all tests pass.  Blt seems to be more
 flacky than usual, with core dumps occuring in the Graph code.  Since
 this is a problem in Blt (not Pmw), the Blt test script has been
@@ -23,11 +23,15 @@ removed from the default Pmw test sequence.
 Several other bug fixes and improvements were made.  See the change
 log for details.
 
+
+A setup.py script has been added in order to automate the installation of Pmw. 
+
+
 To download Pmw or for more information, see the home page at
   http://pmw.sourceforge.net/
 
 If you have any comments, enhancements or new contributions, please
-contact me (gregm@iname.com).
+contact Serge (shulne@planet.nl) or me (gregm@iname.com) .
 
 =====================================================================
 
