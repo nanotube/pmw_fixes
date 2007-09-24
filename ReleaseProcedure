@@ -1,17 +1,21 @@
+# ==================================================================
+
 # Change these as required:
 
 # Version to be released
-VERSION=1.3
+VERSION=1.3.2
 
 # Date to put in documentation for the release date of this release
-VERSION_DATE="5 August 2007"
+VERSION_DATE="23 Sept 2007"
 
-BASEDIR=/home/workspace/Pmw_CVS_1.3.1
+#Base Directory (On Local PC):
+BASEDIR=/home/serge2/workspace/Pmw_CVS_1.3.2
+
+# Location of Pmw source files (On Local PC):
+SRC_DIR=Pmw_0_0_0
 
 # ==================================================================
 
-# Location of Pmw source files:
-SRC_DIR=Pmw_0_0_0
 
 DIR=`echo ${VERSION} | tr . _`
 cd ${BASEDIR}/Pmw
@@ -28,6 +32,7 @@ vi ${SRC_DIR}/docsrc/text/root_index.html
 vi ${SRC_DIR}/docsrc/text/porting_text.py
 
 # Chmod all files 664. Use this to check
+# Also: umask 002
 ls -lR | sort -u > /tmp/foosh
 vi /tmp/foosh
 
