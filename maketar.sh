@@ -4,7 +4,6 @@
 #     /tmp/Pmw.${VERSION}.tar.gz
 
 
-
 ###----------COPIED FROM ReleaseProcedure---------------
 
 
@@ -21,6 +20,8 @@ BASEDIR=/home/serge2/workspace/Pmw_CVS_1.3.2
 SRC_DIR=Pmw_0_0_0
 
 ###-----------------------------------------------------
+
+
 
 echo Using Pmw/${SRC_DIR} to create Pmw.${VERSION}.
 
@@ -69,7 +70,6 @@ echo ====== end ======
 /bin/rm /tmp/Pmw.dirs1 /tmp/Pmw.dirs2
 cd /tmp/Pmw/Pmw_${DIR}
 
-
 # Create documentation source:
 tar cf Pmw.${VERSION}.docsrc.tar ./docsrc
 gzip Pmw.${VERSION}.docsrc.tar
@@ -89,21 +89,19 @@ done
 cd /tmp
 /bin/rm -f Pmw.${VERSION}.tar.gz
 
-
-
 #create a source dir to hold setup.py and Pmw
 
-SRCE=${VERSION}_src
 
-if [ ! -d ${SRCE} ]; then
-    mkdir ${SRCE}    
+if [ ! -d 'src' ]; then
+    mkdir src    
 fi
 
-mv Pmw/setup.py ${SRCE}
-cp -r Pmw ${SRCE}/.
 
-tar zcvf Pmw.${VERSION}.tar.gz ./${VERSION}/${SRCE}
+mv Pmw/setup.py src
+cp -r Pmw ./src/.
 
+tar cf Pmw.${VERSION}.tar ./src
+gzip Pmw.${VERSION}.tar
 
 # Now that the tar file has been created, unpack and run the tests.
 /bin/rm -rf pmw.tmp
