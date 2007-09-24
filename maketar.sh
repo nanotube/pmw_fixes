@@ -93,7 +93,7 @@ cd /tmp
 
 #create a source dir to hold setup.py and Pmw
 
-SRCE=${VERSION}/src
+SRCE=${VERSION}_src
 
 if [ ! -d ${SRCE} ]; then
     mkdir ${SRCE}    
