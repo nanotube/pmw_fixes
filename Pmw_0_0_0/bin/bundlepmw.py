@@ -148,7 +148,7 @@ outfile.write(extraCode % version)
 # Specially handle PmwBase.py file:
 text = mungeFile('Base')
 text = re.sub(r'import PmwLogicalFont', '', text)
-text = re.sub('PmwLogicalFont._font_initialise', '_font_initialise', text)
+text = re.sub(r'PmwLogicalFont\._font_initialise', '_font_initialise', text)
 outfile.write(text)
 if not needBlt:
     outfile.write(ignoreBltCode)
