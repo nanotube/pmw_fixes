@@ -10,7 +10,7 @@
 #    PmwBlt.py PmwColor.py
 
 import os
-import regsub
+import re
 import string
 import sys
 
@@ -49,9 +49,9 @@ def mungeFile(file):
     # other Pmw files.
     file = 'Pmw' + file + '.py'
     text = open(os.path.join(srcdir, file)).read()
-    text = regsub.gsub('import Pmw\>', '', text)
-    text = regsub.gsub('INITOPT = Pmw.INITOPT', '', text)
-    text = regsub.gsub('\<Pmw\.', '', text)
+    text = re.sub(r'import Pmw\b', '', text)
+    text = re.sub(r'INITOPT = Pmw.INITOPT', '', text)
+    text = re.sub(r'\bPmw\.', '', text)
     text = '\n' + ('#' * 70) + '\n' + '### File: ' + file + '\n' + text
     return text
 
@@ -147,8 +147,8 @@ outfile.write(extraCode % version)
 
 # Specially handle PmwBase.py file:
 text = mungeFile('Base')
-text = regsub.gsub('import PmwLogicalFont', '', text)
-text = regsub.gsub('PmwLogicalFont._font_initialise', '_font_initialise', text)
+text = re.sub(r'import PmwLogicalFont', '', text)
+text = re.sub('PmwLogicalFont._font_initialise', '_font_initialise', text)
 outfile.write(text)
 if not needBlt:
     outfile.write(ignoreBltCode)
