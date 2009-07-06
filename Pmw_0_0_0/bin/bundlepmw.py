@@ -50,7 +50,7 @@ def mungeFile(file):
     file = 'Pmw' + file + '.py'
     text = open(os.path.join(srcdir, file)).read()
     text = re.sub(r'import Pmw\b', '', text)
-    text = re.sub(r'INITOPT = Pmw.INITOPT', '', text)
+    text = re.sub(r'INITOPT = Pmw\.INITOPT', '', text)
     text = re.sub(r'\bPmw\.', '', text)
     text = '\n' + ('#' * 70) + '\n' + '### File: ' + file + '\n' + text
     return text
