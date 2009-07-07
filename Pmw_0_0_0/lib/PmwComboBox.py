@@ -167,7 +167,7 @@ class ComboBox(Pmw.MegaWidget):
 	    return self._selectCmd()
 
     def selectitem(self, index, setentry=1):
-	if type(index) == types.StringType:
+	if isinstance(index, basestring):
 	    text = index
 	    items = self._list.get(0, 'end')
 	    if text in items:
