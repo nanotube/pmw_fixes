@@ -1,6 +1,7 @@
 import types
 import Tkinter
 import Pmw
+import sys
 
 class OptionMenu(Pmw.MegaWidget):
 
@@ -58,36 +59,42 @@ class OptionMenu(Pmw.MegaWidget):
 	self.initialiseoptions()
 
     def setitems(self, items, index = None):
-
-        # Clean up old items and callback commands.
-        for oldIndex in range(len(self._itemList)):
-            tclCommandName = str(self._menu.entrycget(oldIndex, 'command'))
-            if tclCommandName != '':   
-                self._menu.deletecommand(tclCommandName)
+        
+        # python version check
+        # python versions >= 2.5.4 automatically clean commands
+        # and manually cleaning them causes errors when deleting items
+        
+        if sys.version_info[0] * 100 + sys.version_info[1] * 10 + \
+                        sys.version_info[2] < 254:
+            # Clean up old items and callback commands.
+            for oldIndex in range(len(self._itemList)):
+                tclCommandName = str(self._menu.entrycget(oldIndex, 'command'))
+                if tclCommandName != '':   
+                    self._menu.deletecommand(tclCommandName)
         self._menu.delete(0, 'end')
-	self._itemList = list(items)
+        self._itemList = list(items)
 
-	# Set the items in the menu component.
+        # Set the items in the menu component.
         for item in items:
             self._menu.add_command(label = item,
-		command = lambda self = self, item = item: self._invoke(item))
+            command = lambda self = self, item = item: self._invoke(item))
 
-	# Set the currently selected value.
-	if index is None:
+        # Set the currently selected value.
+        if index is None:
             var = str(self._menubutton.cget('textvariable'))
-	    if var != '':
-		# None means do not change text variable.
-		return
-	    if len(items) == 0:
-		text = ''
-	    elif str(self._menubutton.cget('text')) in items:
+            if var != '':
+                # None means do not change text variable.
+                return
+            if len(items) == 0:
+                text = ''
+            elif str(self._menubutton.cget('text')) in items:
                 # Do not change selection if it is still valid
-		return
-	    else:
-		text = items[0]
-	else:
-	    index = self.index(index)
-	    text = self._itemList[index]
+                return
+            else:
+                text = items[0]
+        else:
+            index = self.index(index)
+            text = self._itemList[index]
 
         self.setvalue(text)
 
