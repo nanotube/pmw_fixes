@@ -35,12 +35,12 @@ needBlt = 1
 
 def expandLinks(path):
     if not os.path.isabs(path):
-	path = os.path.join(os.getcwd(), path)
+        path = os.path.join(os.getcwd(), path)
     while 1:
-	if not os.path.islink(path):
-	    break
-	dir = os.path.dirname(path)
-	path = os.path.join(dir, os.readlink(path))
+        if not os.path.islink(path):
+            break
+        dir = os.path.dirname(path)
+        path = os.path.join(dir, os.readlink(path))
 
     return path
 
@@ -101,7 +101,7 @@ def setversion(version):
 
 def setalphaversions(*alpha_versions):
     if alpha_versions != ():
-	raise ValueError, 'Dynamic versioning not available'
+        raise ValueError, 'Dynamic versioning not available'
 
 def version(alpha = 0):
     if alpha:
@@ -164,6 +164,6 @@ print '   Pmw.py has been created.'
 if needColor or needBlt:
     print '   Before running freeze, also copy the following file(s):'
     if needBlt:
-	print '   ' + os.path.join(srcdir, 'PmwBlt.py')
+        print '   ' + os.path.join(srcdir, 'PmwBlt.py')
     if needColor:
-	print '   ' + os.path.join(srcdir, 'PmwColor.py')
+        print '   ' + os.path.join(srcdir, 'PmwColor.py')
