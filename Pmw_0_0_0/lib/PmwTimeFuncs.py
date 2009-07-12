@@ -34,7 +34,7 @@ def setyearpivot(pivot, century = None):
     oldvalues = (_year_pivot, _century)
     _year_pivot = pivot
     if century is not None:
-	_century = century
+        _century = century
     return oldvalues
 
 def datestringtojdn(text, format = 'ymd', separator = '/'):
@@ -52,9 +52,9 @@ def datestringtojdn(text, format = 'ymd', separator = '/'):
   if _year_pivot is not None:
     if year >= 0 and year < 100:
       if year <= _year_pivot:
-	year = year + _century
+        year = year + _century
       else:
-	year = year + _century - 100
+        year = year + _century - 100
 
   jdn = ymdtojdn(year, month, day)
   if jdntoymd(jdn) != (year, month, day):
@@ -66,54 +66,54 @@ def _cdiv(a, b):
     # assuming both a and b are integers.
 
     if a * b > 0:
-	return a / b
+        return a / b
     else:
-	return -(abs(a) / abs(b))
+        return -(abs(a) / abs(b))
 
 def ymdtojdn(year, month, day, julian = -1, papal = 1):
 
     # set Julian flag if auto set
     if julian < 0:
-	if papal:                          # Pope Gregory XIII's decree
-	    lastJulianDate = 15821004L     # last day to use Julian calendar
-	else:                              # British-American usage
-	    lastJulianDate = 17520902L     # last day to use Julian calendar
+        if papal:                          # Pope Gregory XIII's decree
+            lastJulianDate = 15821004L     # last day to use Julian calendar
+        else:                              # British-American usage
+            lastJulianDate = 17520902L     # last day to use Julian calendar
 
-	julian = ((year * 100L) + month) * 100 + day  <=  lastJulianDate
+        julian = ((year * 100L) + month) * 100 + day  <=  lastJulianDate
 
     if year < 0:
-	# Adjust BC year
-	year = year + 1
+        # Adjust BC year
+        year = year + 1
 
     if julian:
-	return 367L * year - _cdiv(7 * (year + 5001L + _cdiv((month - 9), 7)), 4) + \
-	    _cdiv(275 * month, 9) + day + 1729777L
+        return 367L * year - _cdiv(7 * (year + 5001L + _cdiv((month - 9), 7)), 4) + \
+            _cdiv(275 * month, 9) + day + 1729777L
     else:
-	return (day - 32076L) + \
-	    _cdiv(1461L * (year + 4800L + _cdiv((month - 14), 12)), 4) + \
-	    _cdiv(367 * (month - 2 - _cdiv((month - 14), 12) * 12), 12) - \
-	    _cdiv((3 * _cdiv((year + 4900L + _cdiv((month - 14), 12)), 100)), 4) + \
-	    1            # correction by rdg
+        return (day - 32076L) + \
+            _cdiv(1461L * (year + 4800L + _cdiv((month - 14), 12)), 4) + \
+            _cdiv(367 * (month - 2 - _cdiv((month - 14), 12) * 12), 12) - \
+            _cdiv((3 * _cdiv((year + 4900L + _cdiv((month - 14), 12)), 100)), 4) + \
+            1            # correction by rdg
 
 def jdntoymd(jdn, julian = -1, papal = 1):
 
     # set Julian flag if auto set
     if julian < 0:
-	if papal:                          # Pope Gregory XIII's decree
-	    lastJulianJdn = 2299160L       # last jdn to use Julian calendar
-	else:                              # British-American usage
-	    lastJulianJdn = 2361221L       # last jdn to use Julian calendar
+        if papal:                          # Pope Gregory XIII's decree
+            lastJulianJdn = 2299160L       # last jdn to use Julian calendar
+        else:                              # British-American usage
+            lastJulianJdn = 2361221L       # last jdn to use Julian calendar
 
-	julian = (jdn <= lastJulianJdn);
+        julian = (jdn <= lastJulianJdn);
 
     x = jdn + 68569L
     if julian:
-	x = x + 38
-	daysPer400Years = 146100L
-	fudgedDaysPer4000Years = 1461000L + 1
+        x = x + 38
+        daysPer400Years = 146100L
+        fudgedDaysPer4000Years = 1461000L + 1
     else:
-	daysPer400Years = 146097L
-	fudgedDaysPer4000Years = 1460970L + 31
+        daysPer400Years = 146097L
+        fudgedDaysPer4000Years = 1460970L + 31
 
     z = _cdiv(4 * x, daysPer400Years)
     x = x - _cdiv((daysPer400Years * z + 3), 4)
@@ -131,16 +131,16 @@ def jdntoymd(jdn, julian = -1, papal = 1):
     dd = int(d)
 
     if yy <= 0:
-	# Adjust BC years.
-	    yy = yy - 1
+        # Adjust BC years.
+            yy = yy - 1
 
     return (yy, mm, dd)
 
 def stringtoreal(text, separator = '.'):
     if separator != '.':
-	if string.find(text, '.') >= 0:
-	    raise ValueError, 'invalid value: ' + text
-	index = string.find(text, separator)
-	if index >= 0:
-	    text = text[:index] + '.' + text[index + 1:]
+        if string.find(text, '.') >= 0:
+            raise ValueError, 'invalid value: ' + text
+        index = string.find(text, separator)
+        if index >= 0:
+            text = text[:index] + '.' + text[index + 1:]
     return string.atof(text)

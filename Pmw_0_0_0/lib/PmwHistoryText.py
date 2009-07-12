@@ -10,8 +10,8 @@ class HistoryText(Pmw.ScrolledText):
 
         # Define the megawidget options.
         optiondefs = (
-	    ('compressany',         1,          None),
-	    ('compresstail',        1,          None),
+            ('compressany',         1,          None),
+            ('compresstail',        1,          None),
             ('historycommand',      None,       None),
         )
         self.defineoptions(kw, optiondefs)
@@ -20,22 +20,22 @@ class HistoryText(Pmw.ScrolledText):
         Pmw.ScrolledText.__init__(self, parent)
 
         # Initialise instance variables.
-	self._list = []
-	self._currIndex = 0
-	self._pastIndex = None
-	self._lastIndex = 0          # pointer to end of history list
+        self._list = []
+        self._currIndex = 0
+        self._pastIndex = None
+        self._lastIndex = 0          # pointer to end of history list
 
         # Check keywords and initialise options.
         self.initialiseoptions()
 
     def addhistory(self):
-	text = self.get()
-	if text[-1] == '\n':
-	    text = text[:-1]
+        text = self.get()
+        if text[-1] == '\n':
+            text = text[:-1]
 
-	if len(self._list) == 0:
+        if len(self._list) == 0:
             # This is the first history entry.  Add it.
-	    self._list.append([text, text, _MODIFIED])
+            self._list.append([text, text, _MODIFIED])
             return
 
         currentEntry =  self._list[self._currIndex]
@@ -75,24 +75,24 @@ class HistoryText(Pmw.ScrolledText):
         self._currIndex = self._lastIndex
 
     def next(self):
-	if self._currIndex == self._lastIndex and self._pastIndex is None:
-	    self.bell()
+        if self._currIndex == self._lastIndex and self._pastIndex is None:
+            self.bell()
         else:
             self._modifyDisplay('next')
 
     def prev(self):
         self._pastIndex = None
-	if self._currIndex == 0:
-	    self.bell()
+        if self._currIndex == 0:
+            self.bell()
         else:
             self._modifyDisplay('prev')
 
     def undo(self):
-	if len(self._list) != 0:
+        if len(self._list) != 0:
             self._modifyDisplay('undo')
 
     def redo(self):
-	if len(self._list) != 0:
+        if len(self._list) != 0:
             self._modifyDisplay('redo')
 
     def gethistory(self):

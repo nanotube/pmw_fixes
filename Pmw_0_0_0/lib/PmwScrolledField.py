@@ -4,24 +4,24 @@ import Pmw
 class ScrolledField(Pmw.MegaWidget):
     def __init__(self, parent = None, **kw):
 
-	# Define the megawidget options.
-	INITOPT = Pmw.INITOPT
-	optiondefs = (
-	    ('labelmargin',   0,      INITOPT),
-	    ('labelpos',      None,   INITOPT),
-	    ('sticky',        'ew',   INITOPT),
-	    ('text',          '',     self._text),
-	)
-	self.defineoptions(kw, optiondefs)
+        # Define the megawidget options.
+        INITOPT = Pmw.INITOPT
+        optiondefs = (
+            ('labelmargin',   0,      INITOPT),
+            ('labelpos',      None,   INITOPT),
+            ('sticky',        'ew',   INITOPT),
+            ('text',          '',     self._text),
+        )
+        self.defineoptions(kw, optiondefs)
 
-	# Initialise the base class (after defining the options).
-	Pmw.MegaWidget.__init__(self, parent)
+        # Initialise the base class (after defining the options).
+        Pmw.MegaWidget.__init__(self, parent)
 
-	# Create the components.
-	interior = self.interior()
-	self._scrolledFieldEntry = self.createcomponent('entry',
-		(), None,
-		Tkinter.Entry, (interior,))
+        # Create the components.
+        interior = self.interior()
+        self._scrolledFieldEntry = self.createcomponent('entry',
+                (), None,
+                Tkinter.Entry, (interior,))
 
         # Can't always use 'disabled', since this greys out text in Tk 8.4.2
         try:
@@ -29,14 +29,14 @@ class ScrolledField(Pmw.MegaWidget):
         except Tkinter.TclError:
             self._scrolledFieldEntry.configure(state = 'disabled')
 
-	self._scrolledFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
-	interior.grid_columnconfigure(2, weight=1)
-	interior.grid_rowconfigure(2, weight=1)
+        self._scrolledFieldEntry.grid(column=2, row=2, sticky=self['sticky'])
+        interior.grid_columnconfigure(2, weight=1)
+        interior.grid_rowconfigure(2, weight=1)
 
-	self.createlabel(interior)
+        self.createlabel(interior)
 
-	# Check keywords and initialise options.
-	self.initialiseoptions()
+        # Check keywords and initialise options.
+        self.initialiseoptions()
 
     def _text(self):
         text = self['text']

@@ -58,7 +58,7 @@ def logicalfont(name='Helvetica', sizeIncr = 0, **kw):
 
     if field == 'size':
       if realValue == '*':
-	  realValue = _fontSize
+          realValue = _fontSize
       realValue = str((realValue + sizeIncr) * 10)
 
     rtn.append(realValue)
