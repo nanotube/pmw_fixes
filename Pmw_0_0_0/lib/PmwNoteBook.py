@@ -7,29 +7,29 @@ class NoteBook(Pmw.MegaArchetype):
 
     def __init__(self, parent = None, **kw):
 
-	# Define the megawidget options.
-	INITOPT = Pmw.INITOPT
+        # Define the megawidget options.
+        INITOPT = Pmw.INITOPT
         optiondefs = (
-	    ('hull_highlightthickness',  0,           None),
-	    ('hull_borderwidth',         0,           None),
+            ('hull_highlightthickness',  0,           None),
+            ('hull_borderwidth',         0,           None),
             ('arrownavigation',          1,           INITOPT),
             ('borderwidth',              2,           INITOPT),
             ('createcommand',            None,        None),
             ('lowercommand',             None,        None),
             ('pagemargin',               4,           INITOPT),
             ('raisecommand',             None,        None),
-	    ('tabpos',                   'n',         INITOPT),
+            ('tabpos',                   'n',         INITOPT),
         )
-	self.defineoptions(kw, optiondefs, dynamicGroups = ('Page', 'Tab'))
+        self.defineoptions(kw, optiondefs, dynamicGroups = ('Page', 'Tab'))
 
-	# Initialise the base class (after defining the options).
-	Pmw.MegaArchetype.__init__(self, parent, Tkinter.Canvas)
+        # Initialise the base class (after defining the options).
+        Pmw.MegaArchetype.__init__(self, parent, Tkinter.Canvas)
 
         self.bind('<Map>', self._handleMap)
         self.bind('<Configure>', self._handleConfigure)
 
         tabpos = self['tabpos']
-	if tabpos is not None and tabpos != 'n':
+        if tabpos is not None and tabpos != 'n':
             raise ValueError, \
                 'bad tabpos option %s:  should be n or None' % repr(tabpos)
         self._withTabs = (tabpos is not None)
@@ -60,7 +60,7 @@ class NoteBook(Pmw.MegaArchetype):
         self._lightBorderColor, self._darkBorderColor = \
                 Pmw.Color.bordercolors(self, self['hull_background'])
 
-	self._pageNames   = []        # List of page names
+        self._pageNames   = []        # List of page names
 
         # Map from page name to page info.  Each item is itself a
         # dictionary containing the following items:
@@ -73,13 +73,13 @@ class NoteBook(Pmw.MegaArchetype):
         #                  window item, the lightshadow and the darkshadow
         #   left           the left and right canvas coordinates of the tab
         #   right
-	self._pageAttrs   = {}
+        self._pageAttrs   = {}
 
         # Name of page currently on top (actually displayed, using
         # create_window, not pending).  Ignored if current top page
         # has been deleted or new top page is pending.  None indicates
         # no pages in notebook.
-	self._topPageName = None
+        self._topPageName = None
 
         # Canvas items used:
         #   Per tab: 
@@ -117,16 +117,16 @@ class NoteBook(Pmw.MegaArchetype):
             self._pageTopBorder = self.create_polygon(0, 0, 0, 0, 0, 0,
                 fill = self._darkBorderColor, tags = 'darktag')
 
-	# Check keywords and initialise options.
-	self.initialiseoptions()
+        # Check keywords and initialise options.
+        self.initialiseoptions()
 
     def insert(self, pageName, before = 0, **kw):
-	if self._pageAttrs.has_key(pageName):
-	    msg = 'Page "%s" already exists.' % pageName
-	    raise ValueError, msg
+        if self._pageAttrs.has_key(pageName):
+            msg = 'Page "%s" already exists.' % pageName
+            raise ValueError, msg
 
         # Do this early to catch bad <before> spec before creating any items.
-	beforeIndex = self.index(before, 1)
+        beforeIndex = self.index(before, 1)
 
         pageOptions = {}
         if self._withTabs:
@@ -145,12 +145,12 @@ class NoteBook(Pmw.MegaArchetype):
                 tabOptions[key[4:]] = kw[key]
                 del kw[key]
             else:
-		raise KeyError, 'Unknown option "' + key + '"'
+                raise KeyError, 'Unknown option "' + key + '"'
 
         # Create the frame to contain the page.
-	page = apply(self.createcomponent, (pageName,
-		(), 'Page',
-		Tkinter.Frame, self._hull), pageOptions)
+        page = apply(self.createcomponent, (pageName,
+                (), 'Page',
+                Tkinter.Frame, self._hull), pageOptions)
 
         attributes = {}
         attributes['page'] = page
@@ -189,7 +189,7 @@ class NoteBook(Pmw.MegaArchetype):
             self._pending['tabs'] = 1
 
         self._pageAttrs[pageName] = attributes
-	self._pageNames.insert(beforeIndex, pageName)
+        self._pageNames.insert(beforeIndex, pageName)
 
         # If this is the first page added, make it the new top page
         # and call the create and raise callbacks.
@@ -199,7 +199,7 @@ class NoteBook(Pmw.MegaArchetype):
 
         self._layout()
         return page
-  		
+        
     def add(self, pageName, **kw):
         return apply(self.insert, (pageName, len(self._pageNames)), kw)
 
@@ -244,10 +244,10 @@ class NoteBook(Pmw.MegaArchetype):
 
     def page(self, pageIndex):
         pageName = self._pageNames[self.index(pageIndex)]
-	return self._pageAttrs[pageName]['page']
+        return self._pageAttrs[pageName]['page']
 
     def pagenames(self):
-	return list(self._pageNames)
+        return list(self._pageNames)
 
     def getcurselection(self):
         if self._pending.has_key('topPage'):
@@ -263,30 +263,30 @@ class NoteBook(Pmw.MegaArchetype):
             return None
 
     def index(self, index, forInsert = 0):
-	listLength = len(self._pageNames)
-	if type(index) == types.IntType:
-	    if forInsert and index <= listLength:
-		return index
-	    elif not forInsert and index < listLength:
-		return index
-	    else:
-		raise ValueError, 'index "%s" is out of range' % index
-	elif index is Pmw.END:
-	    if forInsert:
-		return listLength
-	    elif listLength > 0:
-		return listLength - 1
-	    else:
-		raise ValueError, 'NoteBook has no pages'
-	elif index is Pmw.SELECT:
-	    if listLength == 0:
-		raise ValueError, 'NoteBook has no pages'
+        listLength = len(self._pageNames)
+        if type(index) == types.IntType:
+            if forInsert and index <= listLength:
+                return index
+            elif not forInsert and index < listLength:
+                return index
+            else:
+                raise ValueError, 'index "%s" is out of range' % index
+        elif index is Pmw.END:
+            if forInsert:
+                return listLength
+            elif listLength > 0:
+                return listLength - 1
+            else:
+                raise ValueError, 'NoteBook has no pages'
+        elif index is Pmw.SELECT:
+            if listLength == 0:
+                raise ValueError, 'NoteBook has no pages'
             return self._pageNames.index(self.getcurselection())
-	else:
+        else:
             if index in self._pageNames:
                 return self._pageNames.index(index)
-	    validValues = 'a name, a number, Pmw.END or Pmw.SELECT'
-	    raise ValueError, \
+            validValues = 'a name, a number, Pmw.END or Pmw.SELECT'
+            raise ValueError, \
                 'bad index "%s": must be %s' % (index, validValues)
 
     def selectpage(self, page):
@@ -312,16 +312,16 @@ class NoteBook(Pmw.MegaArchetype):
             curpage = self.index(Pmw.SELECT)
         else:
             curpage = self.index(pageIndex)
-	if curpage > 0:
-	    self.selectpage(curpage - 1)
+        if curpage > 0:
+            self.selectpage(curpage - 1)
 
     def nextpage(self, pageIndex = None):
         if pageIndex is None:
             curpage = self.index(Pmw.SELECT)
         else:
             curpage = self.index(pageIndex)
-	if curpage < len(self._pageNames) - 1:
-	    self.selectpage(curpage + 1)
+        if curpage < len(self._pageNames) - 1:
+            self.selectpage(curpage + 1)
 
     def setnaturalsize(self, pageNames = None):
         self.update_idletasks()

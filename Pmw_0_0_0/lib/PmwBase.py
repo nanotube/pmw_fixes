@@ -100,13 +100,13 @@ def __methodDict(cls, dict):
     
     # do bases in reverse order, so first base overrides last base
     for super in baseList:
-	__methodDict(super, dict)
+        __methodDict(super, dict)
 
     # do my methods last to override base classes
     for key, value in cls.__dict__.items():
-	# ignore class attributes
-	if type(value) == types.FunctionType:
-	    dict[key] = value
+        # ignore class attributes
+        if type(value) == types.FunctionType:
+            dict[key] = value
 
 def __methods(cls):
     # Return all method names for a class.
@@ -117,7 +117,7 @@ def __methods(cls):
     dict = {}
     __methodDict(cls, dict)
     return dict.keys()
-	
+        
 # Function body to resolve a forwarding given the target method name and the 
 # attribute name. The resulting lambda requires only self, but will forward 
 # any other parameters.
@@ -128,9 +128,9 @@ __stringBody = (
 # Get a unique id
 __counter = 0
 def __unique():
-  global __counter
-  __counter = __counter + 1
-  return str(__counter)
+    global __counter
+    __counter = __counter + 1
+    return str(__counter)
 
 # Function body to resolve a forwarding given the target method name and the
 # index of the resolution function. The resulting lambda requires only self, 
@@ -177,22 +177,22 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
     # Allow an attribute name (String) or a function to determine the instance
     if type(toPart) != types.StringType:
 
-	# check that it is something like a function
-	if callable(toPart):
+        # check that it is something like a function
+        if callable(toPart):
 
-	    # If a method is passed, use the function within it
-	    if hasattr(toPart, 'im_func'):
-		toPart = toPart.im_func
-		
-	    # After this is set up, forwarders in this class will use
-	    # the forwarding function. The forwarding function name is
-	    # guaranteed to be unique, so that it can't be hidden by subclasses
-	    forwardName = '__fwdfunc__' + __unique()
-	    fromClass.__dict__[forwardName] = toPart
+            # If a method is passed, use the function within it
+            if hasattr(toPart, 'im_func'):
+                toPart = toPart.im_func
+                
+            # After this is set up, forwarders in this class will use
+            # the forwarding function. The forwarding function name is
+            # guaranteed to be unique, so that it can't be hidden by subclasses
+            forwardName = '__fwdfunc__' + __unique()
+            fromClass.__dict__[forwardName] = toPart
 
-	# It's not a valid type
-	else:
-	    raise TypeError, 'toPart must be attribute name, function or method'
+        # It's not a valid type
+        else:
+            raise TypeError, 'toPart must be attribute name, function or method'
 
     # get the full set of candidate methods
     dict = {}
@@ -200,30 +200,30 @@ def forwardmethods(fromClass, toClass, toPart, exclude = ()):
 
     # discard special methods
     for ex in dict.keys():
-	if ex[:1] == '_' or ex[-1:] == '_':
-	    del dict[ex]
+        if ex[:1] == '_' or ex[-1:] == '_':
+            del dict[ex]
     # discard dangerous methods supplied by the caller
     for ex in exclude:
-	if dict.has_key(ex):
-	    del dict[ex]
+        if dict.has_key(ex):
+            del dict[ex]
     # discard methods already defined in fromClass
     for ex in __methods(fromClass):
-	if dict.has_key(ex):
-	    del dict[ex]
+        if dict.has_key(ex):
+            del dict[ex]
 
     for method, func in dict.items():
-	d = {'method': method, 'func': func}
-	if type(toPart) == types.StringType:
-	    execString = \
-		__stringBody % {'method' : method, 'attribute' : toPart}
-	else:
-	    execString = \
-		__funcBody % {'forwardFunc' : forwardName, 'method' : method}
+        d = {'method': method, 'func': func}
+        if type(toPart) == types.StringType:
+            execString = \
+                __stringBody % {'method' : method, 'attribute' : toPart}
+        else:
+            execString = \
+                __funcBody % {'forwardFunc' : forwardName, 'method' : method}
 
-	exec execString in d
+        exec execString in d
 
-	# this creates a method
-	fromClass.__dict__[method] = d[method]
+        # this creates a method
+        fromClass.__dict__[method] = d[method]
 
 #=============================================================================
 
@@ -285,54 +285,54 @@ class MegaArchetype:
 
     def __init__(self, parent = None, hullClass = None):
 
-	# Mapping from each megawidget option to a list of information
-	# about the option
-	#   - default value
-	#   - current value
-	#   - function to call when the option is initialised in the
-	#     call to initialiseoptions() in the constructor or
-	#     modified via configure().  If this is INITOPT, the
-	#     option is an initialisation option (an option that can
-	#     be set by the call to the constructor but can not be
-	#     used with configure).
-	# This mapping is not initialised here, but in the call to
-	# defineoptions() which precedes construction of this base class.
-	#
-	# self._optionInfo = {}
+        # Mapping from each megawidget option to a list of information
+        # about the option
+        #   - default value
+        #   - current value
+        #   - function to call when the option is initialised in the
+        #     call to initialiseoptions() in the constructor or
+        #     modified via configure().  If this is INITOPT, the
+        #     option is an initialisation option (an option that can
+        #     be set by the call to the constructor but can not be
+        #     used with configure).
+        # This mapping is not initialised here, but in the call to
+        # defineoptions() which precedes construction of this base class.
+        #
+        # self._optionInfo = {}
 
-	# Mapping from each component name to a tuple of information
-	# about the component.
-	#   - component widget instance
-	#   - configure function of widget instance
-	#   - the class of the widget (Frame, EntryField, etc)
-	#   - cget function of widget instance
-	#   - the name of the component group of this component, if any
-	self.__componentInfo = {}
+        # Mapping from each component name to a tuple of information
+        # about the component.
+        #   - component widget instance
+        #   - configure function of widget instance
+        #   - the class of the widget (Frame, EntryField, etc)
+        #   - cget function of widget instance
+        #   - the name of the component group of this component, if any
+        self.__componentInfo = {}
 
-	# Mapping from alias names to the names of components or
-	# sub-components.
-	self.__componentAliases = {}
+        # Mapping from alias names to the names of components or
+        # sub-components.
+        self.__componentAliases = {}
 
-	# Contains information about the keywords provided to the
-	# constructor.  It is a mapping from the keyword to a tuple
-	# containing:
-	#    - value of keyword
-	#    - a boolean indicating if the keyword has been used.
-	# A keyword is used if, during the construction of a megawidget,
-	#    - it is defined in a call to defineoptions() or addoptions(), or
-	#    - it references, by name, a component of the megawidget, or
-	#    - it references, by group, at least one component
-	# At the end of megawidget construction, a call is made to
-	# initialiseoptions() which reports an error if there are
-	# unused options given to the constructor.
+        # Contains information about the keywords provided to the
+        # constructor.  It is a mapping from the keyword to a tuple
+        # containing:
+        #    - value of keyword
+        #    - a boolean indicating if the keyword has been used.
+        # A keyword is used if, during the construction of a megawidget,
+        #    - it is defined in a call to defineoptions() or addoptions(), or
+        #    - it references, by name, a component of the megawidget, or
+        #    - it references, by group, at least one component
+        # At the end of megawidget construction, a call is made to
+        # initialiseoptions() which reports an error if there are
+        # unused options given to the constructor.
         #
         # After megawidget construction, the dictionary contains
         # keywords which refer to a dynamic component group, so that
         # these components can be created after megawidget
         # construction and still use the group options given to the
         # constructor.
-	#
-	# self._constructorKeywords = {}
+        #
+        # self._constructorKeywords = {}
 
         # List of dynamic component groups.  If a group is included in
         # this list, then it not an error if a keyword argument for
@@ -340,48 +340,48 @@ class MegaArchetype:
         # no components with this group have been created.
         # self._dynamicGroups = ()
 
-	if hullClass is None:
-	    self._hull = None
-	else:
-	    if parent is None:
-		parent = Tkinter._default_root
+        if hullClass is None:
+            self._hull = None
+        else:
+            if parent is None:
+                parent = Tkinter._default_root
 
-	    # Create the hull.
-	    self._hull = self.createcomponent('hull',
-		    (), None,
-		    hullClass, (parent,))
-	    _hullToMegaWidget[self._hull] = self
+            # Create the hull.
+            self._hull = self.createcomponent('hull',
+                    (), None,
+                    hullClass, (parent,))
+            _hullToMegaWidget[self._hull] = self
 
-	    if _useTkOptionDb:
-		# Now that a widget has been created, query the Tk
-		# option database to get the default values for the
-		# options which have not been set in the call to the
-		# constructor.  This assumes that defineoptions() is
-		# called before the __init__().
-		option_get = self.option_get
-		_VALUE = _OPT_VALUE
-		_DEFAULT = _OPT_DEFAULT
-		for name, info in self._optionInfo.items():
-		    value = info[_VALUE]
-		    if value is _DEFAULT_OPTION_VALUE:
-			resourceClass = string.upper(name[0]) + name[1:]
-			value = option_get(name, resourceClass)
-			if value != '':
-			    try:
-				# Convert the string to int/float/tuple, etc
-				value = eval(value, {'__builtins__': {}})
-			    except:
-				pass
-			    info[_VALUE] = value
-			else:
-			    info[_VALUE] = info[_DEFAULT]
+            if _useTkOptionDb:
+                # Now that a widget has been created, query the Tk
+                # option database to get the default values for the
+                # options which have not been set in the call to the
+                # constructor.  This assumes that defineoptions() is
+                # called before the __init__().
+                option_get = self.option_get
+                _VALUE = _OPT_VALUE
+                _DEFAULT = _OPT_DEFAULT
+                for name, info in self._optionInfo.items():
+                    value = info[_VALUE]
+                    if value is _DEFAULT_OPTION_VALUE:
+                        resourceClass = string.upper(name[0]) + name[1:]
+                        value = option_get(name, resourceClass)
+                        if value != '':
+                            try:
+                                # Convert the string to int/float/tuple, etc
+                                value = eval(value, {'__builtins__': {}})
+                            except:
+                                pass
+                            info[_VALUE] = value
+                        else:
+                            info[_VALUE] = info[_DEFAULT]
 
     def destroy(self):
         # Clean up optionInfo in case it contains circular references
         # in the function field, such as self._settitle in class
         # MegaToplevel.
 
-	self._optionInfo = {}
+        self._optionInfo = {}
         if self._hull is not None:
             del _hullToMegaWidget[self._hull]
             self._hull.destroy()
@@ -390,343 +390,343 @@ class MegaArchetype:
     # Methods used (mainly) during the construction of the megawidget.
 
     def defineoptions(self, keywords, optionDefs, dynamicGroups = ()):
-	# Create options, providing the default value and the method
-	# to call when the value is changed.  If any option created by
-	# base classes has the same name as one in <optionDefs>, the
-	# base class's value and function will be overriden.
+        # Create options, providing the default value and the method
+        # to call when the value is changed.  If any option created by
+        # base classes has the same name as one in <optionDefs>, the
+        # base class's value and function will be overriden.
 
-	# This should be called before the constructor of the base
-	# class, so that default values defined in the derived class
-	# override those in the base class.
+        # This should be called before the constructor of the base
+        # class, so that default values defined in the derived class
+        # override those in the base class.
 
-	if not hasattr(self, '_constructorKeywords'):
+        if not hasattr(self, '_constructorKeywords'):
             # First time defineoptions has been called.
-	    tmp = {}
-	    for option, value in keywords.items():
-		tmp[option] = [value, 0]
-	    self._constructorKeywords = tmp
-	    self._optionInfo = {}
-	    self._initialiseoptions_counter = 0
+            tmp = {}
+            for option, value in keywords.items():
+                tmp[option] = [value, 0]
+            self._constructorKeywords = tmp
+            self._optionInfo = {}
+            self._initialiseoptions_counter = 0
         self._initialiseoptions_counter = self._initialiseoptions_counter + 1
 
         if not hasattr(self, '_dynamicGroups'):
             self._dynamicGroups = ()
         self._dynamicGroups = self._dynamicGroups + tuple(dynamicGroups)
-	self.addoptions(optionDefs)
+        self.addoptions(optionDefs)
 
     def addoptions(self, optionDefs):
-	# Add additional options, providing the default value and the
-	# method to call when the value is changed.  See
-	# "defineoptions" for more details
+        # Add additional options, providing the default value and the
+        # method to call when the value is changed.  See
+        # "defineoptions" for more details
 
-	# optimisations:
-	optionInfo = self._optionInfo
-	optionInfo_has_key = optionInfo.has_key
-	keywords = self._constructorKeywords
-	keywords_has_key = keywords.has_key
-	FUNCTION = _OPT_FUNCTION
+        # optimisations:
+        optionInfo = self._optionInfo
+        optionInfo_has_key = optionInfo.has_key
+        keywords = self._constructorKeywords
+        keywords_has_key = keywords.has_key
+        FUNCTION = _OPT_FUNCTION
 
-	for name, default, function in optionDefs:
-	    if '_' not in name:
-		# The option will already exist if it has been defined
-		# in a derived class.  In this case, do not override the
-		# default value of the option or the callback function
-		# if it is not None.
-		if not optionInfo_has_key(name):
-		    if keywords_has_key(name):
-			value = keywords[name][0]
-			optionInfo[name] = [default, value, function]
-			del keywords[name]
-		    else:
-			if _useTkOptionDb:
-			    optionInfo[name] = \
-				    [default, _DEFAULT_OPTION_VALUE, function]
-			else:
-			    optionInfo[name] = [default, default, function]
-		elif optionInfo[name][FUNCTION] is None:
-		    optionInfo[name][FUNCTION] = function
-	    else:
-		# This option is of the form "component_option".  If this is
-		# not already defined in self._constructorKeywords add it.
-		# This allows a derived class to override the default value
-		# of an option of a component of a base class.
-		if not keywords_has_key(name):
-		    keywords[name] = [default, 0]
+        for name, default, function in optionDefs:
+            if '_' not in name:
+                # The option will already exist if it has been defined
+                # in a derived class.  In this case, do not override the
+                # default value of the option or the callback function
+                # if it is not None.
+                if not optionInfo_has_key(name):
+                    if keywords_has_key(name):
+                        value = keywords[name][0]
+                        optionInfo[name] = [default, value, function]
+                        del keywords[name]
+                    else:
+                        if _useTkOptionDb:
+                            optionInfo[name] = \
+                                    [default, _DEFAULT_OPTION_VALUE, function]
+                        else:
+                            optionInfo[name] = [default, default, function]
+                elif optionInfo[name][FUNCTION] is None:
+                    optionInfo[name][FUNCTION] = function
+            else:
+                # This option is of the form "component_option".  If this is
+                # not already defined in self._constructorKeywords add it.
+                # This allows a derived class to override the default value
+                # of an option of a component of a base class.
+                if not keywords_has_key(name):
+                    keywords[name] = [default, 0]
 
     def createcomponent(self, componentName, componentAliases,
             componentGroup, widgetClass, *widgetArgs, **kw):
-	# Create a component (during construction or later).
+        # Create a component (during construction or later).
 
-	if self.__componentInfo.has_key(componentName):
-	    raise ValueError, 'Component "%s" already exists' % componentName
+        if self.__componentInfo.has_key(componentName):
+            raise ValueError, 'Component "%s" already exists' % componentName
 
-	if '_' in componentName:
-	    raise ValueError, \
+        if '_' in componentName:
+            raise ValueError, \
                     'Component name "%s" must not contain "_"' % componentName
 
-	if hasattr(self, '_constructorKeywords'):
-	    keywords = self._constructorKeywords
-	else:
-	    keywords = {}
-	for alias, component in componentAliases:
-	    # Create aliases to the component and its sub-components.
-	    index = string.find(component, '_')
-	    if index < 0:
-		self.__componentAliases[alias] = (component, None)
-	    else:
-		mainComponent = component[:index]
-		subComponent = component[(index + 1):]
-		self.__componentAliases[alias] = (mainComponent, subComponent)
+        if hasattr(self, '_constructorKeywords'):
+            keywords = self._constructorKeywords
+        else:
+            keywords = {}
+        for alias, component in componentAliases:
+            # Create aliases to the component and its sub-components.
+            index = string.find(component, '_')
+            if index < 0:
+                self.__componentAliases[alias] = (component, None)
+            else:
+                mainComponent = component[:index]
+                subComponent = component[(index + 1):]
+                self.__componentAliases[alias] = (mainComponent, subComponent)
 
-	    # Remove aliases from the constructor keyword arguments by
-	    # replacing any keyword arguments that begin with *alias*
-	    # with corresponding keys beginning with *component*.
+            # Remove aliases from the constructor keyword arguments by
+            # replacing any keyword arguments that begin with *alias*
+            # with corresponding keys beginning with *component*.
 
-	    alias = alias + '_'
-	    aliasLen = len(alias)
-	    for option in keywords.keys():
-		if len(option) > aliasLen and option[:aliasLen] == alias:
-		    newkey = component + '_' + option[aliasLen:]
-		    keywords[newkey] = keywords[option]
-		    del keywords[option]
+            alias = alias + '_'
+            aliasLen = len(alias)
+            for option in keywords.keys():
+                if len(option) > aliasLen and option[:aliasLen] == alias:
+                    newkey = component + '_' + option[aliasLen:]
+                    keywords[newkey] = keywords[option]
+                    del keywords[option]
 
-	componentPrefix = componentName + '_'
-	nameLen = len(componentPrefix)
-	for option in keywords.keys():
-	    if len(option) > nameLen and option[:nameLen] == componentPrefix:
-		# The keyword argument refers to this component, so add
-		# this to the options to use when constructing the widget.
-		kw[option[nameLen:]] = keywords[option][0]
-		del keywords[option]
-	    else:
-		# Check if this keyword argument refers to the group
-		# of this component.  If so, add this to the options
-		# to use when constructing the widget.  Mark the
-		# keyword argument as being used, but do not remove it
-		# since it may be required when creating another
-		# component.
-		index = string.find(option, '_')
-		if index >= 0 and componentGroup == option[:index]:
-		    rest = option[(index + 1):]
-		    kw[rest] = keywords[option][0]
-		    keywords[option][1] = 1
+        componentPrefix = componentName + '_'
+        nameLen = len(componentPrefix)
+        for option in keywords.keys():
+            if len(option) > nameLen and option[:nameLen] == componentPrefix:
+                # The keyword argument refers to this component, so add
+                # this to the options to use when constructing the widget.
+                kw[option[nameLen:]] = keywords[option][0]
+                del keywords[option]
+            else:
+                # Check if this keyword argument refers to the group
+                # of this component.  If so, add this to the options
+                # to use when constructing the widget.  Mark the
+                # keyword argument as being used, but do not remove it
+                # since it may be required when creating another
+                # component.
+                index = string.find(option, '_')
+                if index >= 0 and componentGroup == option[:index]:
+                    rest = option[(index + 1):]
+                    kw[rest] = keywords[option][0]
+                    keywords[option][1] = 1
 
-	if kw.has_key('pyclass'):
-	    widgetClass = kw['pyclass']
-	    del kw['pyclass']
-	if widgetClass is None:
-	    return None
+        if kw.has_key('pyclass'):
+            widgetClass = kw['pyclass']
+            del kw['pyclass']
+        if widgetClass is None:
+            return None
         if len(widgetArgs) == 1 and type(widgetArgs[0]) == types.TupleType:
             # Arguments to the constructor can be specified as either
             # multiple trailing arguments to createcomponent() or as a
             # single tuple argument.
             widgetArgs = widgetArgs[0]
-	widget = apply(widgetClass, widgetArgs, kw)
-	componentClass = widget.__class__.__name__
-	self.__componentInfo[componentName] = (widget, widget.configure,
-		componentClass, widget.cget, componentGroup)
+        widget = apply(widgetClass, widgetArgs, kw)
+        componentClass = widget.__class__.__name__
+        self.__componentInfo[componentName] = (widget, widget.configure,
+                componentClass, widget.cget, componentGroup)
 
-	return widget
+        return widget
 
     def destroycomponent(self, name):
-	# Remove a megawidget component.
+        # Remove a megawidget component.
 
-	# This command is for use by megawidget designers to destroy a
-	# megawidget component.
+        # This command is for use by megawidget designers to destroy a
+        # megawidget component.
 
-	self.__componentInfo[name][0].destroy()
-	del self.__componentInfo[name]
+        self.__componentInfo[name][0].destroy()
+        del self.__componentInfo[name]
 
     def createlabel(self, parent, childCols = 1, childRows = 1):
 
-	labelpos = self['labelpos']
-	labelmargin = self['labelmargin']
-	if labelpos is None:
-	    return
+        labelpos = self['labelpos']
+        labelmargin = self['labelmargin']
+        if labelpos is None:
+            return
 
-	label = self.createcomponent('label',
-		(), None,
-		Tkinter.Label, (parent,))
+        label = self.createcomponent('label',
+                (), None,
+                Tkinter.Label, (parent,))
 
-	if labelpos[0] in 'ns':
-	    # vertical layout
-	    if labelpos[0] == 'n':
-		row = 0
-		margin = 1
-	    else:
-		row = childRows + 3
-		margin = row - 1
-	    label.grid(column=2, row=row, columnspan=childCols, sticky=labelpos)
-	    parent.grid_rowconfigure(margin, minsize=labelmargin)
-	else:
-	    # horizontal layout
-	    if labelpos[0] == 'w':
-		col = 0
-		margin = 1
-	    else:
-		col = childCols + 3
-		margin = col - 1
-	    label.grid(column=col, row=2, rowspan=childRows, sticky=labelpos)
-	    parent.grid_columnconfigure(margin, minsize=labelmargin)
+        if labelpos[0] in 'ns':
+            # vertical layout
+            if labelpos[0] == 'n':
+                row = 0
+                margin = 1
+            else:
+                row = childRows + 3
+                margin = row - 1
+            label.grid(column=2, row=row, columnspan=childCols, sticky=labelpos)
+            parent.grid_rowconfigure(margin, minsize=labelmargin)
+        else:
+            # horizontal layout
+            if labelpos[0] == 'w':
+                col = 0
+                margin = 1
+            else:
+                col = childCols + 3
+                margin = col - 1
+            label.grid(column=col, row=2, rowspan=childRows, sticky=labelpos)
+            parent.grid_columnconfigure(margin, minsize=labelmargin)
 
     def initialiseoptions(self, dummy = None):
         self._initialiseoptions_counter = self._initialiseoptions_counter - 1
-	if self._initialiseoptions_counter == 0:
-	    unusedOptions = []
-	    keywords = self._constructorKeywords
-	    for name in keywords.keys():
-		used = keywords[name][1]
-		if not used:
+        if self._initialiseoptions_counter == 0:
+            unusedOptions = []
+            keywords = self._constructorKeywords
+            for name in keywords.keys():
+                used = keywords[name][1]
+                if not used:
                     # This keyword argument has not been used.  If it
                     # does not refer to a dynamic group, mark it as
                     # unused.
                     index = string.find(name, '_')
                     if index < 0 or name[:index] not in self._dynamicGroups:
                         unusedOptions.append(name)
-	    if len(unusedOptions) > 0:
-		if len(unusedOptions) == 1:
-		    text = 'Unknown option "'
-		else:
-		    text = 'Unknown options "'
-		raise KeyError, text + string.join(unusedOptions, ', ') + \
-			'" for ' + self.__class__.__name__
+            if len(unusedOptions) > 0:
+                if len(unusedOptions) == 1:
+                    text = 'Unknown option "'
+                else:
+                    text = 'Unknown options "'
+                raise KeyError, text + string.join(unusedOptions, ', ') + \
+                        '" for ' + self.__class__.__name__
 
-	    # Call the configuration callback function for every option.
-	    FUNCTION = _OPT_FUNCTION
-	    for info in self._optionInfo.values():
-		func = info[FUNCTION]
-		if func is not None and func is not INITOPT:
-		    func()
+            # Call the configuration callback function for every option.
+            FUNCTION = _OPT_FUNCTION
+            for info in self._optionInfo.values():
+                func = info[FUNCTION]
+                if func is not None and func is not INITOPT:
+                    func()
 
     #======================================================================
     # Method used to configure the megawidget.
 
     def configure(self, option=None, **kw):
-	# Query or configure the megawidget options.
-	#
-	# If not empty, *kw* is a dictionary giving new
-	# values for some of the options of this megawidget or its
-	# components.  For options defined for this megawidget, set
-	# the value of the option to the new value and call the
-	# configuration callback function, if any.  For options of the
-	# form <component>_<option>, where <component> is a component
-	# of this megawidget, call the configure method of the
-	# component giving it the new value of the option.  The
-	# <component> part may be an alias or a component group name.
-	#
-	# If *option* is None, return all megawidget configuration
-	# options and settings.  Options are returned as standard 5
-	# element tuples
-	#
-	# If *option* is a string, return the 5 element tuple for the
-	# given configuration option.
+        # Query or configure the megawidget options.
+        #
+        # If not empty, *kw* is a dictionary giving new
+        # values for some of the options of this megawidget or its
+        # components.  For options defined for this megawidget, set
+        # the value of the option to the new value and call the
+        # configuration callback function, if any.  For options of the
+        # form <component>_<option>, where <component> is a component
+        # of this megawidget, call the configure method of the
+        # component giving it the new value of the option.  The
+        # <component> part may be an alias or a component group name.
+        #
+        # If *option* is None, return all megawidget configuration
+        # options and settings.  Options are returned as standard 5
+        # element tuples
+        #
+        # If *option* is a string, return the 5 element tuple for the
+        # given configuration option.
 
-	# First, deal with the option queries.
-	if len(kw) == 0:
-	    # This configure call is querying the values of one or all options.
-	    # Return 5-tuples:
-	    #     (optionName, resourceName, resourceClass, default, value)
-	    if option is None:
-		rtn = {}
-		for option, config in self._optionInfo.items():
-		    resourceClass = string.upper(option[0]) + option[1:]
-		    rtn[option] = (option, option, resourceClass,
-			    config[_OPT_DEFAULT], config[_OPT_VALUE])
-		return rtn
-	    else:
-		config = self._optionInfo[option]
-		resourceClass = string.upper(option[0]) + option[1:]
-		return (option, option, resourceClass, config[_OPT_DEFAULT],
-			config[_OPT_VALUE])
+        # First, deal with the option queries.
+        if len(kw) == 0:
+            # This configure call is querying the values of one or all options.
+            # Return 5-tuples:
+            #     (optionName, resourceName, resourceClass, default, value)
+            if option is None:
+                rtn = {}
+                for option, config in self._optionInfo.items():
+                    resourceClass = string.upper(option[0]) + option[1:]
+                    rtn[option] = (option, option, resourceClass,
+                            config[_OPT_DEFAULT], config[_OPT_VALUE])
+                return rtn
+            else:
+                config = self._optionInfo[option]
+                resourceClass = string.upper(option[0]) + option[1:]
+                return (option, option, resourceClass, config[_OPT_DEFAULT],
+                        config[_OPT_VALUE])
 
-	# optimisations:
-	optionInfo = self._optionInfo
-	optionInfo_has_key = optionInfo.has_key
-	componentInfo = self.__componentInfo
-	componentInfo_has_key = componentInfo.has_key
-	componentAliases = self.__componentAliases
-	componentAliases_has_key = componentAliases.has_key
-	VALUE = _OPT_VALUE
-	FUNCTION = _OPT_FUNCTION
+        # optimisations:
+        optionInfo = self._optionInfo
+        optionInfo_has_key = optionInfo.has_key
+        componentInfo = self.__componentInfo
+        componentInfo_has_key = componentInfo.has_key
+        componentAliases = self.__componentAliases
+        componentAliases_has_key = componentAliases.has_key
+        VALUE = _OPT_VALUE
+        FUNCTION = _OPT_FUNCTION
 
-	# This will contain a list of options in *kw* which
-	# are known to this megawidget.
-	directOptions = []
+        # This will contain a list of options in *kw* which
+        # are known to this megawidget.
+        directOptions = []
 
-	# This will contain information about the options in
-	# *kw* of the form <component>_<option>, where
-	# <component> is a component of this megawidget.  It is a
-	# dictionary whose keys are the configure method of each
-	# component and whose values are a dictionary of options and
-	# values for the component.
-	indirectOptions = {}
-	indirectOptions_has_key = indirectOptions.has_key
+        # This will contain information about the options in
+        # *kw* of the form <component>_<option>, where
+        # <component> is a component of this megawidget.  It is a
+        # dictionary whose keys are the configure method of each
+        # component and whose values are a dictionary of options and
+        # values for the component.
+        indirectOptions = {}
+        indirectOptions_has_key = indirectOptions.has_key
 
-	for option, value in kw.items():
-	    if optionInfo_has_key(option):
-		# This is one of the options of this megawidget. 
-		# Make sure it is not an initialisation option.
-		if optionInfo[option][FUNCTION] is INITOPT:
-		    raise KeyError, \
-			    'Cannot configure initialisation option "' \
-			    + option + '" for ' + self.__class__.__name__
-		optionInfo[option][VALUE] = value
-		directOptions.append(option)
-	    else:
-		index = string.find(option, '_')
-		if index >= 0:
-		    # This option may be of the form <component>_<option>.
-		    component = option[:index]
-		    componentOption = option[(index + 1):]
+        for option, value in kw.items():
+            if optionInfo_has_key(option):
+                # This is one of the options of this megawidget. 
+                # Make sure it is not an initialisation option.
+                if optionInfo[option][FUNCTION] is INITOPT:
+                    raise KeyError, \
+                            'Cannot configure initialisation option "' \
+                            + option + '" for ' + self.__class__.__name__
+                optionInfo[option][VALUE] = value
+                directOptions.append(option)
+            else:
+                index = string.find(option, '_')
+                if index >= 0:
+                    # This option may be of the form <component>_<option>.
+                    component = option[:index]
+                    componentOption = option[(index + 1):]
 
-		    # Expand component alias
-		    if componentAliases_has_key(component):
-			component, subComponent = componentAliases[component]
-			if subComponent is not None:
-			    componentOption = subComponent + '_' \
-				    + componentOption
+                    # Expand component alias
+                    if componentAliases_has_key(component):
+                        component, subComponent = componentAliases[component]
+                        if subComponent is not None:
+                            componentOption = subComponent + '_' \
+                                    + componentOption
 
-			# Expand option string to write on error
-			option = component + '_' + componentOption
+                        # Expand option string to write on error
+                        option = component + '_' + componentOption
 
-		    if componentInfo_has_key(component):
-			# Configure the named component
-			componentConfigFuncs = [componentInfo[component][1]]
-		    else:
-			# Check if this is a group name and configure all
-			# components in the group.
-			componentConfigFuncs = []
-			for info in componentInfo.values():
-			    if info[4] == component:
-			        componentConfigFuncs.append(info[1])
+                    if componentInfo_has_key(component):
+                        # Configure the named component
+                        componentConfigFuncs = [componentInfo[component][1]]
+                    else:
+                        # Check if this is a group name and configure all
+                        # components in the group.
+                        componentConfigFuncs = []
+                        for info in componentInfo.values():
+                            if info[4] == component:
+                                componentConfigFuncs.append(info[1])
 
                         if len(componentConfigFuncs) == 0 and \
                                 component not in self._dynamicGroups:
-			    raise KeyError, 'Unknown option "' + option + \
-				    '" for ' + self.__class__.__name__
+                            raise KeyError, 'Unknown option "' + option + \
+                                    '" for ' + self.__class__.__name__
 
-		    # Add the configure method(s) (may be more than
-		    # one if this is configuring a component group)
-		    # and option/value to dictionary.
-		    for componentConfigFunc in componentConfigFuncs:
-			if not indirectOptions_has_key(componentConfigFunc):
-			    indirectOptions[componentConfigFunc] = {}
-			indirectOptions[componentConfigFunc][componentOption] \
-				= value
-		else:
-		    raise KeyError, 'Unknown option "' + option + \
-			    '" for ' + self.__class__.__name__
+                    # Add the configure method(s) (may be more than
+                    # one if this is configuring a component group)
+                    # and option/value to dictionary.
+                    for componentConfigFunc in componentConfigFuncs:
+                        if not indirectOptions_has_key(componentConfigFunc):
+                            indirectOptions[componentConfigFunc] = {}
+                        indirectOptions[componentConfigFunc][componentOption] \
+                                = value
+                else:
+                    raise KeyError, 'Unknown option "' + option + \
+                            '" for ' + self.__class__.__name__
 
-	# Call the configure methods for any components.
-	map(apply, indirectOptions.keys(),
-		((),) * len(indirectOptions), indirectOptions.values())
+        # Call the configure methods for any components.
+        map(apply, indirectOptions.keys(),
+                ((),) * len(indirectOptions), indirectOptions.values())
 
-	# Call the configuration callback function for each option.
-	for option in directOptions:
-	    info = optionInfo[option]
-	    func = info[_OPT_FUNCTION]
-	    if func is not None:
-	      func()
+        # Call the configuration callback function for each option.
+        for option in directOptions:
+            info = optionInfo[option]
+            func = info[_OPT_FUNCTION]
+            if func is not None:
+              func()
 
     def __setitem__(self, key, value):
         apply(self.configure, (), {key: value})
@@ -735,125 +735,125 @@ class MegaArchetype:
     # Methods used to query the megawidget.
 
     def component(self, name):
-	# Return a component widget of the megawidget given the
-	# component's name
-	# This allows the user of a megawidget to access and configure
-	# widget components directly.
+        # Return a component widget of the megawidget given the
+        # component's name
+        # This allows the user of a megawidget to access and configure
+        # widget components directly.
 
-	# Find the main component and any subcomponents
-	index = string.find(name, '_')
-	if index < 0:
-	    component = name
-	    remainingComponents = None
-	else:
-	    component = name[:index]
-	    remainingComponents = name[(index + 1):]
+        # Find the main component and any subcomponents
+        index = string.find(name, '_')
+        if index < 0:
+            component = name
+            remainingComponents = None
+        else:
+            component = name[:index]
+            remainingComponents = name[(index + 1):]
 
-	# Expand component alias
-	if self.__componentAliases.has_key(component):
-	    component, subComponent = self.__componentAliases[component]
-	    if subComponent is not None:
-		if remainingComponents is None:
-		    remainingComponents = subComponent
-		else:
-		    remainingComponents = subComponent + '_' \
-			    + remainingComponents
+        # Expand component alias
+        if self.__componentAliases.has_key(component):
+            component, subComponent = self.__componentAliases[component]
+            if subComponent is not None:
+                if remainingComponents is None:
+                    remainingComponents = subComponent
+                else:
+                    remainingComponents = subComponent + '_' \
+                            + remainingComponents
 
-	widget = self.__componentInfo[component][0]
-	if remainingComponents is None:
-	    return widget
-	else:
-	    return widget.component(remainingComponents)
+        widget = self.__componentInfo[component][0]
+        if remainingComponents is None:
+            return widget
+        else:
+            return widget.component(remainingComponents)
 
     def interior(self):
-	return self._hull
+        return self._hull
 
     def hulldestroyed(self):
-	return not _hullToMegaWidget.has_key(self._hull)
+        return not _hullToMegaWidget.has_key(self._hull)
 
     def __str__(self):
-	return str(self._hull)
+        return str(self._hull)
 
     def cget(self, option):
-	# Get current configuration setting.
+        # Get current configuration setting.
 
-	# Return the value of an option, for example myWidget['font']. 
+        # Return the value of an option, for example myWidget['font']. 
 
-	if self._optionInfo.has_key(option):
-	    return self._optionInfo[option][_OPT_VALUE]
-	else:
-	    index = string.find(option, '_')
-	    if index >= 0:
-		component = option[:index]
-		componentOption = option[(index + 1):]
+        if self._optionInfo.has_key(option):
+            return self._optionInfo[option][_OPT_VALUE]
+        else:
+            index = string.find(option, '_')
+            if index >= 0:
+                component = option[:index]
+                componentOption = option[(index + 1):]
 
-		# Expand component alias
-		if self.__componentAliases.has_key(component):
-		    component, subComponent = self.__componentAliases[component]
-		    if subComponent is not None:
-			componentOption = subComponent + '_' + componentOption
+                # Expand component alias
+                if self.__componentAliases.has_key(component):
+                    component, subComponent = self.__componentAliases[component]
+                    if subComponent is not None:
+                        componentOption = subComponent + '_' + componentOption
 
-		    # Expand option string to write on error
-		    option = component + '_' + componentOption
+                    # Expand option string to write on error
+                    option = component + '_' + componentOption
 
-		if self.__componentInfo.has_key(component):
-		    # Call cget on the component.
-		    componentCget = self.__componentInfo[component][3]
-		    return componentCget(componentOption)
-		else:
-		    # If this is a group name, call cget for one of
-		    # the components in the group.
-		    for info in self.__componentInfo.values():
-			if info[4] == component:
-			    componentCget = info[3]
-			    return componentCget(componentOption)
+                if self.__componentInfo.has_key(component):
+                    # Call cget on the component.
+                    componentCget = self.__componentInfo[component][3]
+                    return componentCget(componentOption)
+                else:
+                    # If this is a group name, call cget for one of
+                    # the components in the group.
+                    for info in self.__componentInfo.values():
+                        if info[4] == component:
+                            componentCget = info[3]
+                            return componentCget(componentOption)
 
-	raise KeyError, 'Unknown option "' + option + \
-		'" for ' + self.__class__.__name__
+        raise KeyError, 'Unknown option "' + option + \
+                '" for ' + self.__class__.__name__
 
     __getitem__ = cget
 
     def isinitoption(self, option):
-	return self._optionInfo[option][_OPT_FUNCTION] is INITOPT
+        return self._optionInfo[option][_OPT_FUNCTION] is INITOPT
 
     def options(self):
-	options = []
-	if hasattr(self, '_optionInfo'):
-	    for option, info in self._optionInfo.items():
-		isinit = info[_OPT_FUNCTION] is INITOPT
-		default = info[_OPT_DEFAULT]
-		options.append((option, default, isinit))
-	    options.sort()
-	return options
+        options = []
+        if hasattr(self, '_optionInfo'):
+            for option, info in self._optionInfo.items():
+                isinit = info[_OPT_FUNCTION] is INITOPT
+                default = info[_OPT_DEFAULT]
+                options.append((option, default, isinit))
+            options.sort()
+        return options
 
     def components(self):
-	# Return a list of all components.
+        # Return a list of all components.
 
-	# This list includes the 'hull' component and all widget subcomponents
+        # This list includes the 'hull' component and all widget subcomponents
 
-	names = self.__componentInfo.keys()
-	names.sort()
-	return names
+        names = self.__componentInfo.keys()
+        names.sort()
+        return names
 
     def componentaliases(self):
-	# Return a list of all component aliases.
+        # Return a list of all component aliases.
 
-	componentAliases = self.__componentAliases
+        componentAliases = self.__componentAliases
 
-	names = componentAliases.keys()
-	names.sort()
-	rtn = []
-	for alias in names:
-	    (mainComponent, subComponent) = componentAliases[alias]
-	    if subComponent is None:
-		rtn.append((alias, mainComponent))
-	    else:
-		rtn.append((alias, mainComponent + '_' + subComponent))
-	    
-	return rtn
+        names = componentAliases.keys()
+        names.sort()
+        rtn = []
+        for alias in names:
+            (mainComponent, subComponent) = componentAliases[alias]
+            if subComponent is None:
+                rtn.append((alias, mainComponent))
+            else:
+                rtn.append((alias, mainComponent + '_' + subComponent))
+            
+        return rtn
 
     def componentgroup(self, name):
-	return self.__componentInfo[name][4]
+        return self.__componentInfo[name][4]
 
 #=============================================================================
 
@@ -960,20 +960,20 @@ def _grabtop():
 class MegaToplevel(MegaArchetype):
 
     def __init__(self, parent = None, **kw):
-	# Define the options for this megawidget.
-	optiondefs = (
+        # Define the options for this megawidget.
+        optiondefs = (
             ('activatecommand',   None,                     None),
             ('deactivatecommand', None,                     None),
             ('master',            None,                     None),
             ('title',             None,                     self._settitle),
             ('hull_class',        self.__class__.__name__,  None),
-	)
-	self.defineoptions(kw, optiondefs)
+        )
+        self.defineoptions(kw, optiondefs)
 
-	# Initialise the base class (after defining the options).
-	MegaArchetype.__init__(self, parent, Tkinter.Toplevel)
+        # Initialise the base class (after defining the options).
+        MegaArchetype.__init__(self, parent, Tkinter.Toplevel)
 
-	# Initialise instance.
+        # Initialise instance.
 
         # Set WM_DELETE_WINDOW protocol, deleting any old callback, so
         # memory does not leak.
@@ -981,50 +981,50 @@ class MegaToplevel(MegaArchetype):
             self._hull.tk.deletecommand(self._hull._Pmw_WM_DELETE_name)
         self._hull._Pmw_WM_DELETE_name = \
                 self.register(self._userDeleteWindow, needcleanup = 0)
-	self.protocol('WM_DELETE_WINDOW', self._hull._Pmw_WM_DELETE_name)
+        self.protocol('WM_DELETE_WINDOW', self._hull._Pmw_WM_DELETE_name)
 
-	# Initialise instance variables.
+        # Initialise instance variables.
 
-	self._firstShowing = 1
-	# Used by show() to ensure window retains previous position on screen.
+        self._firstShowing = 1
+        # Used by show() to ensure window retains previous position on screen.
 
-	# The IntVar() variable to wait on during a modal dialog.
-	self._wait = None
+        # The IntVar() variable to wait on during a modal dialog.
+        self._wait = None
 
-	self._active = 0
-	self._userDeleteFunc = self.destroy
-	self._userModalDeleteFunc = self.deactivate
+        self._active = 0
+        self._userDeleteFunc = self.destroy
+        self._userModalDeleteFunc = self.deactivate
 
-	# Check keywords and initialise options.
-	self.initialiseoptions()
+        # Check keywords and initialise options.
+        self.initialiseoptions()
 
     def _settitle(self):
-	title = self['title']
-	if title is not None:
-	    self.title(title)
+        title = self['title']
+        if title is not None:
+            self.title(title)
 
     def userdeletefunc(self, func=None):
         if func:
-	    self._userDeleteFunc = func
-	else:
-	    return self._userDeleteFunc
+            self._userDeleteFunc = func
+        else:
+            return self._userDeleteFunc
 
     def usermodaldeletefunc(self, func=None):
         if func:
-	    self._userModalDeleteFunc = func
-	else:
-	    return self._userModalDeleteFunc
+            self._userModalDeleteFunc = func
+        else:
+            return self._userModalDeleteFunc
 
     def _userDeleteWindow(self):
-	if self.active():
-	    self._userModalDeleteFunc()
-	else:
-	    self._userDeleteFunc()
+        if self.active():
+            self._userModalDeleteFunc()
+        else:
+            self._userDeleteFunc()
 
     def destroy(self):
-	# Allow this to be called more than once.
-	if _hullToMegaWidget.has_key(self._hull):
-	    self.deactivate()
+        # Allow this to be called more than once.
+        if _hullToMegaWidget.has_key(self._hull):
+            self.deactivate()
 
             # Remove circular references, so that object can get cleaned up.
             del self._userDeleteFunc
@@ -1033,14 +1033,14 @@ class MegaToplevel(MegaArchetype):
             MegaArchetype.destroy(self)
 
     def show(self, master = None):
-	if self.state() != 'normal':
-	    if self._firstShowing:
-		# Just let the window manager determine the window
-		# position for the first time.
-		geom = None
-	    else:
-		# Position the window at the same place it was last time.
-		geom = self._sameposition()
+        if self.state() != 'normal':
+            if self._firstShowing:
+                # Just let the window manager determine the window
+                # position for the first time.
+                geom = None
+            else:
+                # Position the window at the same place it was last time.
+                geom = self._sameposition()
             setgeometryanddeiconify(self, geom)
 
         if self._firstShowing:
@@ -1063,15 +1063,15 @@ class MegaToplevel(MegaArchetype):
         self.focus()
 
     def _centreonscreen(self):
-	# Centre the window on the screen.  (Actually halfway across
-	# and one third down.)
+        # Centre the window on the screen.  (Actually halfway across
+        # and one third down.)
 
         parent = self.winfo_parent()
         if type(parent) == types.StringType:
             parent = self._hull._nametowidget(parent)
 
         # Find size of window.
-	self.update_idletasks()
+        self.update_idletasks()
         width = self.winfo_width()
         height = self.winfo_height()
         if width == 1 and height == 1:
@@ -1081,57 +1081,57 @@ class MegaToplevel(MegaArchetype):
             height = self.winfo_reqheight()
 
         # Place in centre of screen:
-	x = (self.winfo_screenwidth() - width) / 2 - parent.winfo_vrootx()
-	y = (self.winfo_screenheight() - height) / 3 - parent.winfo_vrooty()
-	if x < 0:
-	    x = 0
-	if y < 0:
-	    y = 0
+        x = (self.winfo_screenwidth() - width) / 2 - parent.winfo_vrootx()
+        y = (self.winfo_screenheight() - height) / 3 - parent.winfo_vrooty()
+        if x < 0:
+            x = 0
+        if y < 0:
+            y = 0
         return '+%d+%d' % (x, y)
 
     def _sameposition(self):
-	# Position the window at the same place it was last time.
+        # Position the window at the same place it was last time.
 
-	geometry = self.geometry()
-	index = string.find(geometry, '+')
-	if index >= 0:
-	    return geometry[index:]
+        geometry = self.geometry()
+        index = string.find(geometry, '+')
+        if index >= 0:
+            return geometry[index:]
         else:
-	    return None
+            return None
 
     def activate(self, globalMode = 0, geometry = 'centerscreenfirst'):
-	if self._active:
-	    raise ValueError, 'Window is already active'
-	if self.state() == 'normal':
-	    self.withdraw()
+        if self._active:
+            raise ValueError, 'Window is already active'
+        if self.state() == 'normal':
+            self.withdraw()
 
-	self._active = 1
+        self._active = 1
 
-	showbusycursor()
+        showbusycursor()
 
-	if self._wait is None:
-	    self._wait = Tkinter.IntVar()
-	self._wait.set(0)
+        if self._wait is None:
+            self._wait = Tkinter.IntVar()
+        self._wait.set(0)
 
-	if geometry == 'centerscreenalways':
-	    geom = self._centreonscreen()
-	elif geometry == 'centerscreenfirst':
-	    if self._firstShowing:
-		# Centre the window the first time it is displayed.
-		geom = self._centreonscreen()
-	    else:
-		# Position the window at the same place it was last time.
-		geom = self._sameposition()
-	elif geometry[:5] == 'first':
-	    if self._firstShowing:
+        if geometry == 'centerscreenalways':
+            geom = self._centreonscreen()
+        elif geometry == 'centerscreenfirst':
+            if self._firstShowing:
+                # Centre the window the first time it is displayed.
+                geom = self._centreonscreen()
+            else:
+                # Position the window at the same place it was last time.
+                geom = self._sameposition()
+        elif geometry[:5] == 'first':
+            if self._firstShowing:
                 geom = geometry[5:]
-	    else:
-		# Position the window at the same place it was last time.
-		geom = self._sameposition()
+            else:
+                # Position the window at the same place it was last time.
+                geom = self._sameposition()
         else:
             geom = geometry
 
-	self._firstShowing = 0
+        self._firstShowing = 0
 
         setgeometryanddeiconify(self, geom)
 
@@ -1148,17 +1148,17 @@ class MegaToplevel(MegaArchetype):
             self.transient(master)
 
         pushgrab(self._hull, globalMode, self.deactivate)
-	command = self['activatecommand']
-	if callable(command):
-	    command()
-	self.wait_variable(self._wait)
+        command = self['activatecommand']
+        if callable(command):
+            command()
+        self.wait_variable(self._wait)
 
-	return self._result
+        return self._result
 
     def deactivate(self, result=None):
-	if not self._active:
-	    return
-	self._active = 0
+        if not self._active:
+            return
+        self._active = 0
 
         # Restore the focus before withdrawing the window, since
         # otherwise the window manager may take the focus away so we
@@ -1177,7 +1177,7 @@ class MegaToplevel(MegaArchetype):
         self._wait.set(1)
 
     def active(self):
-	return self._active
+        return self._active
 
 forwardmethods(MegaToplevel, Tkinter.Toplevel, '_hull')
 
@@ -1185,17 +1185,17 @@ forwardmethods(MegaToplevel, Tkinter.Toplevel, '_hull')
 
 class MegaWidget(MegaArchetype):
     def __init__(self, parent = None, **kw):
-	# Define the options for this megawidget.
-	optiondefs = (
-	    ('hull_class',       self.__class__.__name__,  None),
-	)
-	self.defineoptions(kw, optiondefs)
+        # Define the options for this megawidget.
+        optiondefs = (
+            ('hull_class',       self.__class__.__name__,  None),
+        )
+        self.defineoptions(kw, optiondefs)
 
-	# Initialise the base class (after defining the options).
-	MegaArchetype.__init__(self, parent, Tkinter.Frame)
+        # Initialise the base class (after defining the options).
+        MegaArchetype.__init__(self, parent, Tkinter.Frame)
 
-	# Check keywords and initialise options.
-	self.initialiseoptions()
+        # Check keywords and initialise options.
+        self.initialiseoptions()
 
 forwardmethods(MegaWidget, Tkinter.Frame, '_hull')
 
@@ -1216,19 +1216,19 @@ def tracetk(root = None, on = 1, withStackTrace = 0, file=None):
     _withStackTrace = withStackTrace
     _traceTk = on
     if on:
-	if hasattr(root.tk, '__class__'):
-	    # Tracing already on
-	    return
-	if file is None:
-	    _traceTkFile = sys.stderr
-	else:
-	    _traceTkFile = file
-	tk = _TraceTk(root.tk)
+        if hasattr(root.tk, '__class__'):
+            # Tracing already on
+            return
+        if file is None:
+            _traceTkFile = sys.stderr
+        else:
+            _traceTkFile = file
+        tk = _TraceTk(root.tk)
     else:
-	if not hasattr(root.tk, '__class__'):
-	    # Tracing already off
-	    return
-	tk = root.tk.getTclInterp()
+        if not hasattr(root.tk, '__class__'):
+            # Tracing already off
+            return
+        tk = root.tk.getTclInterp()
     _setTkInterps(root, tk)
 
 def showbusycursor():
@@ -1252,7 +1252,7 @@ def showbusycursor():
         return
 
     for (window, winInfo) in _toplevelBusyInfo.items():
-	if (window.state() != 'withdrawn' and not winInfo['isBusy']
+        if (window.state() != 'withdrawn' and not winInfo['isBusy']
                 and not winInfo['excludeFromBusy']):
             busyInfo['newBusyWindows'].append(window)
             winInfo['isBusy'] = 1
@@ -1357,9 +1357,9 @@ def _addRootToToplevelBusyInfo():
 
 def busycallback(command, updateFunction = None):
     if not callable(command):
-	raise ValueError, \
-	    'cannot register non-command busy callback %s %s' % \
-	        (repr(command), type(command))
+        raise ValueError, \
+            'cannot register non-command busy callback %s %s' % \
+                (repr(command), type(command))
     wrapper = _BusyWrapper(command, updateFunction)
     return wrapper.callback
 
@@ -1374,7 +1374,7 @@ def displayerror(text):
     global _errorWindow
 
     if _errorReportFile is not None:
-	_errorReportFile.write(text + '\n')
+        _errorReportFile.write(text + '\n')
     else:
         # Print error on standard error as well as to error window. 
         # Useful if error window fails to be displayed, for example
@@ -1382,11 +1382,11 @@ def displayerror(text):
         # window.
         sys.stderr.write(text + '\n')
 
-	if _errorWindow is None:
-	    # The error window has not yet been created.
-	    _errorWindow = _ErrorWindow()
+        if _errorWindow is None:
+            # The error window has not yet been created.
+            _errorWindow = _ErrorWindow()
 
-	_errorWindow.showerror(text)
+        _errorWindow.showerror(text)
 
 _root = None
 _disableKeyboardWhileBusy = 1
@@ -1418,10 +1418,10 @@ def initialise(
     # If we haven't been given a root window, use the default or
     # create one.
     if root is None:
-	if Tkinter._default_root is None:
-	    root = Tkinter.Tk()
-	else:
-	    root = Tkinter._default_root
+        if Tkinter._default_root is None:
+            root = Tkinter.Tk()
+        else:
+            root = Tkinter._default_root
 
     # If this call is initialising a different Tk interpreter than the
     # last call, then re-initialise all global variables.  Assume the
@@ -1461,7 +1461,7 @@ def initialise(
     # window manager deletes the root window.  Otherwise the
     # application will not exit, even though there are no windows.
     if root.protocol('WM_DELETE_WINDOW') == '':
-	root.protocol('WM_DELETE_WINDOW', root.destroy)
+        root.protocol('WM_DELETE_WINDOW', root.destroy)
 
     # Set the base font size for the application and set the
     # Tk option database font resources.
@@ -1472,23 +1472,23 @@ def initialise(
 
 def alignlabels(widgets, sticky = None):
     if len(widgets) == 0:
-    	return
+        return
 
     widgets[0].update_idletasks()
 
     # Determine the size of the maximum length label string.
     maxLabelWidth = 0
     for iwid in widgets:
-	labelWidth = iwid.grid_bbox(0, 1)[2]
-	if labelWidth > maxLabelWidth:
-	    maxLabelWidth = labelWidth
+        labelWidth = iwid.grid_bbox(0, 1)[2]
+        if labelWidth > maxLabelWidth:
+            maxLabelWidth = labelWidth
 
     # Adjust the margins for the labels such that the child sites and
     # labels line up.
     for iwid in widgets:
-	if sticky is not None:
-	    iwid.component('label').grid(sticky=sticky)
-	iwid.grid_columnconfigure(0, minsize = maxLabelWidth)
+        if sticky is not None:
+            iwid.component('label').grid(sticky=sticky)
+        iwid.grid_columnconfigure(0, minsize = maxLabelWidth)
 #=============================================================================
 
 # Private routines
@@ -1513,12 +1513,12 @@ class _TraceTk:
             argStr = str(args[0])
         else:
             argStr = str(args)
-	_traceTkFile.write('CALL  TK> %d:%s%s' %
+        _traceTkFile.write('CALL  TK> %d:%s%s' %
                 (_recursionCounter, '  ' * _recursionCounter, argStr))
-	_recursionCounter = _recursionCounter + 1
+        _recursionCounter = _recursionCounter + 1
         try:
             result = apply(self.tclInterp.call, args, kw)
-	except Tkinter.TclError, errorString:
+        except Tkinter.TclError, errorString:
             _callToTkReturned = 1
             _recursionCounter = _recursionCounter - 1
             _traceTkFile.write('\nTK ERROR> %d:%s-> %s\n' %
@@ -1594,7 +1594,7 @@ def __TkinterToplevelTitle(self, *args):
     if not _toplevelBusyInfo.has_key(self):
         _addToplevelBusyInfo(self)
         self._Pmw_WM_DELETE_name = self.register(self.destroy, None, 0)
-	self.protocol('WM_DELETE_WINDOW', self._Pmw_WM_DELETE_name)
+        self.protocol('WM_DELETE_WINDOW', self._Pmw_WM_DELETE_name)
 
     return apply(Tkinter.Wm.title, (self,) + args)
 
@@ -1616,20 +1616,20 @@ def _havebltbusy(window):
 
 class _BusyWrapper:
     def __init__(self, command, updateFunction):
-	self._command = command
-	self._updateFunction = updateFunction
+        self._command = command
+        self._updateFunction = updateFunction
 
     def callback(self, *args):
-	showbusycursor()
-	rtn = apply(self._command, args)
+        showbusycursor()
+        rtn = apply(self._command, args)
 
-	# Call update before hiding the busy windows to clear any
-	# events that may have occurred over the busy windows.
-	if callable(self._updateFunction):
-	    self._updateFunction()
+        # Call update before hiding the busy windows to clear any
+        # events that may have occurred over the busy windows.
+        if callable(self._updateFunction):
+            self._updateFunction()
 
-	hidebusycursor()
-	return rtn
+        hidebusycursor()
+        return rtn
 
 #=============================================================================
 
@@ -1683,9 +1683,9 @@ def __TkinterToplevelDestroy(tkWidget):
     if _hullToMegaWidget.has_key(tkWidget):
         mega = _hullToMegaWidget[tkWidget]
         try:
-	    mega.destroy()
+            mega.destroy()
         except:
-	    _reporterror(mega.destroy, ())
+            _reporterror(mega.destroy, ())
     else:
         # Delete the busy info structure for this toplevel (if the
         # window was created before Pmw.initialise() was called, it
@@ -1701,9 +1701,9 @@ def __TkinterWidgetDestroy(tkWidget):
     if _hullToMegaWidget.has_key(tkWidget):
         mega = _hullToMegaWidget[tkWidget]
         try:
-	    mega.destroy()
+            mega.destroy()
         except:
-	    _reporterror(mega.destroy, ())
+            _reporterror(mega.destroy, ())
     else:
         Tkinter.BaseWidget.destroy(tkWidget)
 
@@ -1714,15 +1714,15 @@ def __TkinterWidgetDestroy(tkWidget):
 
 class __TkinterCallWrapper:
     def __init__(self, func, subst, widget):
-	self.func = func
-	self.subst = subst
-	self.widget = widget
+        self.func = func
+        self.subst = subst
+        self.widget = widget
 
     # Calling back from Tk into python.
     def __call__(self, *args):
-	try:
-	    if self.subst:
-		args = apply(self.subst, args)
+        try:
+            if self.subst:
+                args = apply(self.subst, args)
             if _traceTk:
                 if not _callToTkReturned:
                     _traceTkFile.write('\n')
@@ -1744,11 +1744,11 @@ class __TkinterCallWrapper:
                 _traceTkFile.write('CALLBACK> %d:%s%s%s\n' %
                     (_recursionCounter, '  ' * _recursionCounter, name, argStr))
                 _traceTkFile.flush()
-	    return apply(self.func, args)
-	except SystemExit, msg:
-	    raise SystemExit, msg
-	except:
-	    _reporterror(self.func, args)
+            return apply(self.func, args)
+        except SystemExit, msg:
+            raise SystemExit, msg
+        except:
+            _reporterror(self.func, args)
 
 _eventTypeToName = {
     2 : 'KeyPress',         15 : 'VisibilityNotify',   28 : 'PropertyNotify',
@@ -1772,21 +1772,21 @@ def _reporterror(func, args):
 
     # Give basic information about the callback exception.
     if type(exc_type) == types.ClassType:
-	# Handle python 1.5 class exceptions.
-	exc_type = exc_type.__name__
+        # Handle python 1.5 class exceptions.
+        exc_type = exc_type.__name__
     msg = str(exc_type) + ' Exception in Tk callback\n'
     msg = msg + '  Function: %s (type: %s)\n' % (repr(func), type(func))
     msg = msg + '  Args: %s\n' % str(args)
 
     if type(args) == types.TupleType and len(args) > 0 and \
-	    hasattr(args[0], 'type'):
+            hasattr(args[0], 'type'):
         eventArg = 1
     else:
         eventArg = 0
 
     # If the argument to the callback is an event, add the event type.
     if eventArg:
-	eventNum = string.atoi(args[0].type)
+        eventNum = string.atoi(args[0].type)
         if eventNum in _eventTypeToName.keys():
             msg = msg + '  Event type: %s (type num: %d)\n' % \
                     (_eventTypeToName[eventNum], eventNum)
@@ -1796,92 +1796,92 @@ def _reporterror(func, args):
     # Add the traceback.
     msg = msg + 'Traceback (innermost last):\n'
     for tr in traceback.extract_tb(exc_traceback):
-	msg = msg + '  File "%s", line %s, in %s\n' % (tr[0], tr[1], tr[2])
-	msg = msg + '    %s\n' % tr[3]
+        msg = msg + '  File "%s", line %s, in %s\n' % (tr[0], tr[1], tr[2])
+        msg = msg + '    %s\n' % tr[3]
     msg = msg + '%s: %s\n' % (exc_type, exc_value)
 
     # If the argument to the callback is an event, add the event contents.
     if eventArg:
-	msg = msg + '\n================================================\n'
-	msg = msg + '  Event contents:\n'
-	keys = args[0].__dict__.keys()
-	keys.sort()
-	for key in keys:
-	    msg = msg + '    %s: %s\n' % (key, args[0].__dict__[key])
+        msg = msg + '\n================================================\n'
+        msg = msg + '  Event contents:\n'
+        keys = args[0].__dict__.keys()
+        keys.sort()
+        for key in keys:
+            msg = msg + '    %s: %s\n' % (key, args[0].__dict__[key])
 
     clearbusycursor()
     try:
-	displayerror(msg)
+        displayerror(msg)
     except:
         pass
 
 class _ErrorWindow:
     def __init__(self):
 
-	self._errorQueue = []
-	self._errorCount = 0
-	self._open = 0
+        self._errorQueue = []
+        self._errorCount = 0
+        self._open = 0
         self._firstShowing = 1
 
-	# Create the toplevel window
-	self._top = Tkinter.Toplevel()
-	self._top.protocol('WM_DELETE_WINDOW', self._hide)
-	self._top.title('Error in background function')
-	self._top.iconname('Background error')
+        # Create the toplevel window
+        self._top = Tkinter.Toplevel()
+        self._top.protocol('WM_DELETE_WINDOW', self._hide)
+        self._top.title('Error in background function')
+        self._top.iconname('Background error')
 
-	# Create the text widget and scrollbar in a frame
-	upperframe = Tkinter.Frame(self._top)
+        # Create the text widget and scrollbar in a frame
+        upperframe = Tkinter.Frame(self._top)
 
-	scrollbar = Tkinter.Scrollbar(upperframe, orient='vertical')
-	scrollbar.pack(side = 'right', fill = 'y')
+        scrollbar = Tkinter.Scrollbar(upperframe, orient='vertical')
+        scrollbar.pack(side = 'right', fill = 'y')
 
-	self._text = Tkinter.Text(upperframe, yscrollcommand=scrollbar.set)
-	self._text.pack(fill = 'both', expand = 1)
-	scrollbar.configure(command=self._text.yview)
+        self._text = Tkinter.Text(upperframe, yscrollcommand=scrollbar.set)
+        self._text.pack(fill = 'both', expand = 1)
+        scrollbar.configure(command=self._text.yview)
 
-	# Create the buttons and label in a frame
-	lowerframe = Tkinter.Frame(self._top)
+        # Create the buttons and label in a frame
+        lowerframe = Tkinter.Frame(self._top)
 
-	ignore = Tkinter.Button(lowerframe,
-	        text = 'Ignore remaining errors', command = self._hide)
-	ignore.pack(side='left')
+        ignore = Tkinter.Button(lowerframe,
+                text = 'Ignore remaining errors', command = self._hide)
+        ignore.pack(side='left')
 
-	self._nextError = Tkinter.Button(lowerframe,
-	        text = 'Show next error', command = self._next)
-	self._nextError.pack(side='left')
+        self._nextError = Tkinter.Button(lowerframe,
+                text = 'Show next error', command = self._next)
+        self._nextError.pack(side='left')
 
-	self._label = Tkinter.Label(lowerframe, relief='ridge')
-	self._label.pack(side='left', fill='x', expand=1)
+        self._label = Tkinter.Label(lowerframe, relief='ridge')
+        self._label.pack(side='left', fill='x', expand=1)
 
-	# Pack the lower frame first so that it does not disappear
-	# when the window is resized.
-	lowerframe.pack(side = 'bottom', fill = 'x')
-	upperframe.pack(side = 'bottom', fill = 'both', expand = 1)
+        # Pack the lower frame first so that it does not disappear
+        # when the window is resized.
+        lowerframe.pack(side = 'bottom', fill = 'x')
+        upperframe.pack(side = 'bottom', fill = 'both', expand = 1)
 
     def showerror(self, text):
-	if self._open:
-	    self._errorQueue.append(text)
-	else:
-	    self._display(text)
-	    self._open = 1
+        if self._open:
+            self._errorQueue.append(text)
+        else:
+            self._display(text)
+            self._open = 1
 
-	# Display the error window in the same place it was before.
-	if self._top.state() == 'normal':
-	    # If update_idletasks is not called here, the window may
-	    # be placed partially off the screen.  Also, if it is not
-	    # called and many errors are generated quickly in
-	    # succession, the error window may not display errors
-	    # until the last one is generated and the interpreter
-	    # becomes idle.
-	    # XXX: remove this, since it causes omppython to go into an
-	    # infinite loop if an error occurs in an omp callback.
-	    # self._top.update_idletasks()
+        # Display the error window in the same place it was before.
+        if self._top.state() == 'normal':
+            # If update_idletasks is not called here, the window may
+            # be placed partially off the screen.  Also, if it is not
+            # called and many errors are generated quickly in
+            # succession, the error window may not display errors
+            # until the last one is generated and the interpreter
+            # becomes idle.
+            # XXX: remove this, since it causes omppython to go into an
+            # infinite loop if an error occurs in an omp callback.
+            # self._top.update_idletasks()
 
             pass
-	else:
-	    if self._firstShowing:
-		geom = None
-	    else:
+        else:
+            if self._firstShowing:
+                geom = None
+            else:
                 geometry = self._top.geometry()
                 index = string.find(geometry, '+')
                 if index >= 0:
@@ -1897,37 +1897,37 @@ class _ErrorWindow:
 
         self._top.focus()
 
-	self._updateButtons()
+        self._updateButtons()
 
-	# Release any grab, so that buttons in the error window work.
+        # Release any grab, so that buttons in the error window work.
         releasegrabs()
 
     def _hide(self):
-	self._errorCount = self._errorCount + len(self._errorQueue)
-	self._errorQueue = []
-	self._top.withdraw()
-	self._open = 0
+        self._errorCount = self._errorCount + len(self._errorQueue)
+        self._errorQueue = []
+        self._top.withdraw()
+        self._open = 0
 
     def _next(self):
-	# Display the next error in the queue. 
+        # Display the next error in the queue. 
 
-	text = self._errorQueue[0]
-	del self._errorQueue[0]
+        text = self._errorQueue[0]
+        del self._errorQueue[0]
 
-	self._display(text)
-	self._updateButtons()
+        self._display(text)
+        self._updateButtons()
 
     def _display(self, text):
-	self._errorCount = self._errorCount + 1
-	text = 'Error: %d\n%s' % (self._errorCount, text)
-	self._text.delete('1.0', 'end')
-	self._text.insert('end', text)
+        self._errorCount = self._errorCount + 1
+        text = 'Error: %d\n%s' % (self._errorCount, text)
+        self._text.delete('1.0', 'end')
+        self._text.insert('end', text)
 
     def _updateButtons(self):
-	numQueued = len(self._errorQueue)
-	if numQueued > 0:
-	    self._label.configure(text='%d more errors' % numQueued)
-	    self._nextError.configure(state='normal')
-	else:
-	    self._label.configure(text='No more errors')
-	    self._nextError.configure(state='disabled')
+        numQueued = len(self._errorQueue)
+        if numQueued > 0:
+            self._label.configure(text='%d more errors' % numQueued)
+            self._nextError.configure(state='normal')
+        else:
+            self._label.configure(text='No more errors')
+            self._nextError.configure(state='disabled')
