@@ -148,11 +148,11 @@ class ComboBox(Pmw.MegaWidget):
     def destroy(self):
         if self['dropdown'] and self._isPosted:
             Pmw.popgrab(self._popup)
-            Pmw.MegaWidget.destroy(self)
+        Pmw.MegaWidget.destroy(self)
 
-        #======================================================================
+    #======================================================================
 
-        # Public methods
+    # Public methods
 
     def get(self, first = None, last=None):
         if first is None:
@@ -210,8 +210,8 @@ class ComboBox(Pmw.MegaWidget):
             if self['unique']:
                 # If item is already in list, select it and return.
                 items = self._list.get(0, 'end')
-            if input in items:
-                index = list(items).index(input)
+                if input in items:
+                    index = list(items).index(input)
 
             if index is None:
                 index = self._list.index('end')
@@ -271,11 +271,11 @@ class ComboBox(Pmw.MegaWidget):
 
         cmd = self['selectioncommand']
         if callable(cmd):
-                if event is None:
-                    # Return result of selectioncommand for invoke() method.
-                    return cmd(item)
-                else:
-                    cmd(item)
+            if event is None:
+                # Return result of selectioncommand for invoke() method.
+                return cmd(item)
+            else:
+                cmd(item)
 
     #======================================================================
 
@@ -290,7 +290,7 @@ class ComboBox(Pmw.MegaWidget):
             arrow.configure(relief = self._arrowRelief)
 
         if self._isPosted and self['fliparrow']:
-                direction = 'up'
+            direction = 'up'
         else:
             direction = 'down'
         Pmw.drawarrow(arrow, self['entry_foreground'], direction, 'arrow')
