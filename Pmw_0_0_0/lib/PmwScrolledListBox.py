@@ -90,8 +90,8 @@ class ScrolledListBox(Pmw.MegaWidget):
 
             # Bind double button 1 click to the dblclickcommand.
             root.bind_class(theTag, '<Double-ButtonRelease-1>', doubleEvent)
-
-        ScrolledListBox._classBindingsDefinedFor = root
+            
+            ScrolledListBox._classBindingsDefinedFor = root
 
         bindtags = self._listbox.bindtags()
         self._listbox.bindtags(bindtags + (theTag,))
