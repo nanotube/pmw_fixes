@@ -159,6 +159,8 @@ _pattern = None
 # Private functions:
 
 def _print_results(result, expected, description):
+    if isinstance(result, str):
+        result = result.replace("<type 'exceptions.", '').replace("'>",'').replace("<class '_tkinter.",'')
     if type(expected) == types.ClassType:
 	if hasattr(result, '__class__'):
 	    ok = (result.__class__ == expected)
